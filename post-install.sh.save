@@ -1,0 +1,58 @@
+#!/bin/bash
+
+## Created by chn555 && BigRush
+#
+## Post installation script
+
+if [ $UID -ne 0 ] ;then
+	printf "You need to be root to run the script\n"
+	exit 1
+fi
+
+## update the system
+update ()
+{
+	pacman -Syu
+	pacman -S pacaur --noconfirm --needed
+}
+
+
+## config the grub backgroung and fast boot
+grub ()
+{
+sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub ;;
+sed -i 's/#GRUB_HIDDEN_TIMEOUT=1/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub ;;
+sed -i 's/#GRUB_HIDDEN_TIMEOUT_QUIET=true/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub ;;
+update-grub
+}
+
+## application's pre-install requirements
+appreq ()
+{
+	gpg --recv-keys 0FC3042E345AD05D		## discord key
+}
+
+## application i want to install with pacaur
+application ()
+{
+	app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
+	for i in ${app[*]} ;do
+		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
+	done
+}
+
+## virtualbox installation
+virtualbox ()
+{
+	vb=(virtualbox linux414-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
+	for i in ${vb[*]} ;do
+		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
+	done
+	modprobe vboxdrv
+	gpasswd -a tom vboxusers
+}
+
+update
+appreq
+application
+virtualbox
