@@ -16,7 +16,14 @@ update ()
 	pacman -S pacaur --noconfirm --needed
 }
 
+## set desktop theme
+theme ()
+{
 
+	wget -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg
+	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/Pictures/archbk.jpg"
+
+}
 ## config the grub backgroung and fast boot
 grub ()
 {
@@ -44,15 +51,16 @@ application ()
 ## virtualbox installation
 virtualbox ()
 {
-	vb=(virtualbox linux414-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
+	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]} ;do
 		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
-	done
+	don
 	modprobe vboxdrv
 	gpasswd -a tom vboxusers
 }
 
 update
+grub
 appreq
 application
 virtualbox
