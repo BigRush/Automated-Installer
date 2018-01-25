@@ -58,21 +58,12 @@ Manjaro_Sys_Update ()
 ## set desktop theme
 xfce_theme ()
 {
-	wget -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg
-	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/Pictures/archbk.jpg"
+	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
+	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "/home/tom/Pictures/archbk.jpg" 2>> $errorpath >> $outputpath
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/background-alpha' --type int --set 0
 	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/<Super>t' --type string --set xfce4-terminal --create
 	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/grave' --type string --set "xfce4-terminal --drop-down" --create
-
-## dump output to logfile under /var/log/post_install.log
-
-	wget -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg >> $logfilepath
-	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/Pictures/archbk.jpg" >> $logfilepath
-	xfconf-query --channel "$channel_for_Xfce" --property '/panels/panel-1/size' --type int --set 49 >> $logfilepath
-	xfconf-query --channel "$channel_for_Xfce" --property '/panels/panel-1/background-alpha' --type int --set 0 >> $logfilepath
-	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/<Super>1' --type string --set xfce4-terminal --create >> $logfilepath
-
 }
 ## config the grub backgroung and fast boot
 Grub_Config ()
