@@ -1,66 +1,153 @@
-#!/bin/bash
-
-## Created by chn555 && BigRush
+#!/usr/bin/env bash
+################################################################################
+## Created by chn555&& BigRush
 #
 ## Post installation script
+################################################################################
 
-if [ $UID -ne 0 ] ;then
-	printf "You need to be root to run the script\n"
-	exit 1
-fi
+####  Varibale	################################################################
+line="\n#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!\n"
 
-## update the system
-update ()
+errorlog="post_install_error.log"
+outputlog="post_install_output.log"
+
+logfolder="/var/log"
+
+errorpath=$logfolder/$errorlog
+outputpath=$logfolder/$outputlog
+
+Distro_Validation="empty"
+
+
+####  Functions  ###############################################################
+
+### distribution name check for manjaro #####
+Manjaro_Distribution_Check ()
 {
-	pacman -Syu
-	pacman -S pacaur --noconfirm --needed
+	cat /etc/*-release |grep ID |cut -d "=" -f "2" |grep ^manjaro$
+	if [[ $? -eq 0 ]] ;then
+		Distro_Validation="manjaro"
+	else
+		continue
+	fi
+}
+
+### distribution name check for debian #####
+Debian_Distribution_Check ()
+{
+	cat /etc/*-release |grep ID |cut -d "=" -f "2" |grep ^debian$
+	if [[ $? -eq 0	]] ;then
+		Distro_Validation="debian"
+	else
+		continue
+	fi
+}
+
+
+
+### update the system and install pacaur #####
+Manjaro_Sys_Update ()
+{
+	## update the system, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
+	pacman -Syu 2>> $errorpath >> $outputpath
+	printf $line
+	printf "System update complete\n"
+	printf $line
 }
 
 ## set desktop theme
-theme ()
+xfce_theme ()
 {
-
 	wget -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg
 	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/Pictures/archbk.jpg"
+	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
+	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/background-alpha' --type int --set 0
+	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/<Super>t' --type string --set xfce4-terminal --create
+	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/grave' --type string --set "xfce4-terminal --drop-down" --create
+
+## dump output to logfile under /var/log/post_install.log
+
+	wget -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg >> $logfilepath
+	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "$HOME/Pictures/archbk.jpg" >> $logfilepath
+	xfconf-query --channel "$channel_for_Xfce" --property '/panels/panel-1/size' --type int --set 49 >> $logfilepath
+	xfconf-query --channel "$channel_for_Xfce" --property '/panels/panel-1/background-alpha' --type int --set 0 >> $logfilepath
+	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/<Super>1' --type string --set xfce4-terminal --create >> $logfilepath
 
 }
 ## config the grub backgroung and fast boot
-grub ()
+Grub_Config ()
 {
 sed -i 's/GRUB_TIMEOUT=5/GRUB_TIMEOUT=0/' /etc/default/grub ;;
 sed -i 's/#GRUB_HIDDEN_TIMEOUT=1/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub ;;
 sed -i 's/#GRUB_HIDDEN_TIMEOUT_QUIET=true/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub ;;
+
 update-grub
+
 }
 
+
 ## application's pre-install requirements
-appreq ()
+App_Req ()
 {
-	gpg --recv-keys 0FC3042E345AD05D		## discord key
+	gpg --recv-keys 0FC3042E345AD05D 2>> $errorpath >> $outputpath		## discord key
+	return 0
 }
 
 ## application i want to install with pacaur
-application ()
+Manjaro_application ()
 {
-	app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
-	for i in ${app[*]} ;do
-		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
-	done
+		if [[ $Distro_Validation =~ ^manjaro$ ]] ;then
+			## install pacaur, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
+			pacman -S pacaur --noconfirm --needed 2>> $errorpath >> $outputpath
+			printf $line
+			print "Pacaur download complete"
+			printf $line
+
+			return 0
+
+			if [[ $? -eq 0 ]] ;then
+				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
+				for i in ${app[*]} ;do
+					runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath'
+				done
+				return 0
+			else
+				prinf $line
+				printf "Pacaur installation failed"
+				prinf $line
+			fi
+		else
+			continue
+		fi
 }
 
 ## virtualbox installation
-virtualbox ()
+Vbox_Installation ()
 {
 	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]} ;do
 		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
-	don
+	done
 	modprobe vboxdrv
 	gpasswd -a tom vboxusers
 }
 
-update
-grub
-appreq
-application
-virtualbox
+if [ $UID -ne 0 ] ;then
+
+	printf ""$line"
+	printf "You need to be root to run the script\n"
+	printf "$line"
+
+	exit 1
+else
+
+		update
+		sleep 1.5
+		grub
+		sleep 1.5
+		appreq
+		sleep 1.5
+		application
+		sleep 1.5
+		virtualbox
+fi
