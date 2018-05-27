@@ -5,45 +5,116 @@
 ## Post installation script
 ################################################################################
 
-####  Varibale	################################################################
-line="\n#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!#!\n"
 
-errorlog="post_install_error.log"
-outputlog="post_install_output.log"
+Log_Variables () {
 
-logfolder="/var/log"
+	####  Varibale	################################################################
 
-errorpath=$logfolder/$errorlog
-outputpath=$logfolder/$outputlog
+	line="------------------------------------------"
 
-Distro_Validation="empty"
+	errorlog="error.log"
+	outputlog="output.log"
+
+	logfolder="/var/log/post_install"
+
+	errorpath=$logfolder/$errorlog
+	outputpath=$logfolder/$outputlog
+
+	Distro_Validation="empty"
+
+	if ! [ -e $logfolder ]; then
+		mkdir -p $logfolder
+	fi
+}
 
 
 ####  Functions  ###############################################################
 
-### distribution name check for manjaro #####
-Manjaro_Distribution_Check ()
-{
-	cat /etc/*-release |grep ID |cut -d "=" -f "2" |grep ^manjaro$
-	if [[ $? -eq 0 ]] ;then
-		Distro_Validation="manjaro"
-	else
-		continue
+Distro_Check () {		## checking the environment the user is currenttly running on to determine which settings should be applied
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	  	Distro_Val="manjaro"
+	fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+			Distro_Val="arch"
+	fi
+
+  cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
+
+  if [[ $? -eq 0 ]]; then
+    	Distro_Val="debian"
+  fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	   	Distro_Val="centos"
 	fi
 }
 
-### distribution name check for debian #####
-Debian_Distribution_Check ()
-{
-	cat /etc/*-release |grep ID |cut -d "=" -f "2" |grep ^debian$
-	if [[ $? -eq 0	]] ;then
-		Distro_Validation="debian"
-	else
-		continue
+Arch_Config () {
+	if [[ $Distro_Val == arch ]]; then
+		printf "$line\n"
+		printf "Updating the system...\n"
+		printf "$line\n"
+		pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
+
+		if [[ $? -eq 0 ]]; then
+			printf "$line\n"
+			prinf "Update complete\n"
+			printf "$line\n"
+		else
+			printf "$line\n"
+			prinf "Somthing went wrong while updating, please check log:\n$errorpath\n"
+			printf "$line\n"
+			exit 1
+		fi
+
+		printf "$line\n"
+		printf "Installing Xorg...\n"
+		printf "$line\n"
+
+		pacman -S xorg xorg-xinit --nocomfirm --needed 2>> $errorpath >> $outputpath --noconfirm
+
+		if [[ $? -eq 0 ]]; then
+			printf "$line\n"
+			printf "Xorg installation complete\n"
+			printf "$line\n"
+
+		else
+			printf "Somthing went wrong while installing Xorg, please check log:\n$errorpath\n"
+		fi
 	fi
+
+		lspci |grep VGA |grep Intel
+
+		if [[ $? -eq 0 ]]; then
+			printf "$line\n"
+			printf "Installing video drivers...\n"
+			printf "$line\n"
+
+			pacman -S xf86-video-intel --nocomfirm --needed 2>> $errorpath >> $outputpath
+
+			if [[ $? -eq 0 ]]; then
+				printf "$line\n"
+				printf "Video drivers installation complete"
+				printf "$line\n"
+
+			else
+				printf "Somthing went wrong while installing video drivers, please check log:\n$errorpath\n"
+			fi
+		fi
+
+
+
+
+
+
 }
-
-
 
 ### update the system and install pacaur #####
 Manjaro_Sys_Update ()
