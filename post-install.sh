@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ################################################################################
-## Created by chn555&& BigRush
+## Created by  BigRush
 #
 ## Post installation script
 ################################################################################
@@ -87,8 +87,8 @@ Arch_Config () {
 
 		else
 			printf "Somthing went wrong while installing Xorg, please check log:\n$errorpath\n"
+			exit 1
 		fi
-	fi
 
 		lspci |grep VGA |grep Intel
 
@@ -106,8 +106,12 @@ Arch_Config () {
 
 			else
 				printf "Somthing went wrong while installing video drivers, please check log:\n$errorpath\n"
+				exit 1
 			fi
 		fi
+
+		printf "exec startkde\n" > ~/.xinitrc
+
 
 
 
