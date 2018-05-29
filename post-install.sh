@@ -52,7 +52,6 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 	fi
 }
 
-
 Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
 	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
 
@@ -163,6 +162,15 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
 	Exit_Status
 
+	## customize shell
+	printf "alias ll='ls -l'\n" >> ~/.bashrc
+	printf "alias lh='ls -lh'\n" >> ~/.bashrc
+	printf "alias la='ls -la'\n" >> ~/.bashrc
+	printf "screenfetch -E" >> ~/.bashrc
+	printf "alias ll='ls -l'\n" >> /root/.bashrc
+	printf "alias lh='ls -lh'\n" >> /root/.bashrc
+	printf "alias la='ls -la'\n" >> /root/.bashrc
+	
 	## Call Pacaur_Install function to install pacaur
 	Pacaur_Install
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
@@ -260,7 +268,6 @@ Pacaur_Install () {
 	rm -r /tmp/pacaur_install
 }
 
-
 Manjaro_Sys_Update () {
 	## update the system, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
 	pacman -Syu 2>> $errorpath >> $outputpath
@@ -268,7 +275,6 @@ Manjaro_Sys_Update () {
 	printf "System update complete\n"
 	printf $line
 }
-
 
 xfce_theme () {		## Set desktop theme
 	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
@@ -289,12 +295,10 @@ Grub_Config () {		## Config the grub background and fast boot
 
 }
 
-
 App_Req () {		## Application's pre-install requirements
 	gpg --recv-keys 0FC3042E345AD05D 2>> $errorpath >> $outputpath		## discord key
 	return 0
 }
-
 
 Pacaur_applications () {		## Applications i want to install with pacaur
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
@@ -308,7 +312,6 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 		fi
 }
 
-
 Vbox_Installation () {		## Virtualbox installation
 	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]}; do
@@ -318,4 +321,14 @@ Vbox_Installation () {		## Virtualbox installation
 	done
 	modprobe vboxdrv
 	gpasswd -a tom vboxusers
+}
+
+Main () { ## call Functions
+	Root_Check
+	Log_And_Variables
+	if [[ $Distro_Val == arch ]]; then
+		Arch_Config
+
+
+
 }
