@@ -146,8 +146,9 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	printf "alias lh='ls -lh'\n" >> /root/.bashrc
 	printf "alias la='ls -la'\n" >> /root/.bashrc
 
-
-	select opt in (Plasma Deepin xfce4); do
+	desk_env=(Plasma Deepin xfce4)
+	local PS3="Please choose a desktop environment to install: "
+	select opt in ${desk_env[@]} ; do
 		case $opt in
 			plasma)
 				KDE_Installation
@@ -156,6 +157,11 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 				printf "Not avaliable at the moment, coming soon..."
 				;;
 			xfce4)
+				printf "Not avaliable at the moment, coming soon..."
+			*)
+			printf "Invalid option"
+		esac
+	done
 
 
 	## Call Pacaur_Install function to install pacaur
