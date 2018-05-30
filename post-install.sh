@@ -160,6 +160,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 				printf "Not avaliable at the moment, coming soon..."
 			*)
 			printf "Invalid option"
+			;;
 		esac
 	done
 
