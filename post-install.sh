@@ -126,6 +126,45 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		fi
 	fi
 
+	printf "$line\n"
+	printf "Downloading background picture...\n"
+	printf "$line\n"
+
+	output_text="Background picture download"
+	error_txt="Downloading background picture"
+
+	## Download background picture
+	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	## customize shell
+	printf "alias ll='ls -l'\n" >> ~/.bashrc
+	printf "alias lh='ls -lh'\n" >> ~/.bashrc
+	printf "alias la='ls -la'\n" >> ~/.bashrc
+	printf "screenfetch -E" >> ~/.bashrc
+	printf "alias ll='ls -l'\n" >> /root/.bashrc
+	printf "alias lh='ls -lh'\n" >> /root/.bashrc
+	printf "alias la='ls -la'\n" >> /root/.bashrc
+
+
+	select opt in (Plasma Deepin xfce4); do
+		case $opt in
+			plasma)
+				KDE_Installation
+				;;
+			Deepin)
+				printf "Not avaliable at the moment, coming soon..."
+				;;
+			xfce4)
+
+
+	## Call Pacaur_Install function to install pacaur
+	Pacaur_Install
+	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
+	Arch_Font_Config
+}
+
+KDE_Installation () {		## install KDE desktop environment
 	## Set kde to start on startup
 	printf "exec startkde\n" > ~/.xinitrc
 
@@ -150,31 +189,10 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	## install sddm
 	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath
 	Exit_Status
+}
 
-	printf "$line\n"
-	printf "Downloading background picture...\n"
-	printf "$line\n"
+KDE_Config () {
 
-	output_text="Background picture download"
-	error_txt="Downloading background picture"
-
-	## Download background picture
-	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
-	Exit_Status
-
-	## customize shell
-	printf "alias ll='ls -l'\n" >> ~/.bashrc
-	printf "alias lh='ls -lh'\n" >> ~/.bashrc
-	printf "alias la='ls -la'\n" >> ~/.bashrc
-	printf "screenfetch -E" >> ~/.bashrc
-	printf "alias ll='ls -l'\n" >> /root/.bashrc
-	printf "alias lh='ls -lh'\n" >> /root/.bashrc
-	printf "alias la='ls -la'\n" >> /root/.bashrc
-	
-	## Call Pacaur_Install function to install pacaur
-	Pacaur_Install
-	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
-	Arch_Font_Config
 }
 
 Arch_Font_Config () {		## Configure ugly arch kde fonts
