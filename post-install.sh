@@ -115,14 +115,8 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	else
-		read -p "Did not detect an intel graphic card continue?[y/n]:  " answer
-		if [[ $answer =~ [y|Y] || -z $answer ]]; then
-			:
-		elif [[ $answer =~ [n|N] ]]; then
-			exit 0
-		else
-			printf "Invalid answer, exiting..."
-			exit 1
+		printf "Did not detect Intel video card,\nplease install video card drivers by yourself later.\nContinuing with the script...\n"
+		sleep 2
 		fi
 	fi
 
