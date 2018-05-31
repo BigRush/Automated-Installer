@@ -153,7 +153,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	local PS3="Please choose a desktop environment to install: "
 	select opt in ${desk_env[@]} ; do
 		case $opt in
-			plasma)
+			Plasma)
 				KDE_Installation
 				;;
 			Deepin)
