@@ -150,6 +150,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		case $opt in
 			Plasma)
 				KDE_Installation
+				break
 				;;
 			Deepin)
 				printf "Not avaliable at the moment, coming soon...\n"
@@ -195,6 +196,18 @@ KDE_Installation () {		## install KDE desktop environment
 	## install sddm
 	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath
 	Exit_Status
+
+	## enable and start the sddm service
+	printf "$line\n"
+	printf "Enabling sddm service...\n"
+	printf "$line\n\n"
+
+	output_text="Enable SDDM service"
+	error_txt="while enabling sddm service"
+
+	systemctl enable sddm 2>> $errorpath >> $outputpath
+	Exit_Status
+
 }
 
 #KDE_Config () {}
