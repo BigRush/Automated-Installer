@@ -26,11 +26,11 @@ Log_And_Variables () {
 
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	errorlog="error.log"
-	outputlog="output.log"
 	logfolder="/var/log/post_install"
-	errorpath=$logfolder/$errorlog
-	outputpath=$logfolder/$outputlog
+	errorpath=$logfolder/error.log
+	outputpath=$logfolder/output.log
+	orig_user=$(logname)
+	user_path=/home/$orig_user
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
@@ -134,14 +134,17 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	error_txt="Downloading background picture"
 
 	## Download background picture
-	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
-	Exit_Status
+	if ! [[ -e $user_path/Pictures ]]; then
+		mkdir $user_path/Pictures
+		wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
+		Exit_Status
+	fi
 
 	## customize shell
-	printf "alias ll='ls -l'\n" >> ~/.bashrc
-	printf "alias lh='ls -lh'\n" >> ~/.bashrc
-	printf "alias la='ls -la'\n" >> ~/.bashrc
-	printf "screenfetch -E" >> ~/.bashrc
+	printf "alias ll='ls -l'\n" >> $user_path/.bashrc
+	printf "alias lh='ls -lh'\n" >> $user_path/.bashrc
+	printf "alias la='ls -la'\n" >> $user_path/.bashrc
+	printf "screenfetch -E" >> $user_path/.bashrc
 	printf "alias ll='ls -l'\n" >> /root/.bashrc
 	printf "alias lh='ls -lh'\n" >> /root/.bashrc
 	printf "alias la='ls -la'\n" >> /root/.bashrc
@@ -174,7 +177,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 KDE_Installation () {		## install KDE desktop environment
 	## Set kde to start on startup
-	printf "exec startkde\n" > ~/.xinitrc
+	printf "exec startkde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
 	printf "Installing plasma desktop environment...\n"
@@ -328,9 +331,12 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
 				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
+					printf "$line\n"
+					printf "Installing $i"
+					printf "$line\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
-					runuser -l tom -c "pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath"
+					runuser -l $orig_user -c "pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath"
 					Exit_Status
 				done
 		fi
@@ -339,9 +345,12 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 Vbox_Installation () {		## Virtualbox installation
 	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]}; do
+		printf "$line\n"
+		printf "Installing $i"
+		printf "$line\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		runuser -l tom -c 'pacaur -S $i --noconfirm --needed --noedit'
+		runuser -l $orig_user -c 'pacaur -S $i --noconfirm --needed --noedit'
 	done
 	modprobe vboxdrv
 	gpasswd -a tom vboxusers
