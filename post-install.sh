@@ -98,7 +98,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	pacman -S xorg xorg-xinit --noconsfirm --needed 2>> $errorpath >> $outputpath --noconfirm
+	pacman -S xorg xorg-xinit --noconfirm --needed 2>> $errorpath >> $outputpath --noconfirm
 	Exit_Status
 
 	## Make sure there is an Intel video card and install its drivers
