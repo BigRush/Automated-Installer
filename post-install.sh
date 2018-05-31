@@ -154,12 +154,13 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 				KDE_Installation
 				;;
 			Deepin)
-				printf "Not avaliable at the moment, coming soon..."
+				printf "Not avaliable at the moment, coming soon...\n"
 				;;
 			xfce4)
-				printf "Not avaliable at the moment, coming soon..."
+				printf "Not avaliable at the moment, coming soon...\n"
+				;;
 			*)
-			printf "Invalid option"
+			printf "Invalid option\n"
 			;;
 		esac
 	done
