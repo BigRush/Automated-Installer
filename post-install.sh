@@ -286,7 +286,7 @@ Pacaur_Install () {
 		output_text="cowers installation"
 		error_txt="while installing cower"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
-		chown $orig_user PKGBUILD
+		Exit_Status
 		runuser -l $orig_user -c "makepkg PKGBUILD --skippgpcheck --install --needed"
 		Exit_Status
 	fi
@@ -296,7 +296,7 @@ Pacaur_Install () {
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur"
-		chown $orig_user PKGBUILD
+		Exit_Status
 		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed"
 		Exit_Status
 	fi
