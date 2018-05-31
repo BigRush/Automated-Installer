@@ -28,9 +28,9 @@ Log_And_Variables () {
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	errorlog="error.log"
 	outputlog="output.log"
+	logfolder="/var/log/post_install"
 	errorpath=$logfolder/$errorlog
 	outputpath=$logfolder/$outputlog
-	logfolder="/var/log/post_install"
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
