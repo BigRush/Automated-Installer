@@ -354,7 +354,9 @@ Main () { ## call Functions
 	Log_And_Variables
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config
+	else
+		prinf "The script does not support your distribution\n"
 
-
+	fi
 
 }
