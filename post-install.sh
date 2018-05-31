@@ -295,9 +295,9 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs pacaur)" ]]; then
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
-    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur"
+    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur" 2>> $errorpath >> $outputpath
 		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed"
+		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
