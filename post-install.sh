@@ -82,7 +82,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
@@ -94,7 +94,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	printf "$line\n"
 	printf "Installing Xorg...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
@@ -107,7 +107,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	if [[ $? -eq 0 ]]; then
 		printf "$line\n"
 		printf "Installing video drivers...\n"
-		printf "$line\n"
+		printf "$line\n\n"
 
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
@@ -115,13 +115,15 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	else
+		printf "$line\n"
 		printf "Did not detect Intel video card,\nplease install video card drivers by yourself later.\nContinuing with the script...\n"
+		printf "$line\n\n"
 		sleep 2
 	fi
 
 	printf "$line\n"
 	printf "Downloading background picture...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	output_text="Background picture download"
 	error_txt="Downloading background picture"
