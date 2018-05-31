@@ -25,7 +25,7 @@ Root_Check () {		## Checks if the script runs as root
 Log_And_Variables () {
 
 	####  Varibale	####
-	line="------------------------------------------"
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	errorlog="error.log"
 	outputlog="output.log"
 	errorpath=$logfolder/$errorlog
