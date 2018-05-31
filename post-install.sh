@@ -350,6 +350,7 @@ Vbox_Installation () {		## Virtualbox installation
 Main () { ## call Functions
 	Root_Check
 	Log_And_Variables
+	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config
 	else
