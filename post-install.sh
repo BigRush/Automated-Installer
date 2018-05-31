@@ -284,8 +284,8 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs cower)" ]]; then
 		output_text="cowers installation"
 		error_txt="while installing cower"
-    curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
-    makepkg PKGBUILD --skippgpcheck --install --needed
+    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
+    	runuser -l $orig_user -c "makepkg PKGBUILD --skippgpcheck --install --needed"
 		Exit_Status
 	fi
 
@@ -293,8 +293,8 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs pacaur)" ]]; then
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
-    curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur
-    makepkg PKGBUILD --install --needed
+    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur"
+    	runuser -l $orig_user -c "makepkg PKGBUILD --install --needed"
 		Exit_Status
 	fi
 
