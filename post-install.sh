@@ -258,6 +258,7 @@ Pacaur_Install () {
 	## Create a tmp-working-dir if it does't exits and navigate into it
 	if ! [[ -e /tmp/pacaur_install ]]; then
 		mkdir -p /tmp/pacaur_install
+		chown $orig_user /tmp/pacaur_install
 	fi
 
 	cd /tmp/pacaur_install
