@@ -199,9 +199,7 @@ KDE_Installation () {		## install KDE desktop environment
 	Exit_Status
 }
 
-KDE_Config () {
-
-}
+#KDE_Config () {}
 
 Arch_Font_Config () {		## Configure ugly arch kde fonts
 	output_text="Font installation"
