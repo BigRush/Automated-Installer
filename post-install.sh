@@ -117,7 +117,6 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	else
 		printf "Did not detect Intel video card,\nplease install video card drivers by yourself later.\nContinuing with the script...\n"
 		sleep 2
-		fi
 	fi
 
 	printf "$line\n"
