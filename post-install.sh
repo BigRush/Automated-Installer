@@ -43,11 +43,11 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 	if [[ $? -eq 0 ]]; then
 		printf "$line\n"
 		printf "$output_text complete...\n"
-		printf "$line\n"
+		printf "$line\n\n"
 	else
 		printf "$line\n"
 		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
-		printf "$line\n"
+		printf "$line\n\n"
 		exit 1
 	fi
 }
@@ -176,7 +176,7 @@ KDE_Installation () {		## install KDE desktop environment
 
 	printf "$line\n"
 	printf "Installing plasma desktop environment...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	output_text="Plasma desktop installation"
 	error_txt="while installing plasma desktop"
@@ -187,7 +187,7 @@ KDE_Installation () {		## install KDE desktop environment
 
 	printf "$line\n"
 	printf "Installing sddm...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	output_text="sddm installation"
 	error_txt="while installing sddm"
@@ -251,7 +251,7 @@ Pacaur_Install () {
 
 	printf "$line\n"
 	printf "Installing pacaur dependencies...\n"
-	printf "$line\n"
+	printf "$line\n\n"
 
 	output_text="base-devel packages installation"
 	error_txt="while installing base-devel packages"
@@ -293,9 +293,9 @@ Pacaur_Install () {
 Manjaro_Sys_Update () {
 	## update the system, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
 	pacman -Syu 2>> $errorpath >> $outputpath
-	printf $line
+	printf "$line\n"
 	printf "System update complete\n"
-	printf $line
+	printf "$line\n\n"
 }
 
 xfce_theme () {		## Set desktop theme
@@ -328,7 +328,7 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 				for i in ${app[*]}; do
 					printf "$line\n"
 					printf "Installing $i"
-					printf "$line\n"
+					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
 					runuser -l $orig_user -c "pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath"
@@ -342,7 +342,7 @@ Vbox_Installation () {		## Virtualbox installation
 	for i in ${vb[*]}; do
 		printf "$line\n"
 		printf "Installing $i"
-		printf "$line\n"
+		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
 		runuser -l $orig_user -c 'pacaur -S $i --noconfirm --needed --noedit'
@@ -358,8 +358,9 @@ Main () { ## call Functions
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config
 	else
-		prinf "The script does not support your distribution\n"
-
+		printf "$line\n"
+		printf "This script does not support your distribution\n"
+		printf "$line\n\n"
 	fi
 
 }
