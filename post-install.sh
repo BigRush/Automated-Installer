@@ -202,7 +202,7 @@ KDE_Installation () {		## install KDE desktop environment
 	printf "Enabling sddm service...\n"
 	printf "$line\n\n"
 
-	output_text="Enable SDDM service"
+	output_text="Enable sddm service"
 	error_txt="while enabling sddm service"
 
 	systemctl enable sddm 2>> $errorpath >> $outputpath
@@ -285,7 +285,8 @@ Pacaur_Install () {
 		output_text="cowers installation"
 		error_txt="while installing cower"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
-    	runuser -l $orig_user -c "makepkg PKGBUILD --skippgpcheck --install --needed"
+		chown $orig_user PKGBUILD
+		runuser -l $orig_user -c "makepkg PKGBUILD --skippgpcheck --install --needed"
 		Exit_Status
 	fi
 
@@ -294,7 +295,8 @@ Pacaur_Install () {
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur"
-    	runuser -l $orig_user -c "makepkg PKGBUILD --install --needed"
+		chown $orig_user PKGBUILD
+		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed"
 		Exit_Status
 	fi
 
