@@ -159,7 +159,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 
 Pacaur_applications () {		## Applications i want to install with pacaur
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
-				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
+				app=(ncdu git steam teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
 					printf "$line\n"
 					printf "Installing $i"
