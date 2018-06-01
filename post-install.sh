@@ -22,7 +22,7 @@ Root_Check () {		## Checks if the script runs as root
 	fi
 }
 
-Log_And_Variables () {
+Log_And_Variables () {	## declare variables and log path that will be used by other functions
 
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
@@ -81,7 +81,7 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 Arch_Config () {		## Configure arch after a clean install with KDE desktop environment
 
 	## Call Root_Check function
-	Root_Check
+
 
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
@@ -130,7 +130,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	printf "$line\n\n"
 
 	output_text="Background picture download"
-	error_txt="Downloading background picture"
+	error_txt="while downloading background picture"
 
 	## Download background picture
 	if ! [[ -e $user_path/Pictures ]]; then
@@ -188,12 +188,11 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		esac
 	done
 
-
-	## Call Pacaur_Install function to install pacaur
-	echo $(pwd)
-	runuser -l $orig_user -c "bash $(pwd)/pacaur-install.sh"
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
 	Arch_Font_Config
+
+	## Call Boot_Manager_Config function
+	Boot_Manager_Config
 }
 
 KDE_Installation () {		## install KDE desktop environment
@@ -295,13 +294,44 @@ xfce_theme () {		## Set desktop theme
 	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/grave' --type string --set "xfce4-terminal --drop-down" --create
 }
 
-Grub_Config () {		## Config the grub background and fast boot
+Boot_Manager_Config () {		## Config the grub background and fast boot time
 	sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 	sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 	sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
 	## apply changes to grub
 	grub-mkconfig -o /boot/grub/grub.cfg
+
+	## install refinds boot manager and configure it
+	printf "$line\n"
+	printf "Downloading refind boot manager...\n"
+	printf "$line\n\n"
+
+	output_text="Refind boot manager download"
+	error_txt="while downloading refind boot manager"
+
+	pacman -S refind-efi --noconfirm --needed 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	printf "$line\n"
+	printf "Configuring refind with 'refind-install'...\n"
+	printf "$line\n\n"
+
+	output_text="'refind-install'"
+	error_txt="while configuring refind with 'refind-install'"
+
+	refind-install 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	printf "$line\n"
+	printf "Configuring refind with 'mkrlconf'...\n"
+	printf "$line\n\n"
+
+	output_text="'mkrlconf'"
+	error_txt="while configuring refind with 'mkrlconf'"
+
+	mkrlconf 2>> $errorpath >> $outputpath
+	Exit_Status
 
 }
 
@@ -341,6 +371,7 @@ Vbox_Installation () {		## Virtualbox installation
 
 Post_Main () { ## Call Functions
 	Log_And_Variables
+	Root_Check
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config
@@ -351,3 +382,4 @@ Post_Main () { ## Call Functions
 	fi
 
 }
+Post_Main

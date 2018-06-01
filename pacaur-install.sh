@@ -9,7 +9,76 @@ Non_Root_Check () {		## Make sure the script doesn't run as root
 	fi
 }
 
+Log_And_Variables () {	## declare variables and log path that will be used by other functions
+
+	####  Varibale	####
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+	logfolder="/var/log/post_install"
+	errorpath=$logfolder/error.log
+	outputpath=$logfolder/output.log
+	orig_user=$SUDO_USER
+	user_path=/home/$orig_user
+	####  Varibale	####
+
+	## Check if log folder exits, if not - create it
+	if ! [[ -e $logfolder ]]; then
+		mkdir -p $logfolder
+	fi
+}
+
+Exit_Status () {		## Check exit status of the last command to see if it completed successfully
+	if [[ $? -eq 0 ]]; then
+		printf "$line\n"
+		printf "$output_text complete...\n"
+		printf "$line\n\n"
+	else
+		printf "$line\n"
+		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
+		printf "$line\n\n"
+		exit 1
+	fi
+}
+
+Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	  	Distro_Val="manjaro"
+	fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+		Distro_Val="arch"
+	fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+		Distro_Val="debian"
+	fi
+
+	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
+
+	if [[ $? -eq 0 ]]; then
+	   	Distro_Val="centos"
+	fi
+}
+
 Pacaur_Install () {
+
+	## Propmet the user with what the script will now do (with cosmetics :D)
+	printf "$line\n"
+	printf "Updating the system...\n"
+	printf "$line\n\n"
+
+	## Will be used in Exit_Status function to output text for the user
+	output_text="Update"
+	error_txt="while updating"
+
+	## Update the system, send stdout and sterr to log files
+	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
+	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
 	if ! [[ -e $user_path/pacaur_install_tmp ]]; then
@@ -62,12 +131,48 @@ Pacaur_Install () {
 	rm -r /tmp/pacaur_install
 }
 
+Pacaur_applications () {		## Applications i want to install with pacaur
+		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
+				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
+				for i in ${app[*]}; do
+					printf "$line\n"
+					printf "Installing $i"
+					printf "$line\n\n"
+					output_text="$i installation"
+					error_txt="while installing $i"
+					pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
+					Exit_Status
+				done
+		fi
+}
+
+Vbox_Installation () {		## Virtualbox installation
+	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
+	for i in ${vb[*]}; do
+		printf "$line\n"
+		printf "Installing $i"
+		printf "$line\n\n"
+		output_text="$i installation"
+		error_txt="while installing $i"
+		pacaur -S $i --noconfirm --needed --noedit
+	done
+	sudo modprobe vboxdrv
+	sudo gpasswd -a tom vboxusers
+}
 
 Pac_Main () {	## Call functions and source functions from post-install.sh
-	source ./post-install.sh
 	Non_Root_Check
-	Pacaur_Install
-	Pacaur_applications
-	Vbox_Installation
+	Log_And_Variables
+	Exit_Status
+	Distro_Check
+	if [[ $Distro_Val == arch ]]; then
+		Pacaur_Install
+		Pacaur_applications
+		Vbox_Installation
+	else
+		printf "$line\n"
+		printf "This script does not support your distribution\n"
+		printf "$line\n\n"
+	fi
 }
 Pac_Main
