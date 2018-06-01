@@ -115,7 +115,7 @@ Pacaur_Install () {
 		error_txt="while installing cower"
     	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower # 2>> $errorpath >> $outputpath
 		Exit_Status
-		makepkg PKGBUILD --install --needed # 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --needed # 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
@@ -125,7 +125,7 @@ Pacaur_Install () {
 		error_txt="while installing pacaur"
     	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur # 2>> $errorpath >> $outputpath
 		Exit_Status
-		makepkg PKGBUILD --install --needed # 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --needed # 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
