@@ -271,14 +271,14 @@ Pacaur_Install () {
 	error_txt="while installing base-devel packages"
 
 	## If didn't install the "base-devel" group
-	sudo pacman -S binutils make gcc fakeroot pkg-config --noconfirm --needed 2>> $errorpath >> $outputpath
+	pacman -S binutils make gcc fakeroot pkg-config --noconfirm --needed 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	output_text="base-devel pacaur dependencies installation"
 	error_txt="while installing pacaur dependencies"
 
 	## Install pacaur dependencies from arch repos
-	sudo pacman -S expac yajl git --noconfirm --needed 2>> $errorpath >> $outputpath
+	pacman -S expac yajl git --noconfirm --needed 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	## Install "cower" from AUR
