@@ -24,6 +24,8 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 	if ! [[ -e $logfolder ]]; then
 		sudo mkdir -p $logfolder
 		sudo chown -R $orig_user $logfolder
+	else
+		sudo chown -R $orig_user $logfolder
 	fi
 }
 
