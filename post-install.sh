@@ -135,14 +135,34 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		Exit_Status
 	fi
 
-	## customize shell
-	printf "alias ll='ls -l'\n" >> $user_path/.bashrc
-	printf "alias lh='ls -lh'\n" >> $user_path/.bashrc
-	printf "alias la='ls -la'\n" >> $user_path/.bashrc
-	printf "screenfetch -E" >> $user_path/.bashrc
-	printf "alias ll='ls -l'\n" >> /root/.bashrc
-	printf "alias lh='ls -lh'\n" >> /root/.bashrc
-	printf "alias la='ls -la'\n" >> /root/.bashrc
+	## customize shell, check if the config exists, if not - add it to .bashrc
+	if ! [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
+		printf "alias ll='ls -l'\n" >> $user_path/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias lh='ls -lh'" $user_path/.bashrc) ]]; then
+		printf "alias lh='ls -lh'\n" >> $user_path/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias la='ls -la'" $user_path/.bashrc) ]]; then
+		printf "alias la='ls -la'\n" >> $user_path/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias screenfetch -E" $user_path/.bashrc) ]]; then
+		printf "screenfetch -E" >> $user_path/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias ll='ls -l'" /root/.bashrc) ]]; then
+		printf "alias ll='ls -l'\n" >> /root/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias lh='ls -lh'" /root/.bashrc) ]]; then
+		printf "alias lh='ls -lh'\n" >> /root/.bashrc
+	fi
+
+	if ! [[ -z $(grep "alias la ='ls -la'" /root/.bashrc) ]]; then
+		printf "alias la='ls -la'\n" >> /root/.bashrc
+	fi
 
 	desk_env=(Plasma Deepin xfce4)
 	local PS3="Please choose a desktop environment to install: "
@@ -166,7 +186,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 
 	## Call Pacaur_Install function to install pacaur
-	Pacaur_Install
+	runuser -l $orig_user -c "bash pacaur-install.sh"
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
 	Arch_Font_Config
 }
@@ -253,59 +273,6 @@ Arch_Font_Config () {		## Configure ugly arch kde fonts
 	" > /etc/fonts/local.conf
 }
 
-Pacaur_Install () {
-
-	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_pathpacaur_install ]]; then
-		runuser -l $orig_user -c "mkdir -p $user_path/pacaur_install"
-	fi
-
-	cd $user_path/pacaur_install
-	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
-
-	printf "$line\n"
-	printf "Installing pacaur dependencies...\n"
-	printf "$line\n\n"
-
-	output_text="base-devel packages installation"
-	error_txt="while installing base-devel packages"
-
-	## If didn't install the "base-devel" group
-	pacman -S binutils make gcc fakeroot pkg-config --noconfirm --needed 2>> $errorpath >> $outputpath
-	Exit_Status
-
-	output_text="base-devel pacaur dependencies installation"
-	error_txt="while installing pacaur dependencies"
-
-	## Install pacaur dependencies from arch repos
-	pacman -S expac yajl git --noconfirm --needed 2>> $errorpath >> $outputpath
-	Exit_Status
-
-	## Install "cower" from AUR
-	if ! [[ -n "$(pacman -Qs cower)" ]]; then
-		output_text="cowers installation"
-		error_txt="while installing cower"
-    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
-		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
-		Exit_Status
-	fi
-
-	## Install "pacaur" from AUR
-	if ! [[ -n "$(pacman -Qs pacaur)" ]]; then
-		output_text="pacaur installation"
-		error_txt="while installing pacaur"
-    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur" 2>> $errorpath >> $outputpath
-		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
-		Exit_Status
-	fi
-
-	## Clean up on aisle four
-	cd ~
-	rm -r /tmp/pacaur_install
-}
-
 Manjaro_Sys_Update () {
 	## update the system, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
 	pacman -Syu 2>> $errorpath >> $outputpath
@@ -368,6 +335,7 @@ Vbox_Installation () {		## Virtualbox installation
 }
 
 Main () { ## call Functions
+	source pacaur-install.sh
 	Log_And_Variables
 	Root_Check
 	Distro_Check
