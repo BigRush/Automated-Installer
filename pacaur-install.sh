@@ -1,6 +1,18 @@
 #!/bin/bash
 
+Non_Root_Check () {		## Make sure the script doesn't run as root
+	if [[ $EUID -eq 0 ]]; then
+		printf "$line\n"
+		printf "The script can't run as root\n"
+		printf "$line\n"
+		exit 1
+	fi
+}
+
 Pacaur_Install () {
+
+	## Call Non_Root_Check function
+	Non_Root_Check
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
 	if ! [[ -e $user_pathpacaur_install ]]; then
@@ -32,9 +44,9 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs cower)" ]]; then
 		output_text="cowers installation"
 		error_txt="while installing cower"
-    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
+    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower # 2>> $errorpath >> $outputpath
 		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
+		makepkg PKGBUILD --install --needed # 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
@@ -42,9 +54,9 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs pacaur)" ]]; then
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
-    	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur" 2>> $errorpath >> $outputpath
+    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur # 2>> $errorpath >> $outputpath
 		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
+		makepkg PKGBUILD --install --needed # 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
@@ -52,5 +64,12 @@ Pacaur_Install () {
 	cd ~
 	rm -r /tmp/pacaur_install
 }
-source post-install.sh
-Pacaur_Install
+
+
+Pac_Main () {	## Call functions and source functions from post-install.sh
+	source ./post-install.sh
+	Pacaur_Install
+	Pacaur_applications
+	Vbox_Installation
+}
+Pac_Main

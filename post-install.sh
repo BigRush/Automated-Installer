@@ -245,9 +245,9 @@ Arch_Font_Config () {		## Configure ugly arch kde fonts
 	## It will disable embedded bitmap for all fonts
 	## Enable sub-pixel RGB rendering
 	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	sudo ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	sudo ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	sudo ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+	ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+	ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+	ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
@@ -315,7 +315,7 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
-					runuser -l $orig_user -c "pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath"
+					pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
 					Exit_Status
 				done
 		fi
@@ -329,13 +329,13 @@ Vbox_Installation () {		## Virtualbox installation
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		runuser -l $orig_user -c 'pacaur -S $i --noconfirm --needed --noedit'
+		pacaur -S $i --noconfirm --needed --noedit
 	done
 	modprobe vboxdrv
 	gpasswd -a tom vboxusers
 }
 
-Main () { ## call Functions
+Post_Main () { ## Call Functions
 	Log_And_Variables
 	Root_Check
 	Distro_Check
@@ -348,4 +348,4 @@ Main () { ## call Functions
 	fi
 
 }
-Main
+Post_Main
