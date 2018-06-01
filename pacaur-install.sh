@@ -52,3 +52,4 @@ Pacaur_Install () {
 	cd ~
 	rm -r /tmp/pacaur_install
 }
+Pacaur_Install
