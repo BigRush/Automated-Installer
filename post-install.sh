@@ -187,7 +187,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	## Call Pacaur_Install function to install pacaur
 	echo $(pwd)
-	runuser -l $orig_user -c "bash $user_path/pacaur-install.sh"
+	runuser -l $orig_user -c "bash $user_path/install/pacaur-install.sh"
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
 	Arch_Font_Config
 }
