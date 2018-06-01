@@ -186,6 +186,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 
 	## Call Pacaur_Install function to install pacaur
+	echo $(pwd)
 	runuser -l $orig_user -c "bash pacaur-install.sh"
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
 	Arch_Font_Config
@@ -237,7 +238,7 @@ Arch_Font_Config () {		## Configure ugly arch kde fonts
 	error_txt="while installting fonts"
 
 	## Install some nice fonts
-	pacman -S ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath
+	pacman -S ttf-dejavu ttf-liberation noto-fonts --noconfirm --needed 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	## Enable font presets by creating symbolic links

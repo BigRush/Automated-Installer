@@ -17,8 +17,8 @@ Pacaur_Install () {
 	output_text="base-devel packages installation"
 	error_txt="while installing base-devel packages"
 
-	## If didn't install the "base-devel" group
-	pacman -S binutils make gcc fakeroot pkg-config --noconfirm --needed 2>> $errorpath >> $outputpath
+	## If didn't install the "base-devel" group and git
+	pacman -S binutils make gcc fakeroot pkg-config git --noconfirm --needed 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	output_text="base-devel pacaur dependencies installation"
