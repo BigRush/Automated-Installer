@@ -336,7 +336,6 @@ Vbox_Installation () {		## Virtualbox installation
 }
 
 Main () { ## call Functions
-	source pacaur-install.sh
 	Log_And_Variables
 	Root_Check
 	Distro_Check

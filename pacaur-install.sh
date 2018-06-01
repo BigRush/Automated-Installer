@@ -52,4 +52,5 @@ Pacaur_Install () {
 	cd ~
 	rm -r /tmp/pacaur_install
 }
+source post-install.sh
 Pacaur_Install
