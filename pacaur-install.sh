@@ -154,7 +154,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 		else
 			(($i ++))
 		fi
-
+	done
 }
 
 Pacaur_applications () {		## Applications i want to install with pacaur
