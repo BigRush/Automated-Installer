@@ -135,6 +135,28 @@ Pacaur_Install () {
 	rm -rf $user_path/pacaur_install_tmp
 }
 
+Pacman_Multilib () {	## Enablr multilib repo
+
+	## validate the multilib section is in the place that we are going to replace
+	i=1
+	pac_path=/etc/pacman.conf
+	for i in /etc/pacman.conf ;do
+		if [[ "#[multilib]" == $(sudo sed -n "$i\p" $pac_path) ]]; then
+			if [[ $i -eq 93 ]]; then
+				sudo sed "93,94s/.//" $pac_path
+				break
+			else
+				printf "$line\n"
+				printf "the pacman.conf file has changed its format\n please enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
+				printf "$line\n\n"
+				break
+			fi
+		else
+			(($i ++))
+		fi
+
+}
+
 Pacaur_applications () {		## Applications i want to install with pacaur
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
 				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
@@ -171,6 +193,7 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Pacaur_Install
+		Pacman_Multilib
 		Pacaur_applications
 		Vbox_Installation
 	else
