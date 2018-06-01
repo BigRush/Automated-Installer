@@ -29,7 +29,7 @@ Log_And_Variables () {
 	logfolder="/var/log/post_install"
 	errorpath=$logfolder/error.log
 	outputpath=$logfolder/output.log
-	orig_user=$(logname)
+	orig_user=$SUDO_USER
 	user_path=/home/$orig_user
 	####  Varibale	####
 
@@ -256,12 +256,11 @@ Arch_Font_Config () {		## Configure ugly arch kde fonts
 Pacaur_Install () {
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e /tmp/pacaur_install ]]; then
-		mkdir -p /tmp/pacaur_install
-		chown $orig_user /tmp/pacaur_install
+	if ! [[ -e $user_pathpacaur_install ]]; then
+		runuser -l $orig_user -c "mkdir -p $user_path/pacaur_install"
 	fi
 
-	cd /tmp/pacaur_install
+	cd $user_path/pacaur_install
 
 	printf "$line\n"
 	printf "Installing pacaur dependencies...\n"
