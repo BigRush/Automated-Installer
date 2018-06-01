@@ -22,7 +22,8 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 
 	## Check if log folder exits, if not - create it
 	if ! [[ -e $logfolder ]]; then
-		mkdir -p $logfolder
+		sudo mkdir -p $logfolder
+		sudo chown -R $orig_user $logfolder
 	fi
 }
 
@@ -77,7 +78,7 @@ Pacaur_Install () {
 	error_txt="while updating"
 
 	## Update the system, send stdout and sterr to log files
-	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
+	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
