@@ -16,7 +16,7 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 	logfolder="/var/log/post_install"
 	errorpath=$logfolder/error.log
 	outputpath=$logfolder/output.log
-	orig_user=$SUDO_USER
+	orig_user=$USER
 	user_path=/home/$orig_user
 	####  Varibale	####
 
