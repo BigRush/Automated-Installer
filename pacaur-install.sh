@@ -88,6 +88,7 @@ Pacaur_Install () {
 		mkdir -p $user_path/pacaur_install_tmp
 	fi
 
+	pushd .
 	cd $user_path/pacaur_install_tmp
 	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
 
@@ -130,8 +131,8 @@ Pacaur_Install () {
 	fi
 
 	## Clean up on aisle four
-	cd ~
-	rm -r /tmp/pacaur_install
+	popd
+	rm -rf $user_path/pacaur_install_tmp
 }
 
 Pacaur_applications () {		## Applications i want to install with pacaur
