@@ -79,6 +79,10 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 }
 
 Arch_Config () {		## Configure arch after a clean install with KDE desktop environment
+
+	## Call Root_Check function
+	Root_Check
+
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
@@ -337,7 +341,6 @@ Vbox_Installation () {		## Virtualbox installation
 
 Post_Main () { ## Call Functions
 	Log_And_Variables
-	Root_Check
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config

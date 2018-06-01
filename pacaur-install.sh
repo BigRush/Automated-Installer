@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 Non_Root_Check () {		## Make sure the script doesn't run as root
 	if [[ $EUID -eq 0 ]]; then
@@ -11,15 +11,12 @@ Non_Root_Check () {		## Make sure the script doesn't run as root
 
 Pacaur_Install () {
 
-	## Call Non_Root_Check function
-	Non_Root_Check
-
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_pathpacaur_install ]]; then
-		runuser -l $orig_user -c "mkdir -p $user_path/pacaur_install"
+	if ! [[ -e $user_path/pacaur_install_tmp ]]; then
+		mkdir -p $user_path/pacaur_install_tmp
 	fi
 
-	cd $user_path/pacaur_install
+	cd $user_path/pacaur_install_tmp
 	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
 
 	printf "$line\n"
@@ -68,6 +65,7 @@ Pacaur_Install () {
 
 Pac_Main () {	## Call functions and source functions from post-install.sh
 	source ./post-install.sh
+	Non_Root_Check
 	Pacaur_Install
 	Pacaur_applications
 	Vbox_Installation
