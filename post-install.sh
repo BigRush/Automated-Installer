@@ -261,6 +261,7 @@ Pacaur_Install () {
 	fi
 
 	cd $user_path/pacaur_install
+	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
 
 	printf "$line\n"
 	printf "Installing pacaur dependencies...\n"
@@ -286,7 +287,7 @@ Pacaur_Install () {
 		error_txt="while installing cower"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower"
 		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --skippgpcheck --install --needed"
+		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
 		Exit_Status
 	fi
 
@@ -296,7 +297,7 @@ Pacaur_Install () {
 		error_txt="while installing pacaur"
     	runuser -l $orig_user -c "curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur" 2>> $errorpath >> $outputpath
 		Exit_Status
-		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath >> $outputpath
+		runuser -l $orig_user -c "makepkg PKGBUILD --install --needed" 2>> $errorpath
 		Exit_Status
 	fi
 
