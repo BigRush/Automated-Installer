@@ -88,9 +88,9 @@ Pacaur_Install () {
 		mkdir -p $user_path/pacaur_install_tmp
 	fi
 
-	pushd .
+	pushd . 2>> $errorpath >> $outputpath
 	cd $user_path/pacaur_install_tmp
-	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53
+	gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 2>> $errorpath >> $outputpath
 
 	printf "$line\n"
 	printf "Installing pacaur dependencies...\n"
@@ -114,9 +114,9 @@ Pacaur_Install () {
 	if ! [[ -n "$(pacman -Qs cower)" ]]; then
 		output_text="cowers installation"
 		error_txt="while installing cower"
-    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower # 2>> $errorpath >> $outputpath
+    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower 2>> $errorpath >> $outputpath
 		Exit_Status
-		makepkg PKGBUILD --install --noconfirm --needed # 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
@@ -126,35 +126,35 @@ Pacaur_Install () {
 		error_txt="while installing pacaur"
     	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur # 2>> $errorpath >> $outputpath
 		Exit_Status
-		makepkg PKGBUILD --install --noconfirm --needed # 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
 	## Clean up on aisle four
-	popd
+	popd 2>> $errorpath >> $outputpath
 	rm -rf $user_path/pacaur_install_tmp
 }
 
 Pacman_Multilib () {	## Enablr multilib repo
 
 	## validate the multilib section is in the place that we are going to replace
-	i=1
 	pac_path=/etc/pacman.conf
-	for i in /etc/pacman.conf ;do
-		if [[ "#[multilib]" == $(sudo sed -n "$i\p" $pac_path) ]]; then
-			if [[ $i -eq 93 ]]; then
-				sudo sed "93,94s/.//" $pac_path
-				break
-			else
-				printf "$line\n"
-				printf "the pacman.conf file has changed its format\n please enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
-				printf "$line\n\n"
-				break
+	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
+		for ((i; i<=100; i++); do
+			pac_line=$(sed -n "$i"p $pac_path)
+			if [[ "#[multilib]" == $pac_line ]]; then
+				if [[ $i -eq 93 ]]; then
+					sudo sed -ie "93,94s/.//" $pac_path
+					break
+				else
+					printf "$line\n"
+					printf "the pacman.conf file has changed its format\n please enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
+					printf "$line\n\n"
+					break
+				fi
 			fi
-		else
-			(($i ++))
-		fi
-	done
+		done
+	fi
 }
 
 Pacaur_applications () {		## Applications i want to install with pacaur
