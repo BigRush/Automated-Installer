@@ -39,7 +39,8 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
-		read -p "Would you like to continue anyway?[y/n]: \n" answer
+		read -p "Would you like to continue anyway?[y/n]: " answer
+		printf "\n"
 		if [[ -z $answer ]]; then
 			:
 		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
@@ -186,7 +187,8 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 
 Vbox_Installation () {		## Virtualbox installation
 
-	read -p "Would you like to install virtualbox?[y/n]: \n" answer
+	read -p "Would you like to install virtualbox?[y/n]: " answer
+	printf "\n"
 	if [[ -z $answer ]]; then
 		:
 	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
