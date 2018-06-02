@@ -38,7 +38,19 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 		printf "$line\n"
 		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
-		exit 1
+
+		read -p "Would you like to continue anyway?[y/n]: " answer
+		if [[ -z $answer ]]; then
+			:
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			exit 1
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+		fi
 	fi
 }
 
@@ -193,8 +205,11 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Pacaur_Install
+		sleep 1
 		Pacman_Multilib
+		sleep 1
 		Pacaur_applications
+		sleep 1
 		Vbox_Installation
 	else
 		printf "$line\n"
