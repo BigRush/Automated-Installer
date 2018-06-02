@@ -39,7 +39,7 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
-		read -p "Would you like to continue anyway?[y/n]: " answer
+		read -p "Would you like to continue anyway?[y/n]: \n" answer
 		if [[ -z $answer ]]; then
 			:
 		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
@@ -185,6 +185,20 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 }
 
 Vbox_Installation () {		## Virtualbox installation
+
+	read -p "Would you like to install virtualbox?[y/n]: \n" answer
+	if [[ -z $answer ]]; then
+		:
+	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+		:
+	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+		exit 1
+	else
+		printf "$line\n"
+		printf "Invalid answer - exiting\n"
+		printf "$line\n\n"
+	fi
+
 	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]}; do
 		printf "$line\n"
@@ -192,7 +206,7 @@ Vbox_Installation () {		## Virtualbox installation
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		pacaur -S $i --noconfirm --needed --noedit
+		pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
 	done
 	sudo modprobe vboxdrv
 	sudo gpasswd -a tom vboxusers
