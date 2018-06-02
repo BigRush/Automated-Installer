@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+## ToDo	####################################
+#Add verbos option
+#Fix teamviewer
+#Fix discord
+############################################
+
 Non_Root_Check () {		## Make sure the script doesn't run as root
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
