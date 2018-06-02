@@ -142,7 +142,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
 		for ((i; i<=100; i++)); do
 			pac_line=$(sed -n "$i"p $pac_path)
-			if [[ "#[multilib]" == $pac_line ]]; then
+			if [[ "#[multilib]" == "$pac_line" ]]; then
 				if [[ $i -eq 93 ]]; then
 					sudo sed -ie "93,94s/.//" $pac_path
 					break
@@ -162,7 +162,7 @@ Pacaur_applications () {		## Applications i want to install with pacaur
 				app=(ncdu git steam teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
 					printf "$line\n"
-					printf "Installing $i"
+					printf "Installing $i\n"
 					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
@@ -176,7 +176,7 @@ Vbox_Installation () {		## Virtualbox installation
 	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]}; do
 		printf "$line\n"
-		printf "Installing $i"
+		printf "Installing $i\n"
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
