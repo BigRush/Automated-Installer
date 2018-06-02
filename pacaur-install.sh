@@ -46,6 +46,9 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Exiting..."
+			printf "$line\n\n"
 			exit 1
 		else
 			printf "$line\n"
@@ -194,6 +197,9 @@ Vbox_Installation () {		## Virtualbox installation
 	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
 		:
 	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+		printf "$line\n"
+		printf "Exiting..."
+		printf "$line\n\n"
 		exit 1
 	else
 		printf "$line\n"
