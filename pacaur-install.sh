@@ -140,7 +140,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 	## validate the multilib section is in the place that we are going to replace
 	pac_path=/etc/pacman.conf
 	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
-		for ((i; i<=100; i++); do
+		for ((i; i<=100; i++)); do
 			pac_line=$(sed -n "$i"p $pac_path)
 			if [[ "#[multilib]" == $pac_line ]]; then
 				if [[ $i -eq 93 ]]; then
