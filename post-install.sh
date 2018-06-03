@@ -203,12 +203,52 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Boot_Manager_Config
 }
 
+Deepin_Installation () {
+	printf "exec startdde\n" > $user_path/.xinitrc
+
+	printf "$line\n"
+	printf "Installing Deepin desktop environment...\n"
+	printf "$line\n\n"
+
+	output_text="Deepin desktop installation"
+	error_txt="while installing Deepin desktop"
+
+	##	install plasma desktop environment
+	pacman -S deepin --needed 2>> $errorpath
+	Exit_Status
+
+	printf "$line\n"
+	printf "Installing Lightdm...\n"
+	printf "$line\n\n"
+
+	output_text="Lightdm installation"
+	error_txt="while installing Lightdm"
+
+	## install sddm
+	pacman -S lightdm lightdm-deepin-greeter --needed --noconfirm 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	## enable and start the sddm service
+	printf "$line\n"
+	printf "Enabling Lightdm service...\n"
+	printf "$line\n\n"
+
+	output_text="Enable Lightdm service"
+	error_txt="while enabling Lightdm service"
+
+	systemctl enable lightdm 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	sed -ie "s/"
+
+}
+
 KDE_Installation () {		## install KDE desktop environment
 	## Set kde to start on startup
 	printf "exec startkde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
-	printf "Installing plasma desktop environment...\n"
+	printf "Installing Plasma desktop environment...\n"
 	printf "$line\n\n"
 
 	output_text="Plasma desktop installation"
