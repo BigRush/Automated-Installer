@@ -170,7 +170,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 					break
 				else
 					printf "$line\n"
-					printf "the pacman.conf file has changed its format\n please enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
+					printf "the pacman.conf file has changed its format\nplease enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
 					printf "$line\n\n"
 					break
 				fi
@@ -179,9 +179,14 @@ Pacman_Multilib () {	## Enablr multilib repo
 	fi
 }
 
+Webkit2_greeter () { ## install Webkit2_greeter for lightdm and change its theme
+	pacaur -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm
+
+}
+
 Pacaur_applications () {		## Applications i want to install with pacaur
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
-				app=(ncdu git steam teamviewer openssh vlc atom discord screenfetch)
+				app=(ncdu guake git steam teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
 					printf "$line\n"
 					printf "Installing $i\n"
@@ -235,6 +240,8 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 		Pacaur_Install
 		sleep 1
 		Pacman_Multilib
+		sleep 1
+		Webkit2_greeter
 		sleep 1
 		Pacaur_applications
 		sleep 1

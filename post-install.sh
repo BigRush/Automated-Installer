@@ -142,10 +142,10 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	## Download background picture
 	if ! [[ -e $user_path/Pictures ]]; then
-		mkdir $user_path/Pictures
-		wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
-		Exit_Status
+		runuser -l $orig_user -c "mkdir $user_path/Pictures"
 	fi
+	runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+	Exit_Status
 
 	## customize shell, check if the config exists, if not - add it to .bashrc
 	if ! [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
@@ -161,7 +161,11 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	fi
 
 	if ! [[ -z $(grep "alias screenfetch -E" $user_path/.bashrc) ]]; then
-		printf "screenfetch -E" >> $user_path/.bashrc
+		printf "screenfetch -E\n" >> $user_path/.bashrc
+	fi
+
+	if ! [[ -e /root/.bashrc ]]; then
+		touch /root/.bashrc
 	fi
 
 	if ! [[ -z $(grep "alias ll='ls -l'" /root/.bashrc) ]]; then
@@ -185,7 +189,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 				break
 				;;
 			Deepin)
-				printf "Not avaliable at the moment, coming soon...\n"
+				Deepin_Installation
 				;;
 			xfce4)
 				printf "Not avaliable at the moment, coming soon...\n"
@@ -239,7 +243,7 @@ Deepin_Installation () {
 	systemctl enable lightdm 2>> $errorpath >> $outputpath
 	Exit_Status
 
-	sed -ie "s/"
+	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" /etc/lightdm/lightdm.conf
 
 }
 
@@ -282,7 +286,11 @@ KDE_Installation () {		## install KDE desktop environment
 
 }
 
-#KDE_Config () {}
+KDE_Config () {
+	## Change background image
+
+
+}
 
 Arch_Font_Config () {		## Configure ugly arch kde fonts
 	output_text="Font installation"
@@ -296,9 +304,9 @@ Arch_Font_Config () {		## Configure ugly arch kde fonts
 	## It will disable embedded bitmap for all fonts
 	## Enable sub-pixel RGB rendering
 	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	ln -s /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	ln -s /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	ln -s /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
 	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
