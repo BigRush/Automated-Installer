@@ -351,9 +351,9 @@ xfce_theme () {		## Set desktop theme
 }
 
 Boot_Manager_Config () {		## Config the grub background and fast boot time
-	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) && \
-	-z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) && \
-	-z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
+	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
+	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
+	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
 
 		sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 		sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
