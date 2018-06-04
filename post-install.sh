@@ -148,19 +148,19 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Exit_Status
 
 	## customize shell, check if the config exists, if not - add it to .bashrc
-	if ! [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
+	if [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
 		printf "alias ll='ls -l'\n" >> $user_path/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias lh='ls -lh'" $user_path/.bashrc) ]]; then
+	if [[ -z $(grep "alias lh='ls -lh'" $user_path/.bashrc) ]]; then
 		printf "alias lh='ls -lh'\n" >> $user_path/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias la='ls -la'" $user_path/.bashrc) ]]; then
+	if [[ -z $(grep "alias la='ls -la'" $user_path/.bashrc) ]]; then
 		printf "alias la='ls -la'\n" >> $user_path/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias screenfetch -E" $user_path/.bashrc) ]]; then
+	if [[ -z $(grep "alias screenfetch -E" $user_path/.bashrc) ]]; then
 		printf "screenfetch -E\n" >> $user_path/.bashrc
 	fi
 
@@ -168,15 +168,15 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		touch /root/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias ll='ls -l'" /root/.bashrc) ]]; then
+	if [[ -z $(grep "alias ll='ls -l'" /root/.bashrc) ]]; then
 		printf "alias ll='ls -l'\n" >> /root/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias lh='ls -lh'" /root/.bashrc) ]]; then
+	if [[ -z $(grep "alias lh='ls -lh'" /root/.bashrc) ]]; then
 		printf "alias lh='ls -lh'\n" >> /root/.bashrc
 	fi
 
-	if ! [[ -z $(grep "alias la ='ls -la'" /root/.bashrc) ]]; then
+	if [[ -z $(grep "alias la ='ls -la'" /root/.bashrc) ]]; then
 		printf "alias la='ls -la'\n" >> /root/.bashrc
 	fi
 
@@ -190,6 +190,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 				;;
 			Deepin)
 				Deepin_Installation
+				break
 				;;
 			xfce4)
 				printf "Not avaliable at the moment, coming soon...\n"
@@ -350,43 +351,48 @@ xfce_theme () {		## Set desktop theme
 }
 
 Boot_Manager_Config () {		## Config the grub background and fast boot time
-	sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-	sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
-	sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
+	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) && \
+	-z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) && \
+	-z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
 
-	## apply changes to grub
-	grub-mkconfig -o /boot/grub/grub.cfg
+		sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+		sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
+		sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
-	## install refinds boot manager and configure it
-	printf "$line\n"
-	printf "Downloading refind boot manager...\n"
-	printf "$line\n\n"
+		## apply changes to grub
+		grub-mkconfig -o /boot/grub/grub.cfg
 
-	output_text="Refind boot manager download"
-	error_txt="while downloading refind boot manager"
+		## install refinds boot manager and configure it
+		printf "$line\n"
+		printf "Downloading refind boot manager...\n"
+		printf "$line\n\n"
 
-	pacman -S refind-efi --noconfirm --needed 2>> $errorpath >> $outputpath
-	Exit_Status
+		output_text="Refind boot manager download"
+		error_txt="while downloading refind boot manager"
 
-	printf "$line\n"
-	printf "Configuring refind with 'refind-install'...\n"
-	printf "$line\n\n"
+		pacman -S refind-efi --noconfirm --needed 2>> $errorpath >> $outputpath
+		Exit_Status
 
-	output_text="'refind-install'"
-	error_txt="while configuring refind with 'refind-install'"
+		printf "$line\n"
+		printf "Configuring refind with 'refind-install'...\n"
+		printf "$line\n\n"
 
-	refind-install 2>> $errorpath >> $outputpath
-	Exit_Status
+		output_text="'refind-install'"
+		error_txt="while configuring refind with 'refind-install'"
 
-	printf "$line\n"
-	printf "Configuring refind with 'mkrlconf'...\n"
-	printf "$line\n\n"
+		refind-install 2>> $errorpath >> $outputpath
+		Exit_Status
 
-	output_text="'mkrlconf'"
-	error_txt="while configuring refind with 'mkrlconf'"
+		printf "$line\n"
+		printf "Configuring refind with 'mkrlconf'...\n"
+		printf "$line\n\n"
 
-	mkrlconf 2>> $errorpath >> $outputpath
-	Exit_Status
+		output_text="'mkrlconf'"
+		error_txt="while configuring refind with 'mkrlconf'"
+
+		mkrlconf 2>> $errorpath >> $outputpath
+		Exit_Status
+	fi
 
 }
 
