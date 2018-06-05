@@ -53,7 +53,7 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting...\n"
+			printf "Exiting... \n"
 			printf "$line\n\n"
 			exit 1
 		else
