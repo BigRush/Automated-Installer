@@ -53,13 +53,14 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting..."
+			printf "Exiting...\n"
 			printf "$line\n\n"
 			exit 1
 		else
 			printf "$line\n"
 			printf "Invalid answer - exiting\n"
 			printf "$line\n\n"
+			exit 1
 		fi
 	fi
 }
@@ -134,20 +135,24 @@ Pacaur_Install () {
 
 	## Install "cower" from AUR
 	if ! [[ -n "$(pacman -Qs cower)" ]]; then
-		output_text="cowers installation"
-		error_txt="while installing cower"
+		output_text="getting cower with curl"
+		error_txt="while getting cower with curl"
     	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower 2>> $errorpath >> $outputpath
 		Exit_Status
+		output_text="cower installation"
+		error_txt="while installing cower"
 		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
 	## Install "pacaur" from AUR
 	if ! [[ -n "$(pacman -Qs pacaur)" ]]; then
-		output_text="pacaur installation"
-		error_txt="while installing pacaur"
+		output_text="getting pacaur with curl"
+		error_txt="while getting pacaur with curl"
     	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=pacaur # 2>> $errorpath >> $outputpath
 		Exit_Status
+		output_text="pacaur installation"
+		error_txt="while installing pacaur"
 		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
