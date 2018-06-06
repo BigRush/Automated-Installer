@@ -215,6 +215,7 @@ Vbox_Installation () {		## Virtualbox installation
 	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 		printf "$line\n"
 		printf "Exiting..."
+		printf "\n"
 		printf "$line\n\n"
 		exit 1
 	else
