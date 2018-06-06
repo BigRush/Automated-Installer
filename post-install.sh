@@ -160,7 +160,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		printf "alias la='ls -la'\n" >> $user_path/.bashrc
 	fi
 
-	if [[ -z $(grep "alias screenfetch -E" $user_path/.bashrc) ]]; then
+	if [[ -z $(grep "screenfetch -E" $user_path/.bashrc) ]]; then
 		printf "screenfetch -E\n" >> $user_path/.bashrc
 	fi
 
