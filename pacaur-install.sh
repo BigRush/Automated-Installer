@@ -240,7 +240,6 @@ Vbox_Installation () {		## Virtualbox installation
 Pac_Main () {	## Call functions and source functions from post-install.sh
 	Non_Root_Check
 	Log_And_Variables
-	Exit_Status
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Pacman_Multilib
