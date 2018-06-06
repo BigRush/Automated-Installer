@@ -53,7 +53,7 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting..."
+			printf "Exiting...\n"
 			printf "$line\n\n"
 			exit 1
 		else
@@ -242,9 +242,9 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 	Exit_Status
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
-		Pacaur_Install
-		sleep 1
 		Pacman_Multilib
+		sleep 1
+		Pacaur_Install
 		sleep 1
 		Webkit2_greeter
 		sleep 1
