@@ -113,7 +113,7 @@ Pacaur_Install () {
 
 	pushd . 2>> $errorpath >> $outputpath
 	cd $user_path/pacaur_install_tmp
-	#gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 2>> $errorpath >> $outputpath
+	# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 2>> $errorpath >> $outputpath
 
 	printf "$line\n"
 	printf "Installing pacaur dependencies...\n"
@@ -141,7 +141,7 @@ Pacaur_Install () {
 		Exit_Status
 		output_text="cower installation"
 		error_txt="while installing cower"
-		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --skippgpcheck --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
@@ -153,7 +153,7 @@ Pacaur_Install () {
 		Exit_Status
 		output_text="pacaur installation"
 		error_txt="while installing pacaur"
-		makepkg PKGBUILD --install --noconfirm --skippgpcheck --needed 2>> $errorpath >> $outputpath
+		makepkg PKGBUILD --install --noconfirm --needed 2>> $errorpath >> $outputpath
 		Exit_Status
 	fi
 
