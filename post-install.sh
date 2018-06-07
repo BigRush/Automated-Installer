@@ -86,7 +86,7 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 			sleep 0.75
 			printf "\r-"
 			sleep 0.75
-			printf "\r\\ \n"
+			printf "\r\\"
 		## when ps fails to get the process break the loop
 #		else
 #			break
