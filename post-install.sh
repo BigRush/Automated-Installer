@@ -70,14 +70,13 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 
 		## checks exit status of last command, if succeed
 	#	if [[ $? -eq 0 ]]; then
-			printf "\n"
-			printf "$line\n$output_text in progress...  [|]\n$line"
+			printf "\r$output_text in progress...  [|]"
 			sleep 0.75
-			printf "\r$line\n$output_text in progress... [/]"
+			printf "\r$output_text in progress... [/]"
 			sleep 0.75
-			printf "\r$line\n$output_text in progress... [-]\n$line"
+			printf "\r$output_text in progress... [-]"
 			sleep 0.75
-			printf "\r$line\n$output_text in progress... [\\] \n$line"
+			printf "\r$output_text in progress... [\\]"
 
 <<com
 			printf "\r\r|"
