@@ -72,9 +72,9 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 	#	if [[ $? -eq 0 ]]; then
 			printf "\r$output_text in progress...  [|]"
 			sleep 0.75
-			printf "\r$output_text in progress... \r[%s]" /
+			printf "\r$output_text in progress... [%c]" /
 			sleep 0.75
-			printf "\r$output_text in progress... \r[%s]" -
+			printf "\r$output_text in progress... [%c]" -
 			sleep 0.75
 			printf "\r$output_text in progress... [\\]"
 
