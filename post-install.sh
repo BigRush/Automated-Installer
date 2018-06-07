@@ -103,7 +103,8 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	## Update the system, send stdout and sterr to log files
 	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
 	Exit_Status
-
+	sleep 0.5
+	
 	printf "$line\n"
 	printf "Installing Xorg...\n"
 	printf "$line\n\n"
