@@ -62,14 +62,14 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 Progress_Spinner () {		## progress bar that runs while the installation process is running
 
 	## Endless loop
-	while true ;do
+	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$!") ]];do
 
 		## checks if our process is still alive by checking
 		## if his PID shows in ps command
-		ps aux |awk '{print $2}' |egrep -Eo "$!" &> /dev/null
+		# &> /dev/null
 
 		## checks exit status of last command, if succeed
-		if [[ $? -eq 0 ]]; then
+	#	if [[ $? -eq 0 ]]; then
 	#		printf "\n"
 	#		printf "$line\n$output_text in progress...  [|]\n$line\n\n"
 	#		sleep 0.75
@@ -88,9 +88,9 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 			sleep 0.75
 			printf "\r\\ \n"
 		## when ps fails to get the process break the loop
-		else
-			break
-		fi
+#		else
+#			break
+#		fi
 	done
 }
 
