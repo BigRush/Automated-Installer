@@ -72,9 +72,9 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 	#	if [[ $? -eq 0 ]]; then
 			printf "\r$output_text in progress...  [|]"
 			sleep 0.75
-			printf "\r$output_text in progress... [/]"
+			printf "\r$output_text in progress... [/\]"
 			sleep 0.75
-			printf "\r$output_text in progress... [-]"
+			printf "\r$output_text in progress... [-\]"
 			sleep 0.75
 			printf "\r$output_text in progress... [\\]"
 
@@ -138,7 +138,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Exit_Status
 	sleep 0.5
 
-	printf "$line\n"
+	printf "\n$line\n"
 	printf "Installing Xorg...\n"
 	printf "$line\n\n"
 
