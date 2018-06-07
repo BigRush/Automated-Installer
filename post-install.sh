@@ -13,7 +13,6 @@
 
 ## ToDo	####################################
 # Config KDE
-# Add Deepin DE
 # Add xfce4 DE
 # Config Deepin
 # Config xfce4
@@ -88,9 +87,6 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 
 Arch_Config () {		## Configure arch after a clean install with KDE desktop environment
 
-	## Call Root_Check function
-
-
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
@@ -104,14 +100,14 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
 	Exit_Status
 	sleep 0.5
-	
+
 	printf "$line\n"
 	printf "Installing Xorg...\n"
 	printf "$line\n\n"
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	pacman -S xorg xorg-xinit wget --noconfirm --needed 2>> $errorpath >> $outputpath --noconfirm
+	pacman -S xorg xorg-xinit --noconfirm --needed 2>> $errorpath >> $outputpath --noconfirm
 	Exit_Status
 
 	## Make sure there is an Intel video card and install its drivers
@@ -134,6 +130,35 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		sleep 2
 	fi
 
+
+Progress_Spinner () {		## progress bar that runs while the installation process is running
+
+	## Endless loop
+	while true ;do
+
+		## checks if our process is still alive by checking
+		## if his PID shows in ps command
+		ps aux |awk '{print $2}' |egrep -Eo "$!" &> /dev/null
+
+		## checks exit status of last command, if succeed
+		if [[ $? -eq 0 ]]; then
+			printf "\n"
+			printf "|"
+			sleep 0.75
+			printf "\r/"
+			sleep 0.75
+			printf "\r-"
+			sleep 0.75
+			printf "\r\\ \n"
+
+		## when ps fails to get the process break the loop
+		else
+			break
+		fi
+	done
+}
+
+Alias_and_Wallpaper () {
 	printf "$line\n"
 	printf "Downloading background picture...\n"
 	printf "$line\n\n"
@@ -145,6 +170,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	if ! [[ -e $user_path/Pictures ]]; then
 		runuser -l $orig_user -c "mkdir $user_path/Pictures"
 	fi
+
 	runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
 	Exit_Status
 
@@ -202,8 +228,10 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		esac
 	done
 
+}
+
 	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
-	Arch_Font_Config
+
 
 	## Call Boot_Manager_Config function
 	Boot_Manager_Config
@@ -437,6 +465,8 @@ Post_Main () { ## Call Functions
 	Distro_Check
 	if [[ $Distro_Val == arch ]]; then
 		Arch_Config
+		sleep 0.5
+		Arch_Font_Config
 	else
 		printf "$line\n"
 		printf "This script does not support your distribution\n"
