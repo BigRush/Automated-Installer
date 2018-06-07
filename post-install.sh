@@ -81,7 +81,7 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 
 
 			printf "\n"
-			printf "|"
+			printf "\r|"
 			sleep 0.75
 			printf "\r/"
 			sleep 0.75
