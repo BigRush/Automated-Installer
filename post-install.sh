@@ -70,15 +70,24 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 
 		## checks exit status of last command, if succeed
 		if [[ $? -eq 0 ]]; then
-			printf "\n"
-			printf "$line\n$output_text in progress...  [|]\n$line\n\n"
-			sleep 0.75
-			printf "\r$line\n$output_text in progress... [/]"
-			sleep 0.75
-			printf "\r$line\n$output_text in progress... [-]\n$line\n\n"
-			sleep 0.75
-			printf "\r$line\n$output_text in progress... [\\] \n$line\n\n"
+	#		printf "\n"
+	#		printf "$line\n$output_text in progress...  [|]\n$line\n\n"
+	#		sleep 0.75
+	#		printf "\r$line\n$output_text in progress... [/]"
+	#		sleep 0.75
+	#		printf "\r$line\n$output_text in progress... [-]\n$line\n\n"
+	#		sleep 0.75
+	#		printf "\r$line\n$output_text in progress... [\\] \n$line\n\n"
 
+
+			printf "\n"
+			printf "|"
+			sleep 0.75
+			printf "\r/"
+			sleep 0.75
+			printf "\r-"
+			sleep 0.75
+			printf "\r\\ \n"
 		## when ps fails to get the process break the loop
 		else
 			break
