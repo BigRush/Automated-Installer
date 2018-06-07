@@ -47,7 +47,7 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 }
 
 Exit_Status () {		## Check exit status of the last command to see if it completed successfully
-	if [[ $? -eq 0 ]]; then
+	if [[ $status -eq 0 ]]; then
 		printf "$line\n"
 		printf "$output_text complete...\n"
 		printf "$line\n\n"
@@ -57,6 +57,33 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 		printf "$line\n\n"
 		exit 1
 	fi
+}
+
+Progress_Spinner () {		## progress bar that runs while the installation process is running
+
+	## Endless loop
+	while true ;do
+
+		## checks if our process is still alive by checking
+		## if his PID shows in ps command
+		ps aux |awk '{print $2}' |egrep -Eo "$!" &> /dev/null
+
+		## checks exit status of last command, if succeed
+		if [[ $? -eq 0 ]]; then
+			printf "\n"
+			printf "$line\n$output_text in progress...  [|]\n$line\n\n"
+			sleep 0.75
+			printf "$line\n\r$output_text in progress... [/]"
+			sleep 0.75
+			printf "$line\n\r$output_text in progress... [-]\n$line\n\n"
+			sleep 0.75
+			printf "$line\n\r$output_text in progress... [\\] \n$line\n\n"
+
+		## when ps fails to get the process break the loop
+		else
+			break
+		fi
+	done
 }
 
 Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
@@ -97,7 +124,9 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	error_txt="while updating"
 
 	## Update the system, send stdout and sterr to log files
-	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
+	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 	sleep 0.5
 
@@ -107,9 +136,11 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	pacman -S xorg xorg-xinit --noconfirm --needed 2>> $errorpath >> $outputpath --noconfirm
+	pacman -S xorg xorg-xinit --noconfirm --needed 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
-
+	sleep 0.5
 	## Make sure there is an Intel video card and install its drivers
 	## If no Intel video card detected then ask the user if he wants to continue with the script
 	lspci |grep VGA |grep Intel
@@ -121,7 +152,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
 
-		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath
+		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath &
 		Exit_Status
 	else
 		printf "$line\n"
@@ -129,34 +160,6 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		printf "$line\n\n"
 		sleep 2
 	fi
-
-
-Progress_Spinner () {		## progress bar that runs while the installation process is running
-
-	## Endless loop
-	while true ;do
-
-		## checks if our process is still alive by checking
-		## if his PID shows in ps command
-		ps aux |awk '{print $2}' |egrep -Eo "$!" &> /dev/null
-
-		## checks exit status of last command, if succeed
-		if [[ $? -eq 0 ]]; then
-			printf "\n"
-			printf "|"
-			sleep 0.75
-			printf "\r/"
-			sleep 0.75
-			printf "\r-"
-			sleep 0.75
-			printf "\r\\ \n"
-
-		## when ps fails to get the process break the loop
-		else
-			break
-		fi
-	done
-}
 
 Alias_and_Wallpaper () {
 	printf "$line\n"
