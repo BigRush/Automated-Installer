@@ -20,7 +20,8 @@
 
 ####  Functions  ###############################################################
 
-Root_Check () {		## Checks if the script runs as root
+## Checks if the script runs as root
+Root_Check () {
 
 	if ! [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
@@ -30,8 +31,8 @@ Root_Check () {		## Checks if the script runs as root
 	fi
 }
 
-Log_And_Variables () {	## declare variables and log path that will be used by other functions
-
+## Declare variables and log path that will be used by other functions
+Log_And_Variables () {
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	logfolder="/var/log/post_install"
@@ -39,6 +40,9 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 	outputpath=$logfolder/output.log
 	orig_user=$SUDO_USER
 	user_path=/home/$orig_user
+	lightconf=/etc/lightdm/lightdm.conf
+	PACSTALL="pacman -S --needed --noconfirm"
+	AURSTALL="aurman -S --needed --noconfirm"
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
@@ -47,7 +51,8 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 	fi
 }
 
-Exit_Status () {		## Check exit status of the last command to see if it completed successfully
+## Check exit status of the last command to see if it completed successfully
+Exit_Status () {
 
 	if [[ $status -eq 0 ]]; then
 		printf "$line\n"
@@ -61,7 +66,8 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 	fi
 }
 
-Progress_Spinner () {		## progress bar that runs while the installation process is running
+## progress bar that runs while the installation process is running
+Progress_Spinner () {
 
 	## Loop until the PID of the last background process is not found
 	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$!") ]];do
@@ -81,7 +87,8 @@ Progress_Spinner () {		## progress bar that runs while the installation process 
 	printf "\n"
 }
 
-Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
+## Checking the environment the user is currenttly running on to determine which settings should be applied
+Distro_Check () {
 
 	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
 
@@ -108,7 +115,8 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 	fi
 }
 
-Arch_Config () {		## Configure arch after a clean install with KDE desktop environment
+## Configure arch after a clean install with KDE desktop environment
+Arch_Config () {
 
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
@@ -133,7 +141,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Exit_Status
 
 	## Wait for 0.5 seconds for preventing unwanted errors
-	sleep 0.5
+	# sleep 0.5
 
 	printf "$line\n"
 	printf "Installing Xorg...\n"
@@ -141,11 +149,11 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	pacman -S xorg xorg-xinit --noconfirm --needed 2>> $errorpath >> $outputpath &
+	$PACSTALL xorg xorg-xinit 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
-	sleep 0.5
+	# sleep 0.5
 
 	## Make sure there is an Intel video card and install its drivers.
 	## If no Intel video card detected,
@@ -159,22 +167,23 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
 
-		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath &
+		$PACSTALL xf86-video-intel 2>> $errorpath >> $outputpath &
 		status=$?
 		Progress_Spinner
 		Exit_Status
-		sleep 0.5
+		# sleep 0.5
 	else
 		printf "$line\n"
 		printf "Did not detect Intel video card,
 		\b\b\b\bplease install video card drivers by yourself later.
 		\b\b\b\bContinuing with the script...\n"
 		printf "$line\n\n"
-		sleep 2
+		# sleep 2
 	fi
 }
 
-Alias_and_Wallpaper () {	## Add aliases and download a nice wallpaper
+## Add aliases and download a nice wallpaper
+Alias_and_Wallpaper () {
 
 	printf "$line\n"
 	printf "Downloading background picture...\n"
@@ -194,7 +203,7 @@ Alias_and_Wallpaper () {	## Add aliases and download a nice wallpaper
 		Exit_Status
 	fi
 
-	## customize shell, check if the config exists, if not - add it to .bashrc
+	## customize shell, check if the config exists, if not, add it to .bashrc
 	if [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
 		printf "alias ll='ls -l'\n" >> $user_path/.bashrc
 	fi
@@ -236,6 +245,8 @@ Alias_and_Wallpaper () {	## Add aliases and download a nice wallpaper
 	fi
 }
 
+
+## Menu, to choose which desktop environment to install
 DE_Menu () {
 
 	desk_env=(Plasma Deepin xfce4 exit)
@@ -268,7 +279,10 @@ DE_Menu () {
 
 }
 
+## Installs Deepin desktop environment
 Deepin_Installation () {
+
+	## Add the option to start the deepin desktop environment with xinit
 	printf "exec startdde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
@@ -278,11 +292,15 @@ Deepin_Installation () {
 	output_text="Deepin desktop installation"
 	error_txt="while installing Deepin desktop"
 
-	##	install plasma desktop environment
-	pacman -S deepin --needed 2>> $errorpath >>$outputpath &
+	##	Install plasma desktop environment
+	$PACSTALL deepin 2>> $errorpath >>$outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
+}
+
+## Installs LightDM display manager and configures it
+LightDM_Installation () {
 
 	printf "$line\n"
 	printf "Installing Lightdm...\n"
@@ -291,13 +309,13 @@ Deepin_Installation () {
 	output_text="Lightdm installation"
 	error_txt="while installing Lightdm"
 
-	## install sddm
-	pacman -S lightdm lightdm-deepin-greeter --needed --noconfirm 2>> $errorpath >> $outputpath &
+	## Install sddm
+	$PACSTALL lightdm lightdm-deepin-greeter 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
 
-	## enable and start the sddm service
+	## Enable and start the sddm service
 	printf "$line\n"
 	printf "Enabling Lightdm service...\n"
 	printf "$line\n\n"
@@ -308,12 +326,14 @@ Deepin_Installation () {
 	systemctl enable lightdm 2>> $errorpath >> $outputpath
 	Exit_Status
 
-	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" /etc/lightdm/lightdm.conf
+	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 
 }
 
-KDE_Installation () {		## install KDE desktop environment
-	## Set kde to start on startup
+## Installs KDE desktop environment
+KDE_Installation () {
+
+	## Add the option to start the deepin desktop environment with xinit
 	printf "exec startkde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
@@ -323,11 +343,44 @@ KDE_Installation () {		## install KDE desktop environment
 	output_text="Plasma desktop installation"
 	error_txt="while installing plasma desktop"
 
-	##	install plasma desktop environment
-	pacman -S plasma --needed 2>> $errorpath >> $outputpath &
+	##	Install plasma desktop environment
+	$PACSTALL plasma --needed 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
+
+	displaymgr=(LightDM SDDM Continue Exit)
+	local PS3="Please choose the desired display manager: "
+	select opt in ${scripts[@]} ; do
+	    case $opt in
+	        LightDm)
+				LightDM_Installation
+	            break
+	            ;;
+	        SDDM)
+				SDDM_Installation
+	            break
+	            ;;
+			Continue)
+				printf "$line\n"
+				printf "Continuing"
+				printf "$line\n"
+				break
+				;;
+	        Exit)
+	            printf "$line\n"
+	            printf "Exiting, have a nice day!"
+	            printf "$line\n"
+	            exit 0
+	        *)
+	        printf "Invalid option\n"
+	        ;;
+	    esac
+	done
+}
+
+## Install SDDM display manager
+SDDM_Installation () {
 
 	printf "$line\n"
 	printf "Installing sddm...\n"
@@ -336,11 +389,13 @@ KDE_Installation () {		## install KDE desktop environment
 	output_text="sddm installation"
 	error_txt="while installing sddm"
 
-	## install sddm
-	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath
+	## Install sddm
+	$PACSTALL sddm 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
-	## enable and start the sddm service
+	## Enable and start the sddm service
 	printf "$line\n"
 	printf "Enabling sddm service...\n"
 	printf "$line\n\n"
@@ -350,20 +405,15 @@ KDE_Installation () {		## install KDE desktop environment
 
 	systemctl enable sddm 2>> $errorpath >> $outputpath
 	Exit_Status
-
 }
 
-#KDE_Config () {
-	## Change background image
-
-
-
-Arch_Font_Config () {		## Configure ugly arch kde fonts
+## Configure ugly arch kde fonts
+Arch_Font_Config () {
 	output_text="Font installation"
 	error_txt="while installting fonts"
 
 	## Install some nice fonts
-	pacman -S ttf-dejavu ttf-liberation noto-fonts --noconfirm --needed 2>> $errorpath >> $outputpath
+	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath
 	Exit_Status
 
 	## Enable font presets by creating symbolic links
@@ -407,7 +457,8 @@ Manjaro_Sys_Update () {
 	printf "$line\n\n"
 }
 
-xfce_theme () {		## Set desktop theme
+## Set desktop theme
+xfce_theme () {
 	#	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
 	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "/home/tom/Pictures/archbk.jpg" 2>> $errorpath >> $outputpath
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
@@ -416,7 +467,8 @@ xfce_theme () {		## Set desktop theme
 	xfconf-query --channel 'xfce4-keyboard-shortcuts' --property '/commands/custom/grave' --type string --set "xfce4-terminal --drop-down" --create
 }
 
-Boot_Manager_Config () {		## Config the grub background and fast boot time
+## Config the grub background and fast boot time
+Boot_Manager_Config () {
 
 	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
@@ -468,36 +520,8 @@ App_Req () {		## Application's pre-install requirements
 	return 0
 }
 
-Pacaur_applications () {		## Applications i want to install with pacaur
-		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
-				app=(ncdu git steam-native-runtime openssh vlc atom discord screenfetch)
-				for i in ${app[*]}; do
-					printf "$line\n"
-					printf "Installing $i"
-					printf "$line\n\n"
-					output_text="$i installation"
-					error_txt="while installing $i"
-					pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
-					Exit_Status
-				done
-		fi
-}
-
-Vbox_Installation () {		## Virtualbox installation
-	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
-	for i in ${vb[*]}; do
-		printf "$line\n"
-		printf "Installing $i"
-		printf "$line\n\n"
-		output_text="$i installation"
-		error_txt="while installing $i"
-		pacaur -S $i --noconfirm --needed --noedit
-	done
-	modprobe vboxdrv
-	gpasswd -a tom vboxusers
-}
-
-Post_Main () { ## Call Functions
+## Call Functions
+Post_Main () {
 	Log_And_Variables
 	Root_Check
 	Distro_Check

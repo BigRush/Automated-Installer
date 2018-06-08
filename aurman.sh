@@ -21,12 +21,12 @@
 Non_Root_Check () {		## Make sure the script doesn't run as root
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
-		printf "The script can't run as root\n"
+		printf "The Aurman \n"
 		printf "$line\n"
 		exit 1
 	fi
 }
-
+<<COM
 Log_And_Variables () {	## declare variables and log path that will be used by other functions
 
 	####  Varibale	####
@@ -102,7 +102,7 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 	   	Distro_Val="centos"
 	fi
 }
-
+COM
 Aurman_Install () {
 
 	## Propmet the user with what the script will now do (with cosmetics :D)
@@ -191,7 +191,7 @@ Pacman_Multilib () {	## Enablr multilib repo
 }
 
 Webkit2_greeter () { ## install Webkit2_greeter for lightdm and change its theme
-	pacaur -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm
+	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm
 
 }
 
@@ -243,7 +243,7 @@ Vbox_Installation () {		## Virtualbox installation
 	sudo gpasswd -a tom vboxusers
 }
 
-Pac_Main () {	## Call functions and source functions from post-install.sh
+Aur_Main () {	## Call functions and source functions from post-install.sh
 	Non_Root_Check
 	Log_And_Variables
 	Distro_Check
@@ -263,4 +263,3 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 		printf "$line\n\n"
 	fi
 }
-Pac_Main
