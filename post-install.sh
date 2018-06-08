@@ -411,6 +411,25 @@ Boot_Manager_Config () {
 		## apply changes to grub
 		grub-mkconfig -o /boot/grub/grub.cfg
 
+		## Ask the user if he wants to install refined boot manager
+		read -p "Would you like to install refined boot manager?[y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			:
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Exiting...\n"
+			printf "$line\n\n"
+			exit 1
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+			exit 1
+		fi
+
 		## install refinds boot manager and configure it
 		printf "$line\n"
 		printf "Downloading refind boot manager...\n"
