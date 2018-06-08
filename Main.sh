@@ -23,6 +23,16 @@ Root_Check () {
 	fi
 }
 
+## Make sure the script doesn't run as root
+Non_Root_Check () {
+	if [[ $EUID -eq 0 ]]; then
+		printf "$line\n"
+		printf "The Aurman \n"
+		printf "$line\n"
+		exit 1
+	fi
+}
+
 ## Check exit status of the last command to see if it completed successfully
 Exit_Status () {
 
@@ -76,6 +86,52 @@ Progress_Spinner () {
 	## Print a new line outside the loop so it will not interrupt with the it
 	## and will not interrupt with the upcoming text of the script
 	printf "\n"
+}
+
+## Declare variables and log path that will be used by other functions
+Log_And_Variables () {
+
+	####  Varibale	####
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+	logfolder="/var/log/post_install"
+	errorpath=$logfolder/error.log
+	outputpath=$logfolder/output.log
+	orig_user=$SUDO_USER
+	user_path=/home/$orig_user
+	lightconf=/etc/lightdm/lightdm.conf
+	PACSTALL="pacman -S --needed --noconfirm"
+	AURSTALL="aurman -S --needed --noconfirm --noedit"
+    post_script="https://raw.githubusercontent.com/BigRush/install/master/post-install.sh"
+    aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
+	####  Varibale	####
+
+	## Check if log folder exits, if not - create it
+	if ! [[ -e $logfolder ]]; then
+		mkdir -p $logfolder
+	fi
+}
+
+## Checking the environment the user is currenttly running on to determine which settings should be applied
+Distro_Check () {
+
+    Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
+    status=1
+    DistroChk="cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep \"^$tmp_dist$\""
+    for i in ${Distro_Array[@]}; do
+        tmp_dist=$i
+    	if ! [[ -z $DistroChk ]]; then
+    	  	Distro_Val="$i"
+            status=0
+    	fi
+    done
+
+    if [[ $status -eq 1 ]]; then
+        printf "$line\n"
+        printf "Sorry, but the script did not find your distribution,
+        \b\b\b\bExiting...\n"
+        printf "$line\n\n"
+        exit 1
+    fi
 }
 
 ## Source functions from other scripts
@@ -134,88 +190,16 @@ Source_And_Validation () {
     fi
 }
 
-## Declare variables and log path that will be used by other functions
-Log_And_Variables () {
-
-	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	logfolder="/var/log/post_install"
-	errorpath=$logfolder/error.log
-	outputpath=$logfolder/output.log
-	orig_user=$SUDO_USER
-	user_path=/home/$orig_user
-	lightconf=/etc/lightdm/lightdm.conf
-	PACSTALL="pacman -S --needed --noconfirm"
-	AURSTALL="aurman -S --needed --noconfirm --noedit"
-    post_script="https://raw.githubusercontent.com/BigRush/install/master/post-install.sh"
-    aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
-	####  Varibale	####
-
-	## Check if log folder exits, if not - create it
-	if ! [[ -e $logfolder ]]; then
-		mkdir -p $logfolder
-	fi
-}
-
-## Checking the environment the user is currenttly running on to determine which settings should be applied
-Distro_Check () {
-
-    Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
-    status=1
-    DistroChk="cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep \"^$tmp_dist$\""
-    for i in ${Distro_Array[@]}; do
-        tmp_dist=$i
-    	if ! [[ -z $DistroChk ]]; then
-    	  	Distro_Val="$i"
-            status=0
-    	fi
-    done
-
-    if [[ $status -eq 1 ]]; then
-        printf "$line\n"
-        printf "Sorry, but the script did not find your distribution,
-        \b\b\b\bExiting...\n"
-        printf "$line\n\n"
-        exit 1
-    fi
-
-<<COM
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="arch"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="debian"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-	   	Distro_Val="centos"
-	fi
-COM
-}
-
-## Make sure the script doesn't run as root
-Non_Root_Check () {
-	if [[ $EUID -eq 0 ]]; then
-		printf "$line\n"
-		printf "The Aurman \n"
-		printf "$line\n"
-		exit 1
-	fi
-}
-
 ## Call Log_And_Variables function
 Log_And_Variables
 
 ## Call Distro_Check function
 Distro_Check
 
+## Call Source_And_Validation function
+Source_And_Validation
+
+## Propmet the user with a menu to start the script
 scripts=("Post install **Run as Root**" "Aurman **Run as Non-Root**")
 local PS3="Please choose what would you like to do: "
 select opt in ${scripts[@]} ; do
