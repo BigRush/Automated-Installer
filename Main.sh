@@ -80,6 +80,11 @@ Progress_Spinner () {
 
 ## Declare variables and log path that will be used by other functions
 Log_And_Variables () {
+
+    ## Source the functions from the other scripts
+    source ./post_install
+    source ./aurman.sh
+
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	logfolder="/var/log/post_install"
@@ -136,29 +141,34 @@ Non_Root_Check () {
 	fi
 }
 
-## Source the functions from the other scripts
-source ./post_install
-source ./aurman.sh
+## Call Log_And_Variables function
+Log_And_Variables
+
+## Call Distro_Check function
+Distro_Check
 
 scripts=("Post install **Run as Root**" "Aurman **Run as Non-Root**")
 local PS3="Please choose what would you like to do: "
 select opt in ${scripts[@]} ; do
     case $opt in
         "Post install **Run as Root**")
-            Log_And_Variables
             Root_Check
-            Distro_Check
         	if [[ $Distro_Val == arch ]]; then
                 Arch_Config
                 sleep 1
                 Alias_and_Wallpaper
                 sleep 1
                 DE_Menu
+                sleep 1
+                Boot_Manager_Config
+            fi
             break
             ;;
 
         "Aurman **Run as Non-Root**")
-            Deepin_Installation
+            Non_Root_Check
+            if [[ $Distro_Val == arch ]]; then
+                Aurman_Install
             break
             ;;
 

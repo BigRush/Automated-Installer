@@ -164,29 +164,6 @@ COM
 	rm -rf $user_path/pacaur_install_tmp
 }
 
-## Enable multilib repo
-Pacman_Multilib () {
-
-	## validate the multilib section is in the place that we are going to replace
-	pac_path=/etc/pacman.conf
-	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
-		for ((i; i<=100; i++)); do
-			pac_line=$(sed -n "$i"p $pac_path)
-			if [[ "#[multilib]" == "$pac_line" ]]; then
-				if [[ $i -eq 93 ]]; then
-					sudo sed -ie "93,94s/.//" $pac_path
-					break
-				else
-					printf "$line\n"
-					printf "the pacman.conf file has changed its format\nplease enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
-					printf "$line\n\n"
-					break
-				fi
-			fi
-		done
-	fi
-}
-
 ## Applications i want to install with pacaur
 Aurman_Applications () {
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
