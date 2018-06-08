@@ -119,11 +119,20 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	output_text="Update"
 	error_txt="while updating"
 
-	## Update the system, send stdout and sterr to log files
+	## Update the system, send stdout, sterr to log files
+	## and move the process to the background for the Progress_Spinner function.
 	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
+
+	## Save the exxit status of last command to a Varibale
 	status=$?
+
+	## Call Progress_Spinner function
 	Progress_Spinner
+
+	## Call Exit_Status function
 	Exit_Status
+
+	## Wait for 0.5 seconds for preventing unwanted errors
 	sleep 0.5
 
 	printf "$line\n"
@@ -138,8 +147,9 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Exit_Status
 	sleep 0.5
 
-	## Make sure there is an Intel video card and install its drivers
-	## If no Intel video card detected then ask the user if he wants to continue with the script
+	## Make sure there is an Intel video card and install its drivers.
+	## If no Intel video card detected,
+	## tell the user and continue the script
 	lspci |grep VGA |grep Intel
 	if [[ $? -eq 0 ]]; then
 		printf "$line\n"
@@ -173,13 +183,16 @@ Alias_and_Wallpaper () {	## Add aliases and download a nice wallpaper
 	output_text="Background picture download"
 	error_txt="while downloading background picture"
 
-	## Download background picture
-	if ! [[ -e $user_path/Pictures ]]; then
+	## If the directory doesn't exits, create it
+	if ! [[ -d $user_path/Pictures ]]; then
 		runuser -l $orig_user -c "mkdir $user_path/Pictures"
 	fi
 
-	runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
-	Exit_Status
+	## If the background picture doesn't already exists, download it
+	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
+		runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+		Exit_Status
+	fi
 
 	## customize shell, check if the config exists, if not - add it to .bashrc
 	if [[ -z $(grep "alias ll='ls -l'" $user_path/.bashrc) ]]; then
@@ -253,13 +266,6 @@ DE_Menu () {
 		esac
 	done
 
-}
-
-	## Call Arch_Font_Config function to configure the ugly stock font that arch KDE comes with
-
-
-	## Call Boot_Manager_Config function
-	Boot_Manager_Config
 }
 
 Deepin_Installation () {
@@ -506,4 +512,3 @@ Post_Main () { ## Call Functions
 	fi
 
 }
-Post_Main
