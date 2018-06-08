@@ -18,7 +18,8 @@
 # Add verbos option
 ############################################
 
-Non_Root_Check () {		## Make sure the script doesn't run as root
+## Make sure the script doesn't run as root
+Non_Root_Check () {
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
 		printf "The Aurman \n"
@@ -103,6 +104,8 @@ Distro_Check () {		## Checking the environment the user is currenttly running on
 	fi
 }
 COM
+
+## Install aurman manually
 Aurman_Install () {
 
 	## Propmet the user with what the script will now do (with cosmetics :D)
@@ -115,7 +118,9 @@ Aurman_Install () {
 	error_txt="while updating"
 
 	## Update the system, send stdout and sterr to log files
-	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath
+	sudo $PACSTALL 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
@@ -168,7 +173,8 @@ COM
 	rm -rf $user_path/pacaur_install_tmp
 }
 
-Pacman_Multilib () {	## Enablr multilib repo
+## Enable multilib repo
+Pacman_Multilib () {
 
 	## validate the multilib section is in the place that we are going to replace
 	pac_path=/etc/pacman.conf
@@ -190,12 +196,14 @@ Pacman_Multilib () {	## Enablr multilib repo
 	fi
 }
 
-Webkit2_greeter () { ## install Webkit2_greeter for lightdm and change its theme
-	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm
+## Install Webkit2_greeter for lightdm and change its theme
+Webkit2_greeter () {
 
+	$AURSTALL lightdm-webkit2-greeter lightdm-webkit-theme-litarvan 2>> $errorpath >> $outputpath &
 }
 
-Aurman_Applications () {		## Applications i want to install with pacaur
+## Applications i want to install with pacaur
+Aurman_Applications () {
 		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
 				app=(ncdu guake git steam teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
@@ -204,13 +212,16 @@ Aurman_Applications () {		## Applications i want to install with pacaur
 					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
-					aurman -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
+					$AURSTALL $i 2>> $errorpath >> $outputpath &
+					status=$?
+					Progress_Spinner
 					Exit_Status
 				done
 		fi
 }
 
-Vbox_Installation () {		## Virtualbox installation
+## Virtualbox installation
+Vbox_Installation () {
 
 	read -p "Would you like to install virtualbox?[y/n]: " answer
 	printf "\n"
@@ -237,12 +248,19 @@ Vbox_Installation () {		## Virtualbox installation
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		pacaur -S $i --noconfirm --needed --noedit 2>> $errorpath >> $outputpath
+		$AURSTALL $i 2>> $errorpath >> $outputpath &
+		status=$?
+		Progress_Spinner
+		Exit_Status
 	done
-	sudo modprobe vboxdrv
-	sudo gpasswd -a tom vboxusers
+
+	sudo modprobe vboxdrv 2>> $errorpath >> $outputpath
+	Exit_Status
+	sudo gpasswd -a tom vboxusers 2>> $errorpath >> $outputpath
+	Exit_Status
 }
 
+<<COM
 Aur_Main () {	## Call functions and source functions from post-install.sh
 	Non_Root_Check
 	Log_And_Variables
@@ -263,3 +281,4 @@ Aur_Main () {	## Call functions and source functions from post-install.sh
 		printf "$line\n\n"
 	fi
 }
+COM

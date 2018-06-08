@@ -31,26 +31,6 @@ Root_Check () {
 	fi
 }
 
-## Declare variables and log path that will be used by other functions
-Log_And_Variables () {
-	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	logfolder="/var/log/post_install"
-	errorpath=$logfolder/error.log
-	outputpath=$logfolder/output.log
-	orig_user=$SUDO_USER
-	user_path=/home/$orig_user
-	lightconf=/etc/lightdm/lightdm.conf
-	PACSTALL="pacman -S --needed --noconfirm"
-	AURSTALL="aurman -S --needed --noconfirm"
-	####  Varibale	####
-
-	## Check if log folder exits, if not - create it
-	if ! [[ -e $logfolder ]]; then
-		mkdir -p $logfolder
-	fi
-}
-
 ## Check exit status of the last command to see if it completed successfully
 Exit_Status () {
 
@@ -245,7 +225,6 @@ Alias_and_Wallpaper () {
 	fi
 }
 
-
 ## Menu, to choose which desktop environment to install
 DE_Menu () {
 
@@ -413,7 +392,9 @@ Arch_Font_Config () {
 	error_txt="while installting fonts"
 
 	## Install some nice fonts
-	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath
+	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	## Enable font presets by creating symbolic links
@@ -449,12 +430,30 @@ Arch_Font_Config () {
 	" > /etc/fonts/local.conf
 }
 
+## Full system update for manjaro
 Manjaro_Sys_Update () {
-	## update the system, dump errors to /var/log/post_install_error.log and output to /var/log/post_install_output.log
-	pacman -Syu 2>> $errorpath >> $outputpath
+
+	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
-	printf "System update complete\n"
+	printf "Updating the system...\n"
 	printf "$line\n\n"
+
+	## Will be used in Exit_Status function to output text for the user
+	output_text="Update"
+	error_txt="while updating"
+
+	## Update the system, send stdout, sterr to log files
+	## and move the process to the background for the Progress_Spinner function.
+	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
+
+	## Save the exxit status of last command to a Varibale
+	status=$?
+
+	## Call Progress_Spinner function
+	Progress_Spinner
+
+	## Call Exit_Status function
+	Exit_Status
 }
 
 ## Set desktop theme

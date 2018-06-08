@@ -23,7 +23,7 @@ Log_And_Variables () {
 	user_path=/home/$orig_user
 	lightconf=/etc/lightdm/lightdm.conf
 	PACSTALL="pacman -S --needed --noconfirm"
-	AURSTALL="aurman -S --needed --noconfirm"
+	AURSTALL="aurman -S --needed --noconfirm --noedit"
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
@@ -48,15 +48,12 @@ select opt in ${scripts[@]} ; do
                 Arch_Config
             break
             ;;
-        Deepin)
+
+        "Aurman **Run as Non-Root**")
             Deepin_Installation
             break
             ;;
-        xfce4)
-            printf "$line\n"
-            printf "Not avaliable at the moment, coming soon...\n"
-            printf "$line\n\n"
-            ;;
+
         Exit)
             printf "$line\n"
             printf "Exiting, have a nice day!"
