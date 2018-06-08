@@ -85,7 +85,7 @@ Progress_Spinner () {
 
 	## Print a new line outside the loop so it will not interrupt with the it
 	## and will not interrupt with the upcoming text of the script
-	printf "\n"
+	printf "\n\n"
 }
 
 ## Declare variables and log path that will be used by other functions
@@ -126,8 +126,8 @@ Distro_Check () {
 
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
-        printf "Sorry, but the script did not find your distribution,
-        Exiting...\n" |tr -d "[:blank:]"
+        printf "Sorry, but the script did not find your distribution,\n"
+        printf "Exiting...\n"
         printf "$line\n\n"
         exit 1
     fi
@@ -172,8 +172,8 @@ Source_And_Validation () {
     ## Source the functions from the other scripts.
     ## Check if it was successfull with exit status,
     ## if it wasn't, get the missing script from GitHub
-    source ./post_install 2>> $errorpath >> $outputpath
-    if [[ $? -eq 0 ]]; then
+    source ./post-install.sh 2>> $errorpath >> $outputpath
+    if ! [[ $? -eq 0 ]]; then
         wget $post_script 2>> $errorpath >> $outputpath &
         status=$?
         Progress_Spinner
@@ -181,7 +181,7 @@ Source_And_Validation () {
     fi
 
     source ./aurman.sh 2>> $errorpath >> $outputpath
-    if [[ $? -eq 0 ]]; then
+    if ! [[ $? -eq 0 ]]; then
         wget $aurman_script 2>> $errorpath >> $outputpath &
         status=$?
         Progress_Spinner
