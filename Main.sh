@@ -120,6 +120,7 @@ Distro_Check () {
         tmp_dist=$i
     	if ! [[ -z $DistroChk ]]; then
     	  	Distro_Val="$i"
+            status=0
     	fi
     done
 
