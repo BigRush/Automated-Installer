@@ -126,7 +126,7 @@ Distro_Check () {
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
         printf "Sorry, but the script did not find your distribution,
-        \b\b\b\bExiting...\n"
+        Exiting...\n" |tr -d "[:blank:]"
         printf "$line\n\n"
         exit 1
     fi

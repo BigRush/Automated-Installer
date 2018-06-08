@@ -80,8 +80,8 @@ Arch_Config () {
 	else
 		printf "$line\n"
 		printf "Did not detect Intel video card,
-		\b\b\b\bplease install video card drivers by yourself later.
-		\b\b\b\bContinuing with the script...\n"
+		please install video card drivers by yourself later.
+		Continuing with the script...\n" |tr -d "[:blank:]"
 		printf "$line\n\n"
 		# sleep 2
 	fi
