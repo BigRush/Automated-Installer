@@ -166,7 +166,7 @@ COM
 
 ## Applications i want to install with pacaur
 Aurman_Applications () {
-		if [[ $Distro_Val == manjaro || $Distro_Val == arch  ]] ;then
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 				app=(ncdu guake git steam teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
 					printf "$line\n"

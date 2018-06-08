@@ -115,6 +115,11 @@ Pacman_Multilib () {
 ## Add aliases and download a nice wallpaper
 Alias_and_Wallpaper () {
 
+	## Check if wget is installed,
+	## if not then download it
+	if [[ -z $(command -v wget) ]]; then
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]
+
 	printf "$line\n"
 	printf "Downloading background picture...\n"
 	printf "$line\n\n"

@@ -78,12 +78,25 @@ Progress_Spinner () {
 	printf "\n"
 }
 
+## Source functions from other scripts
+## If they doesn't exists, pull them from GitHub
+Source_And_Validation () {
+
+    ## Source the functions from the other scripts.
+    ## Check if it was successfull by inserting exit status to a variable
+    ## and examen it later
+    source ./post_install
+    status=$?
+    source ./aurman.sh
+    status=$?
+
+    if [[ $status -eq 0 ]]; then
+        if
+
+}
+
 ## Declare variables and log path that will be used by other functions
 Log_And_Variables () {
-
-    ## Source the functions from the other scripts
-    source ./post_install
-    source ./aurman.sh
 
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
