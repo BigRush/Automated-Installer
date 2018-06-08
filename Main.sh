@@ -139,7 +139,7 @@ Source_And_Validation () {
     ## Check if wget is installed,
     ## if not then download it
     ## (It's a dependency for later anyways)
-    if ! [[ -z $(command -v wget) ]]; then
+    if [[ -z $(command -v wget) ]]; then
         printf "$line\n"
         printf "Downloading wget...\n"
         printf "$line\n\n"
