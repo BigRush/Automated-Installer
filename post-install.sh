@@ -117,8 +117,26 @@ Alias_and_Wallpaper () {
 
 	## Check if wget is installed,
 	## if not then download it
-	if [[ -z $(command -v wget) ]]; then
-		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]
+	if ! [[ -z $(command -v wget) ]]; then
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			$PACSTALL wget 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+
+		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+			apt-get install wget -y 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+
+		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+			yum install wget -y 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+		fi
+	fi
 
 	printf "$line\n"
 	printf "Downloading background picture...\n"

@@ -82,17 +82,56 @@ Progress_Spinner () {
 ## If they doesn't exists, pull them from GitHub
 Source_And_Validation () {
 
+    ## Check if wget is installed,
+    ## if not then download it
+    ## (It's a dependency for later anyways)
+    if ! [[ -z $(command -v wget) ]]; then
+        printf "$line\n"
+        printf "Downloading wget...\n"
+        printf "$line\n\n"
+
+        output_text="wget download"
+        error_txt="while downloading wget"
+
+        ## Download wget
+        if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+            $PACSTALL wget 2>> $errorpath >> $outputpath &
+            status=$?
+            Progress_Spinner
+            Exit_Status
+
+        elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+            apt-get install wget -y 2>> $errorpath >> $outputpath &
+            status=$?
+            Progress_Spinner
+            Exit_Status
+
+        elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+            yum install wget -y 2>> $errorpath >> $outputpath &
+            status=$?
+            Progress_Spinner
+            Exit_Status
+        fi
+    fi
+
     ## Source the functions from the other scripts.
-    ## Check if it was successfull by inserting exit status to a variable
-    ## and examen it later
-    source ./post_install
-    status=$?
-    source ./aurman.sh
-    status=$?
+    ## Check if it was successfull with exit status,
+    ## if it wasn't, get the missing script from GitHub
+    source ./post_install 2>> $errorpath >> $outputpath
+    if [[ $? -eq 0 ]]; then
+        wget $post_script 2>> $errorpath >> $outputpath &
+        status=$?
+        Progress_Spinner
+        Exit_Status
+    fi
 
-    if [[ $status -eq 0 ]]; then
-        if
-
+    source ./aurman.sh 2>> $errorpath >> $outputpath
+    if [[ $? -eq 0 ]]; then
+        wget $aurman_script 2>> $errorpath >> $outputpath &
+        status=$?
+        Progress_Spinner
+        Exit_Status
+    fi
 }
 
 ## Declare variables and log path that will be used by other functions
@@ -108,6 +147,8 @@ Log_And_Variables () {
 	lightconf=/etc/lightdm/lightdm.conf
 	PACSTALL="pacman -S --needed --noconfirm"
 	AURSTALL="aurman -S --needed --noconfirm --noedit"
+    post_script="https://raw.githubusercontent.com/BigRush/install/master/post-install.sh"
+    aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
@@ -119,7 +160,7 @@ Log_And_Variables () {
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
 Distro_Check () {
 
-    Distro_Array=(manjaro arch debian \"centos\" \"fedora\")
+    Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
     status=1
     DistroChk="cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep \"^$tmp_dist$\""
     for i in ${Distro_Array[@]}; do
