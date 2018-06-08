@@ -18,15 +18,6 @@
 # Add verbos option
 ############################################
 
-## Make sure the script doesn't run as root
-Non_Root_Check () {
-	if [[ $EUID -eq 0 ]]; then
-		printf "$line\n"
-		printf "The Aurman \n"
-		printf "$line\n"
-		exit 1
-	fi
-}
 <<COM
 Log_And_Variables () {	## declare variables and log path that will be used by other functions
 
@@ -194,12 +185,6 @@ Pacman_Multilib () {
 			fi
 		done
 	fi
-}
-
-## Install Webkit2_greeter for lightdm and change its theme
-Webkit2_greeter () {
-
-	$AURSTALL lightdm-webkit2-greeter lightdm-webkit-theme-litarvan 2>> $errorpath >> $outputpath &
 }
 
 ## Applications i want to install with pacaur

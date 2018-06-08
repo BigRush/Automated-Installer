@@ -20,81 +20,6 @@
 
 ####  Functions  ###############################################################
 
-## Checks if the script runs as root
-Root_Check () {
-
-	if ! [[ $EUID -eq 0 ]]; then
-		printf "$line\n"
-		printf "The script needs to run with root privileges\n"
-		printf "$line\n"
-		exit 1
-	fi
-}
-
-## Check exit status of the last command to see if it completed successfully
-Exit_Status () {
-
-	if [[ $status -eq 0 ]]; then
-		printf "$line\n"
-		printf "$output_text complete...\n"
-		printf "$line\n\n"
-	else
-		printf "$line\n"
-		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
-		printf "$line\n\n"
-		exit 1
-	fi
-}
-
-## progress bar that runs while the installation process is running
-Progress_Spinner () {
-
-	## Loop until the PID of the last background process is not found
-	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$!") ]];do
-		## Print text with a spinner
-		printf "\r$output_text in progress...  [|]"
-		sleep 0.75
-		printf "\r$output_text in progress...  [/]"
-		sleep 0.75
-		printf "\r$output_text in progress...  [-]"
-		sleep 0.75
-		printf "\r$output_text in progress...  [\\]"
-		sleep 0.70
-	done
-
-	## Print a new line outside the loop so it will not interrupt with the it
-	## and will not interrupt with the upcoming text of the script
-	printf "\n"
-}
-
-## Checking the environment the user is currenttly running on to determine which settings should be applied
-Distro_Check () {
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-	  	Distro_Val="manjaro"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="arch"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="debian"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-	   	Distro_Val="centos"
-	fi
-}
-
 ## Configure arch after a clean install with KDE desktop environment
 Arch_Config () {
 
@@ -160,6 +85,50 @@ Arch_Config () {
 		printf "$line\n\n"
 		# sleep 2
 	fi
+}
+
+## Configure ugly arch kde fonts
+Arch_Font_Config () {
+	output_text="Font installation"
+	error_txt="while installting fonts"
+
+	## Install some nice fonts
+	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Enable font presets by creating symbolic links
+	## It will disable embedded bitmap for all fonts
+	## Enable sub-pixel RGB rendering
+	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
+	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+
+	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
+
+	printf "
+	<?xml version="1.0"?>
+	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+	<fontconfig>
+	    <match>
+	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>sans-serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>monospace</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
+	    </match>
+	</fontconfig>
+	" > /etc/fonts/local.conf
 }
 
 ## Add aliases and download a nice wallpaper
@@ -258,57 +227,6 @@ DE_Menu () {
 
 }
 
-## Installs Deepin desktop environment
-Deepin_Installation () {
-
-	## Add the option to start the deepin desktop environment with xinit
-	printf "exec startdde\n" > $user_path/.xinitrc
-
-	printf "$line\n"
-	printf "Installing Deepin desktop environment...\n"
-	printf "$line\n\n"
-
-	output_text="Deepin desktop installation"
-	error_txt="while installing Deepin desktop"
-
-	##	Install plasma desktop environment
-	$PACSTALL deepin 2>> $errorpath >>$outputpath &
-	status=$?
-	Progress_Spinner
-	Exit_Status
-}
-
-## Installs LightDM display manager and configures it
-LightDM_Installation () {
-
-	printf "$line\n"
-	printf "Installing Lightdm...\n"
-	printf "$line\n\n"
-
-	output_text="Lightdm installation"
-	error_txt="while installing Lightdm"
-
-	## Install sddm
-	$PACSTALL lightdm lightdm-deepin-greeter 2>> $errorpath >> $outputpath &
-	status=$?
-	Progress_Spinner
-	Exit_Status
-
-	## Enable and start the sddm service
-	printf "$line\n"
-	printf "Enabling Lightdm service...\n"
-	printf "$line\n\n"
-
-	output_text="Enable Lightdm service"
-	error_txt="while enabling Lightdm service"
-
-	systemctl enable lightdm 2>> $errorpath >> $outputpath
-	Exit_Status
-
-	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
-
-}
-
 ## Installs KDE desktop environment
 KDE_Installation () {
 
@@ -356,6 +274,32 @@ KDE_Installation () {
 	        ;;
 	    esac
 	done
+
+	## Call Arch_Font_Config function
+	Arch_Font_Config
+}
+
+## Installs Deepin desktop environment
+Deepin_Installation () {
+
+	## Add the option to start the deepin desktop environment with xinit
+	printf "exec startdde\n" > $user_path/.xinitrc
+
+	printf "$line\n"
+	printf "Installing Deepin desktop environment...\n"
+	printf "$line\n\n"
+
+	output_text="Deepin desktop installation"
+	error_txt="while installing Deepin desktop"
+
+	##	Install deepin desktop environment
+	$PACSTALL deepin 2>> $errorpath >>$outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Call the SDDM_Installation function
+	SDDM_Installation
 }
 
 ## Install SDDM display manager
@@ -386,48 +330,35 @@ SDDM_Installation () {
 	Exit_Status
 }
 
-## Configure ugly arch kde fonts
-Arch_Font_Config () {
-	output_text="Font installation"
-	error_txt="while installting fonts"
+## Installs LightDM display manager and configures it
+LightDM_Installation () {
 
-	## Install some nice fonts
-	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	printf "$line\n"
+	printf "Installing Lightdm...\n"
+	printf "$line\n\n"
+
+	output_text="Lightdm installation"
+	error_txt="while installing Lightdm"
+
+	## Install lightdm and webkit greeter for a nice theme
+	$PACSTALL lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
 
-	## Enable font presets by creating symbolic links
-	## It will disable embedded bitmap for all fonts
-	## Enable sub-pixel RGB rendering
-	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+	## Enable and start the sddm service
+	printf "$line\n"
+	printf "Enabling Lightdm service...\n"
+	printf "$line\n\n"
 
-	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
+	output_text="Enable Lightdm service"
+	error_txt="while enabling Lightdm service"
 
-	printf "
-	<?xml version="1.0"?>
-	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-	<fontconfig>
-	    <match>
-	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>sans-serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>monospace</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
-	    </match>
-	</fontconfig>
-	" > /etc/fonts/local.conf
+	systemctl enable lightdm 2>> $errorpath >> $outputpath
+	Exit_Status
+
+	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
+
 }
 
 ## Full system update for manjaro
@@ -488,7 +419,9 @@ Boot_Manager_Config () {
 		output_text="Refind boot manager download"
 		error_txt="while downloading refind boot manager"
 
-		pacman -S refind-efi --noconfirm --needed 2>> $errorpath >> $outputpath
+		$PACSTALL refind-efi 2>> $errorpath >> $outputpath &
+		status=$?
+		Progress_Spinner
 		Exit_Status
 
 		printf "$line\n"
@@ -514,11 +447,8 @@ Boot_Manager_Config () {
 
 }
 
-App_Req () {		## Application's pre-install requirements
-	gpg --recv-keys 0FC3042E345AD05D 2>> $errorpath >> $outputpath		## discord key
-	return 0
-}
 
+<<COM
 ## Call Functions
 Post_Main () {
 	Log_And_Variables
@@ -535,3 +465,4 @@ Post_Main () {
 	fi
 
 }
+COM
