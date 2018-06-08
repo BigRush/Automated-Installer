@@ -92,14 +92,14 @@ Progress_Spinner () {
 Log_And_Variables () {
 
 	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	errorpath=log/error.log
-	outputpath=log/output.log
-	orig_user=$SUDO_USER
-	user_path=/home/$orig_user
-	lightconf=/etc/lightdm/lightdm.conf
-	PACSTALL="pacman -S --needed --noconfirm"
-	AURSTALL="aurman -S --needed --noconfirm --noedit"
+    line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+    errorpath=log/error.log
+    outputpath=log/output.log
+    orig_user=$SUDO_USER
+    user_path=/home/$orig_user
+    lightconf=/etc/lightdm/lightdm.conf
+    PACSTALL="pacman -S --needed --noconfirm"
+    AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/install/master/post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
 	####  Varibale	####
@@ -199,8 +199,8 @@ Distro_Check
 Source_And_Validation
 
 ## Propmet the user with a menu to start the script
-FS=","
-scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**,Exit")
+FS="|"
+scripts=("Post install **Run as Root**"|"Aurman **Run as Non-Root**"|"Exit")
 PS3="Please choose what would you like to do: "
 select opt in ${scripts[@]} ; do
     case $opt in
