@@ -202,7 +202,7 @@ Source_And_Validation
 IFS=","
 scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**","Exit")
 PS3="Please choose what would you like to do: "
-select opt in ${scripts[@]} ; do
+select opt in ${scripts[*]} ; do
     case $opt in
         "Post install **Run as Root**")
             Root_Check
