@@ -199,8 +199,8 @@ Distro_Check
 Source_And_Validation
 
 ## Propmet the user with a menu to start the script
-FS="."
-scripts=("Post install **Run as Root**"."Aurman **Run as Non-Root**"."Exit")
+IFS=","
+scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**","Exit")
 PS3="Please choose what would you like to do: "
 select opt in ${scripts[@]} ; do
     case $opt in
