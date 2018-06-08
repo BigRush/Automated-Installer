@@ -115,9 +115,9 @@ Distro_Check () {
 
     Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
     status=1
-    DistroChk="cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep \"^$tmp_dist$\""
     for i in ${Distro_Array[@]}; do
         tmp_dist=$i
+        DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$tmp_dist$")
     	if ! [[ -z $DistroChk ]]; then
     	  	Distro_Val="$i"
             status=0
