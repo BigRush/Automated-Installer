@@ -95,7 +95,6 @@ Log_And_Variables () {
 	lightconf=/etc/lightdm/lightdm.conf
 	PACSTALL="pacman -S --needed --noconfirm"
 	AURSTALL="aurman -S --needed --noconfirm --noedit"
-    DistroChk=$(cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^$temp_dist$")
 	####  Varibale	####
 
 	## Check if log folder exits, if not - create it
@@ -107,11 +106,12 @@ Log_And_Variables () {
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
 Distro_Check () {
 
+    Distro_Array=(manjaro arch debian \"centos\" \"fedora\")
     status=1
-    Distro_Array=(manjaro arch debian centos)
+    DistroChk="cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep \"^$tmp_dist$\""
     for i in ${Distro_Array[@]}; do
-        temp_dist=$i
-    	if ! [[ -z $OneDisChk]]; then
+        tmp_dist=$i
+    	if ! [[ -z $DistroChk ]]; then
     	  	Distro_Val="$i"
             status=0
     	fi
