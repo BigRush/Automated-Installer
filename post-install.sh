@@ -87,49 +87,6 @@ Arch_Config () {
 	fi
 }
 
-## Configure ugly arch kde fonts
-Arch_Font_Config () {
-	output_text="Font installation"
-	error_txt="while installting fonts"
-
-	## Install some nice fonts
-	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
-	status=$?
-	Progress_Spinner
-	Exit_Status
-
-	## Enable font presets by creating symbolic links
-	## It will disable embedded bitmap for all fonts
-	## Enable sub-pixel RGB rendering
-	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
-
-	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
-
-	printf "
-	<?xml version="1.0"?>
-	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-	<fontconfig>
-	    <match>
-	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>sans-serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>monospace</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
-	    </match>
-	</fontconfig>
-	" > /etc/fonts/local.conf
-}
 
 ## Add aliases and download a nice wallpaper
 Alias_and_Wallpaper () {
@@ -275,8 +232,52 @@ KDE_Installation () {
 	    esac
 	done
 
-	## Call Arch_Font_Config function
-	Arch_Font_Config
+	## Call KDE_Font_Config function to fix the fonts
+	KDE_Font_Config
+}
+
+## Configure ugly arch kde fonts
+KDE_Font_Config () {
+	output_text="Font installation"
+	error_txt="while installting fonts"
+
+	## Install some nice fonts
+	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Enable font presets by creating symbolic links
+	## It will disable embedded bitmap for all fonts
+	## Enable sub-pixel RGB rendering
+	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
+	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+
+	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
+
+	printf "
+	<?xml version="1.0"?>
+	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+	<fontconfig>
+	    <match>
+	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>sans-serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
+	    </match>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>monospace</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
+	    </match>
+	</fontconfig>
+	" > /etc/fonts/local.conf
 }
 
 ## Installs Deepin desktop environment
@@ -298,8 +299,8 @@ Deepin_Installation () {
 	Progress_Spinner
 	Exit_Status
 
-	## Call the SDDM_Installation function
-	SDDM_Installation
+	## Call the LightDM_Installation function
+	LightDM_Installation
 }
 
 ## Install SDDM display manager
