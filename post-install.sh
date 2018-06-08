@@ -112,7 +112,6 @@ Pacman_Multilib () {
 	fi
 }
 
-
 ## Add aliases and download a nice wallpaper
 Alias_and_Wallpaper () {
 

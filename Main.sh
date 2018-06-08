@@ -169,6 +169,11 @@ select opt in ${scripts[@]} ; do
             Non_Root_Check
             if [[ $Distro_Val == arch ]]; then
                 Aurman_Install
+                sleep 1
+                Aurman_Applications
+                sleep 1
+                Vbox_Installation
+            fi
             break
             ;;
 
