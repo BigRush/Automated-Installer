@@ -93,9 +93,8 @@ Log_And_Variables () {
 
 	####  Varibale	####
 	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	logfolder="/var/log/post_install"
-	errorpath=$logfolder/error.log
-	outputpath=$logfolder/output.log
+	errorpath=log/error.log
+	outputpath=log/output.log
 	orig_user=$SUDO_USER
 	user_path=/home/$orig_user
 	lightconf=/etc/lightdm/lightdm.conf
@@ -105,9 +104,9 @@ Log_And_Variables () {
     aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
 	####  Varibale	####
 
-	## Check if log folder exits, if not - create it
-	if ! [[ -e $logfolder ]]; then
-		mkdir -p $logfolder
+	## Check if log folder exits, if not, create it
+	if ! [[ -d log ]]; then
+		mkdir log
 	fi
 }
 
@@ -235,8 +234,10 @@ select opt in ${scripts[@]} ; do
             printf "Exiting, have a nice day!"
             printf "$line\n"
             exit 0
+            ;;
+
         *)
             printf "Invalid option\n"
-        ;;
+            ;;
     esac
 done
