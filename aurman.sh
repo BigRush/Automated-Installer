@@ -1,9 +1,21 @@
 #!/usr/bin/env bash
 
+
+################################################################################
+# Author :	BigRush
+#
+# License :	GPLv3
+#
+# Description :	Update the system
+#				Install aurman (AUR helper),
+#				Enable multilib repository for pacman
+#				Install applications that i want with aurman
+#
+# Version :	1.0.0
+################################################################################
+
 ## ToDo	####################################
-#Add verbos option
-#Fix teamviewer
-#Fix discord
+# Add verbos option
 ############################################
 
 Non_Root_Check () {		## Make sure the script doesn't run as root
@@ -18,7 +30,7 @@ Non_Root_Check () {		## Make sure the script doesn't run as root
 Log_And_Variables () {	## declare variables and log path that will be used by other functions
 
 	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	logfolder="/var/log/post_install"
 	errorpath=$logfolder/error.log
 	outputpath=$logfolder/output.log
@@ -239,11 +251,11 @@ Pac_Main () {	## Call functions and source functions from post-install.sh
 		Pacman_Multilib
 		sleep 1
 		Pacaur_Install
-		sleep 1
+		sleep 0.5
 		Webkit2_greeter
-		sleep 1
+		sleep 0.5
 		Pacaur_applications
-		sleep 1
+		sleep 0.5
 		Vbox_Installation
 	else
 		printf "$line\n"

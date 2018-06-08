@@ -1,26 +1,27 @@
 #!/usr/bin/env bash
 
 
-#######################################################################################
-# Author	: BigRush
+################################################################################
+# Author :	BigRush
 #
-#License	: GPLv3
+# License :	GPLv3
 #
-# Description	: Post installation script.
-#
-# Version	: 1.0.0
-#######################################################################################
+# Description :	Update the system
+#				Install video card driver for intel
+#				Install Desktop environment and a display manager
+#				Add personal aliases and a nice wallpaper
+# Version :	1.0.0
+################################################################################
 
 ## ToDo	####################################
-# Config KDE
 # Add xfce4 DE
-# Config Deepin
-# Config xfce4
+# Add verbos option
 ############################################
 
 ####  Functions  ###############################################################
 
 Root_Check () {		## Checks if the script runs as root
+
 	if ! [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
 		printf "The script needs to run with root privileges\n"
@@ -32,7 +33,7 @@ Root_Check () {		## Checks if the script runs as root
 Log_And_Variables () {	## declare variables and log path that will be used by other functions
 
 	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 	logfolder="/var/log/post_install"
 	errorpath=$logfolder/error.log
 	outputpath=$logfolder/output.log
@@ -47,6 +48,7 @@ Log_And_Variables () {	## declare variables and log path that will be used by ot
 }
 
 Exit_Status () {		## Check exit status of the last command to see if it completed successfully
+
 	if [[ $status -eq 0 ]]; then
 		printf "$line\n"
 		printf "$output_text complete...\n"
@@ -61,40 +63,26 @@ Exit_Status () {		## Check exit status of the last command to see if it complete
 
 Progress_Spinner () {		## progress bar that runs while the installation process is running
 
-	## Endless loop
+	## Loop until the PID of the last background process is not found
 	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$!") ]];do
-
-		## checks if our process is still alive by checking
-		## if his PID shows in ps command
-		# &> /dev/null
-
-		## checks exit status of last command, if succeed
-	#	if [[ $? -eq 0 ]]; then
-			printf "\r$output_text in progress...  [|]"
-			sleep 0.75
-			printf "\r$output_text in progress... [\\]" /
-			sleep 0.75
-			printf "\r$output_text in progress... %S" -
-			sleep 0.75
-			printf "\r$output_text in progress... [\\]"
-
-<<com
-			printf "\r\r|"
-			sleep 0.75
-			printf "\r/"
-			sleep 0.75
-			printf "\r-"
-			sleep 0.75
-			printf "\r\\"
-com
-		## when ps fails to get the process break the loop
-#		else
-#			break
-#		fi
+		## Print text with a spinner
+		printf "\r$output_text in progress...  [|]"
+		sleep 0.75
+		printf "\r$output_text in progress...  [/]"
+		sleep 0.75
+		printf "\r$output_text in progress...  [-]"
+		sleep 0.75
+		printf "\r$output_text in progress...  [\\]"
+		sleep 0.70
 	done
+
+	## Print a new line outside the loop so it will not interrupt with the it
+	## and will not interrupt with the upcoming text of the script
+	printf "\n"
 }
 
 Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
+
 	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
 
 	if [[ $? -eq 0 ]]; then
@@ -138,7 +126,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Exit_Status
 	sleep 0.5
 
-	printf "\n$line\n"
+	printf "$line\n"
 	printf "Installing Xorg...\n"
 	printf "$line\n\n"
 
@@ -149,6 +137,7 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 	Progress_Spinner
 	Exit_Status
 	sleep 0.5
+
 	## Make sure there is an Intel video card and install its drivers
 	## If no Intel video card detected then ask the user if he wants to continue with the script
 	lspci |grep VGA |grep Intel
@@ -161,15 +150,22 @@ Arch_Config () {		## Configure arch after a clean install with KDE desktop envir
 		error_txt="while installing video card's drivers"
 
 		pacman -S xf86-video-intel --noconfirm --needed 2>> $errorpath >> $outputpath &
+		status=$?
+		Progress_Spinner
 		Exit_Status
+		sleep 0.5
 	else
 		printf "$line\n"
-		printf "Did not detect Intel video card,\nplease install video card drivers by yourself later.\nContinuing with the script...\n"
+		printf "Did not detect Intel video card,
+		\b\b\b\bplease install video card drivers by yourself later.
+		\b\b\b\bContinuing with the script...\n"
 		printf "$line\n\n"
 		sleep 2
 	fi
+}
 
-Alias_and_Wallpaper () {
+Alias_and_Wallpaper () {	## Add aliases and download a nice wallpaper
+
 	printf "$line\n"
 	printf "Downloading background picture...\n"
 	printf "$line\n\n"
@@ -198,6 +194,10 @@ Alias_and_Wallpaper () {
 		printf "alias la='ls -la'\n" >> $user_path/.bashrc
 	fi
 
+	if [[ -z $(grep "alias log=/var/log" $user_path/.bashrc) ]]; then
+		printf "alias log=/var/log\n" >> $user_path/.bashrc
+	fi
+
 	if [[ -z $(grep "screenfetch -E" $user_path/.bashrc) ]]; then
 		printf "screenfetch -E\n" >> $user_path/.bashrc
 	fi
@@ -218,7 +218,14 @@ Alias_and_Wallpaper () {
 		printf "alias la='ls -la'\n" >> /root/.bashrc
 	fi
 
-	desk_env=(Plasma Deepin xfce4)
+	if [[ -z $(grep "alias log=/var/log" $user_path/.bashrc) ]]; then
+		printf "alias log=/var/log\n" >> /root/.bashrc
+	fi
+}
+
+DE_Menu () {
+
+	desk_env=(Plasma Deepin xfce4 exit)
 	local PS3="Please choose a desktop environment to install: "
 	select opt in ${desk_env[@]} ; do
 		case $opt in
@@ -231,8 +238,15 @@ Alias_and_Wallpaper () {
 				break
 				;;
 			xfce4)
+				printf "$line\n"
 				printf "Not avaliable at the moment, coming soon...\n"
+				printf "$line\n\n"
 				;;
+			Exit)
+				printf "$line\n"
+				printf "Exiting, have a nice day!"
+				printf "$line\n"
+				exit 0
 			*)
 			printf "Invalid option\n"
 			;;
@@ -259,7 +273,9 @@ Deepin_Installation () {
 	error_txt="while installing Deepin desktop"
 
 	##	install plasma desktop environment
-	pacman -S deepin --needed 2>> $errorpath
+	pacman -S deepin --needed 2>> $errorpath >>$outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	printf "$line\n"
@@ -270,7 +286,9 @@ Deepin_Installation () {
 	error_txt="while installing Lightdm"
 
 	## install sddm
-	pacman -S lightdm lightdm-deepin-greeter --needed --noconfirm 2>> $errorpath >> $outputpath
+	pacman -S lightdm lightdm-deepin-greeter --needed --noconfirm 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	## enable and start the sddm service
@@ -300,7 +318,9 @@ KDE_Installation () {		## install KDE desktop environment
 	error_txt="while installing plasma desktop"
 
 	##	install plasma desktop environment
-	pacman -S plasma --needed 2>> $errorpath
+	pacman -S plasma --needed 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	printf "$line\n"
@@ -382,7 +402,7 @@ Manjaro_Sys_Update () {
 }
 
 xfce_theme () {		## Set desktop theme
-	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
+	#	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
 	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "/home/tom/Pictures/archbk.jpg" 2>> $errorpath >> $outputpath
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/background-alpha' --type int --set 0
@@ -391,6 +411,7 @@ xfce_theme () {		## Set desktop theme
 }
 
 Boot_Manager_Config () {		## Config the grub background and fast boot time
+
 	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
