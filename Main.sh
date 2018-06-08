@@ -12,6 +12,26 @@
 # Version :  1.0.0
 ################################################################################
 
+## Declare variables and log path that will be used by other functions
+Log_And_Variables () {
+	####  Varibale	####
+	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+	logfolder="/var/log/post_install"
+	errorpath=$logfolder/error.log
+	outputpath=$logfolder/output.log
+	orig_user=$SUDO_USER
+	user_path=/home/$orig_user
+	lightconf=/etc/lightdm/lightdm.conf
+	PACSTALL="pacman -S --needed --noconfirm"
+	AURSTALL="aurman -S --needed --noconfirm"
+	####  Varibale	####
+
+	## Check if log folder exits, if not - create it
+	if ! [[ -e $logfolder ]]; then
+		mkdir -p $logfolder
+	fi
+}
+
 ## Source the functions from the other scripts
 source ./post_install
 source ./aurman.sh
