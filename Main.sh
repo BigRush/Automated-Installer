@@ -34,8 +34,7 @@ Non_Root_Check () {
 }
 
 ## Check exit status of the last command to see if it completed successfully
-Exit_Status () {
-
+1
 	if [[ $status -eq 0 ]]; then
 		printf "$line\n"
 		printf "$output_text complete...\n"
@@ -172,16 +171,30 @@ Source_And_Validation () {
     ## Source the functions from the other scripts.
     ## Check if it was successfull with exit status,
     ## if it wasn't, get the missing script from GitHub
-    source ./post-install.sh 2>> $errorpath >> $outputpath
+    source ./.post-install.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
+		printf "$line\n"
+		printf "Downloading .post-install.sh...\n"
+		printf "$line\n\n"
+
+		output_text=".post-install.sh download"
+		error_txt="while downloading .post-install.sh"
+
         wget $post_script 2>> $errorpath >> $outputpath &
         status=$?
         Progress_Spinner
         Exit_Status
     fi
 
-    source ./aurman.sh 2>> $errorpath >> $outputpath
+    source ./.aurman.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
+		printf "$line\n"
+		printf "Downloading .aurman.sh...\n"
+		printf "$line\n\n"
+
+		output_text=".aurman.sh download"
+		error_txt="while downloading .aurman.sh"
+
         wget $aurman_script 2>> $errorpath >> $outputpath &
         status=$?
         Progress_Spinner
