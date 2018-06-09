@@ -200,6 +200,7 @@ DE_Menu () {
 				printf "Exiting, have a nice day!"
 				printf "$line\n"
 				exit 0
+				;;
 			*)
 			printf "Invalid option\n"
 			;;
