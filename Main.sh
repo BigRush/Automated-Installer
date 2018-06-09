@@ -245,7 +245,7 @@ select opt in ${scripts[*]} ; do
 
         Exit)
             printf "$line\n"
-            printf "Exiting, have a nice day!"
+            printf "Exiting, have a nice day!\n"
             printf "$line\n"
             exit 0
             ;;
