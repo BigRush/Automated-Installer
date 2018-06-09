@@ -34,7 +34,7 @@ Non_Root_Check () {
 }
 
 ## Check exit status of the last command to see if it completed successfully
-1
+Exit_Status () {
 	if [[ $status -eq 0 ]]; then
 		printf "$line\n"
 		printf "$output_text complete...\n"
