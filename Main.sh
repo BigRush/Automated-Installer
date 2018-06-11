@@ -99,8 +99,8 @@ Log_And_Variables () {
     lightconf=/etc/lightdm/lightdm.conf
     PACSTALL="pacman -S --needed --noconfirm"
     AURSTALL="aurman -S --needed --noconfirm --noedit"
-    post_script="https://raw.githubusercontent.com/BigRush/install/master/post-install.sh"
-    aurman_script="https://raw.githubusercontent.com/BigRush/install/master/aurman.sh"
+    post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
+    aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
 	####  Varibale	####
 
 	## Check if log folder exits, if not, create it
