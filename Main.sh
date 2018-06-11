@@ -244,6 +244,8 @@ select opt in ${scripts[*]} ; do
                 sleep 1
                 Alias_and_Wallpaper
                 sleep 1
+				Pacman_Multilib
+				sleep 1
                 DE_Menu
                 sleep 1
                 Boot_Manager_Config
