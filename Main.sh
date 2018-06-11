@@ -107,6 +107,7 @@ Log_And_Variables () {
 	if [[ $orig_user == "root" ]]; then
 		printf "$line\n"
 		printf "The script can't run when the user that originally logged in is root\n"
+		printf "Please log in as non-root and try again..\n"
 		printf "$line\n\n"
 		exit 1
 	fi
