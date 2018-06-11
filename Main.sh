@@ -105,7 +105,17 @@ Log_And_Variables () {
 
 	## Check if log folder exits, if not, create it
 	if ! [[ -d log ]]; then
-		mkdir log
+		runuser -l $orig_user -c "mkdir log"
+	fi
+
+	## Check if error log exits, if not, create it
+	if ! [[ -e $errorpath ]]; then
+		runuser -l $orig_user -c "touch $errorpath"
+	fi
+
+	## Check if output log exits, if not, create it
+	if ! [[ -e $outputpath ]]; then
+		runuser -l $orig_user -c "touch $outputpath"
 	fi
 }
 
