@@ -97,6 +97,7 @@ Log_And_Variables () {
     orig_user=$(who |awk {'print $1'})
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
+	CWD=$(pwd)
     PACSTALL="pacman -S --needed --noconfirm"
     AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
@@ -114,17 +115,17 @@ Log_And_Variables () {
 
 	## Check if log folder exits, if not, create it
 	if ! [[ -d log ]]; then
-		runuser -l $orig_user -c "mkdir log"
+		runuser -l $orig_user -c "mkdir $CWD/log"
 	fi
 
 	## Check if error log exits, if not, create it
 	if ! [[ -e $errorpath ]]; then
-		runuser -l $orig_user -c "touch $errorpath"
+		runuser -l $orig_user -c "touch $CWD/$errorpath"
 	fi
 
 	## Check if output log exits, if not, create it
 	if ! [[ -e $outputpath ]]; then
-		runuser -l $orig_user -c "touch $outputpath"
+		runuser -l $orig_user -c "touch $CWD/$outputpath"
 	fi
 }
 
