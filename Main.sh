@@ -94,7 +94,7 @@ Log_And_Variables () {
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
     errorpath=log/error.log
     outputpath=log/output.log
-    orig_user=$SUDO_USER
+    orig_user=$(who |awk {'print $1'})
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
     PACSTALL="pacman -S --needed --noconfirm"
@@ -102,6 +102,14 @@ Log_And_Variables () {
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
 	####  Varibale	####
+
+	## Validate that the original user that logged in isn't root
+	if [[ $orig_user == "root" ]]; then
+		printf "$line\n"
+		printf "The script can't run when the user that originally logged in is root\n"
+		printf "$line\n\n"
+		exit 1
+	fi
 
 	## Check if log folder exits, if not, create it
 	if ! [[ -d log ]]; then
