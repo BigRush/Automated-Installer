@@ -448,7 +448,7 @@ Boot_Manager_Config () {
 			printf "$line\n"
 			printf "Exiting...\n"
 			printf "$line\n\n"
-			exit 1
+			exit 0
 		else
 			printf "$line\n"
 			printf "Invalid answer - exiting\n"
