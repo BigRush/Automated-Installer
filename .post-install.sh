@@ -39,11 +39,12 @@ Arch_Config () {
 	## Save the exxit status of last command to a Varibale
 	status=$?
 
+	## Call Exit_Status function
+	Exit_Status
+
 	## Call Progress_Spinner function
 	Progress_Spinner
 
-	## Call Exit_Status function
-	Exit_Status
 
 	## Wait for 0.5 seconds for preventing unwanted errors
 	# sleep 0.5
@@ -54,7 +55,7 @@ Arch_Config () {
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	$PACSTALL xorg xorg-xinit 2>> $errorpath >> $outputpath &
+	"$PACSTALL" xorg xorg-xinit 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
