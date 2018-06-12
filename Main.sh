@@ -17,7 +17,7 @@ Root_Check () {
 
 	if ! [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
-		printf "The script needs to run with root privileges\n"
+		printf "The 'Post install' option must run with root privileges\n"
 		printf "$line\n"
 		exit 1
 	fi
@@ -27,7 +27,7 @@ Root_Check () {
 Non_Root_Check () {
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
-		printf "The Aurman \n"
+		printf "The 'Aurman' option must run as non-root\n"
 		printf "$line\n"
 		exit 1
 	fi
@@ -241,6 +241,7 @@ select opt in ${scripts[*]} ; do
             Root_Check
         	if [[ $Distro_Val == arch ]]; then
                 Arch_Config
+				exit 0
                 sleep 1
                 Alias_and_Wallpaper
                 sleep 1
