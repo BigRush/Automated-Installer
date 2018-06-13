@@ -141,20 +141,6 @@ Pacman_Multilib () {
 					sudo sed -ie "93,94s/.//" $pac_path
 					break
 
-					printf "$line\n"
-					printf "Syncing multilib...\n"
-					printf "$line\n\n"
-
-					output_text="Multilib sync"
-					error_txt="while syncing multilib"
-
-					pacman -Sy 2>> $errorpath >> $outputpath &
-					Progress_Spinner
-					BPID=$!
-					wait $BPID
-					status=$?
-					Exit_Status
-					
 				else
 					printf "$line\n"
 					printf "the pacman.conf file has changed its format\nplease enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
@@ -163,6 +149,20 @@ Pacman_Multilib () {
 				fi
 			fi
 		done
+
+		printf "$line\n"
+		printf "Syncing multilib...\n"
+		printf "$line\n\n"
+
+		output_text="Multilib sync"
+		error_txt="while syncing multilib"
+
+		pacman -Sy 2>> $errorpath >> $outputpath &
+		Progress_Spinner
+		BPID=$!
+		wait $BPID
+		status=$?
+		Exit_Status
 	fi
 }
 
