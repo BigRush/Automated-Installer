@@ -130,7 +130,7 @@ Arch_Config () {
 ## Enable multilib repo
 Pacman_Multilib () {
 
-	## validate the multilib section is in the place that we are going to replace
+	## Validate the multilib section is in the place that we are going to replace
 	pac_path=/etc/pacman.conf
 	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
 		i=1
@@ -140,6 +140,21 @@ Pacman_Multilib () {
 				if [[ $i -eq 93 ]]; then
 					sudo sed -ie "93,94s/.//" $pac_path
 					break
+
+					printf "$line\n"
+					printf "Syncing multilib...\n"
+					printf "$line\n\n"
+
+					output_text="Multilib sync"
+					error_txt="while syncing multilib"
+
+					pacman -Sy 2>> $errorpath >> $outputpath &
+					Progress_Spinner
+					BPID=$!
+					wait $BPID
+					status=$?
+					Exit_Status
+					
 				else
 					printf "$line\n"
 					printf "the pacman.conf file has changed its format\nplease enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
