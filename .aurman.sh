@@ -18,84 +18,6 @@
 # Add verbos option
 ############################################
 
-<<COM
-Log_And_Variables () {	## declare variables and log path that will be used by other functions
-
-	####  Varibale	####
-	line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-	logfolder="/var/log/post_install"
-	errorpath=$logfolder/error.log
-	outputpath=$logfolder/output.log
-	orig_user=$USER
-	user_path=/home/$orig_user
-	####  Varibale	####
-
-	## Check if log folder exits, if not - create it
-	if ! [[ -e $logfolder ]]; then
-		sudo mkdir -p $logfolder
-		sudo chown -R $orig_user $logfolder
-	else
-		sudo chown -R $orig_user $logfolder
-	fi
-}
-
-Exit_Status () {		## Check exit status of the last command to see if it completed successfully
-	if [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "$output_text complete...\n"
-		printf "$line\n\n"
-	else
-		printf "$line\n"
-		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
-		printf "$line\n\n"
-
-		read -p "Would you like to continue anyway?[y/n]: " answer
-		printf "\n"
-		if [[ -z $answer ]]; then
-			:
-		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-			:
-		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-			printf "$line\n"
-			printf "Exiting...\n"
-			printf "$line\n\n"
-			exit 1
-		else
-			printf "$line\n"
-			printf "Invalid answer - exiting\n"
-			printf "$line\n\n"
-			exit 1
-		fi
-	fi
-}
-
-Distro_Check () {		## Checking the environment the user is currenttly running on to determine which settings should be applied
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^manjaro$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-	  	Distro_Val="manjaro"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^arch$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="arch"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^debian$|^\"Ubuntu\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-		Distro_Val="debian"
-	fi
-
-	cat /etc/*-release |grep ID |cut  -d "=" -f "2" |egrep "^\"centos\"$|^\"fedora\"$" &> /dev/null
-
-	if [[ $? -eq 0 ]]; then
-	   	Distro_Val="centos"
-	fi
-}
-COM
-
 ## Install aurman manually
 Aurman_Install () {
 
@@ -160,7 +82,7 @@ COM
 		error_txt="while installing cower"
 
 		## Compile
-		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
+		sudo makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
