@@ -114,8 +114,8 @@ Log_And_Variables () {
 	fi
 
 	## Check if log folder exits, if not, create it
-	if ! [[ -d $orig_user/Automated-Installer ]]; then
-		runuser -l $orig_user -c "mkdir $orig_user/Automated-Installer"
+	if ! [[ -d $user_path/Automated-Installer ]]; then
+		runuser -l $orig_user -c "mkdir $user_path/Automated-Installer"
 	fi
 
 	## Check if error log exits, if not, create it
