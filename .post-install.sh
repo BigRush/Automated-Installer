@@ -39,14 +39,14 @@ Arch_Config () {
 	## Save the background PID to a variable for later use with wait command
 	BPID=$!
 
+	## Call Progress_Spinner function
+	Progress_Spinner
+
 	## Wait until the process is done to get its exit status.
 	wait $BPID
 
 	## Save the exxit status of last command to a Varibale
 	status=$?
-
-	## Call Progress_Spinner function
-	Progress_Spinner
 
 	## Call Exit_Status function
 	Exit_Status
@@ -57,9 +57,10 @@ Arch_Config () {
 	## If I don't use this method of:
 	## 1. Sending the process to the backgroud.
 	## 2. Save its PID.
-	## 3. Executing wait command.
-	## 4. Save the process exit status.
-	## 5. Make sure the exit status is 0.
+	## 3. Call Progress_Spinner function
+	## 4. Executing wait command.
+	## 5. Save the process exit status.
+	## 6. Make sure the exit status is 0.
 	##
 	## I will not be able to:
 	## 1. Run the Progress_Spinner function because it
@@ -88,7 +89,7 @@ Arch_Config () {
 	error_txt=" while installing Xorg"
 	pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
-	Progress_Spinner 
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
