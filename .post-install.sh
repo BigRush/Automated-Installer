@@ -168,6 +168,7 @@ Alias_and_Wallpaper () {
 	## If the background picture doesn't already exists, download it
 	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
 		runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+		status=$?
 		Exit_Status
 	fi
 
@@ -400,6 +401,7 @@ SDDM_Installation () {
 	error_txt="while enabling sddm service"
 
 	systemctl enable sddm 2>> $errorpath >> $outputpath
+	status=$?
 	Exit_Status
 }
 
@@ -430,6 +432,7 @@ LightDM_Installation () {
 	error_txt="while enabling Lightdm service"
 
 	systemctl enable lightdm 2>> $errorpath >> $outputpath
+	status=$?
 	Exit_Status
 
 	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
@@ -533,6 +536,7 @@ Boot_Manager_Config () {
 		error_txt="while configuring refind with 'refind-install'"
 
 		refind-install 2>> $errorpath >> $outputpath
+		status=$?
 		Exit_Status
 
 		printf "$line\n"
@@ -543,6 +547,7 @@ Boot_Manager_Config () {
 		error_txt="while configuring refind with 'mkrlconf'"
 
 		mkrlconf 2>> $errorpath >> $outputpath
+		status=$?
 		Exit_Status
 	fi
 }

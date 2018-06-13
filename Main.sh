@@ -41,7 +41,7 @@ Exit_Status () {
 		printf "$line\n\n"
 	else
 		printf "$line\n"
-		printf "Somethong went wrong $error_txt, please check log under:\n$errorpath\n"
+		printf "Something went wrong $error_txt, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
         ## Propmet the user if he wants to continue with the script
@@ -212,6 +212,13 @@ Source_And_Validation () {
 		wait $BPID
 		status=$?
 		Exit_Status
+
+		output_text=".post-install.sh source"
+		error_txt="while sourcing .post-install.sh"
+
+		source ./.post-install.sh 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
     fi
 
     source ./.aurman.sh 2>> $errorpath >> $outputpath
@@ -227,6 +234,13 @@ Source_And_Validation () {
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
+		status=$?
+		Exit_Status
+
+		output_text=".aurman.sh source"
+		error_txt="while sourcing .aurman.sh"
+
+		source ./.aurman.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
