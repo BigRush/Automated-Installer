@@ -216,7 +216,7 @@ Alias_and_Wallpaper () {
 ## Menu, to choose which desktop environment to install
 DE_Menu () {
 
-	desk_env=(Plasma Deepin xfce4 exit)
+	desk_env=(Plasma Deepin xfce4 Exit)
 	local PS3="Please choose a desktop environment to install: "
 	select opt in ${desk_env[@]} ; do
 		case $opt in
