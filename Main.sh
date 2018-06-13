@@ -70,7 +70,7 @@ Exit_Status () {
 Progress_Spinner () {
 
 	## Loop until the PID of the last background process is not found
-	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$!") ]];do
+	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$BPID") ]];do
 		## Print text with a spinner
 		printf "\r$output_text in progress...  [|]"
 		sleep 0.75
@@ -98,7 +98,7 @@ Log_And_Variables () {
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
 	CWD=$(pwd)
-    PACSTALL="pacman -S"
+    PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
     AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
@@ -169,22 +169,29 @@ Source_And_Validation () {
 
         ## Download wget
         if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
-            $PACSTALL wget 2>> $errorpath >> $outputpath &
-            status=$?
-            Progress_Spinner
-            Exit_Status
+			PKGNAME="wget"
+            $PACSTALL 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
         elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
             apt-get install wget -y 2>> $errorpath >> $outputpath &
-            status=$?
-            Progress_Spinner
-            Exit_Status
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
         elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
             yum install wget -y 2>> $errorpath >> $outputpath &
-            status=$?
-            Progress_Spinner
-            Exit_Status
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
         fi
     fi
 
