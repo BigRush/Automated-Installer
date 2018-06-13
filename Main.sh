@@ -92,8 +92,8 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-    errorpath=$orig_user/error.log
-    outputpath=$orig_user/Automated-Installer/output.log
+    errorpath=$user_path/error.log
+    outputpath=$user_path/Automated-Installer/output.log
     orig_user=$SUDO_USER
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
