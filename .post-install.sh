@@ -45,11 +45,12 @@ Arch_Config () {
 	## Save the exxit status of last command to a Varibale
 	status=$?
 
+	## Call Progress_Spinner function
+	Progress_Spinner
+
 	## Call Exit_Status function
 	Exit_Status
 
-	## Call Progress_Spinner function
-	Progress_Spinner
 
 	## Understanding the logic behind the code
 	############################################################################
@@ -86,11 +87,13 @@ Arch_Config () {
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
 	pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
+	Progress_Spinner &
 	BPID=$!
 	wait $BPID
 	status=$?
+
 	Exit_Status
-	Progress_Spinner
+
 	# sleep 0.5
 
 	## Make sure there is an Intel video card and install its drivers.
