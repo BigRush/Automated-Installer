@@ -109,10 +109,10 @@ Arch_Config () {
 		error_txt="while installing video card's drivers"
 
 		pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
+		Progress_Spinner
 		BPID=$!
 		wait $BPID
 		status=$?
-		Progress_Spinner
 		Exit_Status
 		# sleep 0.5
 	else
@@ -263,10 +263,10 @@ KDE_Installation () {
 	##	Install plasma desktop environment
 	pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
-	Progress_Spinner
 
 	displaymgr=(LightDM SDDM Continue Exit)
 	local PS3="Please choose the desired display manager: "
@@ -310,10 +310,10 @@ KDE_Font_Config () {
 	## Install some nice fonts
 	pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
-	Progress_Spinner
 
 	## Enable font presets by creating symbolic links
 	## It will disable embedded bitmap for all fonts
@@ -364,10 +364,10 @@ Deepin_Installation () {
 	##	Install deepin desktop environment
 	pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
 	BPID=$!
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
-	Progress_Spinner
 
 	## Call the LightDM_Installation function
 	LightDM_Installation
@@ -386,10 +386,10 @@ SDDM_Installation () {
 	## Install sddm
 	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
-	Progress_Spinner
 
 	## Enable and start the sddm service
 	printf "$line\n"
@@ -416,10 +416,10 @@ LightDM_Installation () {
 	## Install lightdm and webkit greeter for a nice theme
 	pacman -S lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
+	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
-	Progress_Spinner
 
 	## Enable and start the sddm service
 	printf "$line\n"
@@ -454,6 +454,9 @@ Manjaro_Sys_Update () {
 	## Save the background PID to a variable for later use with wait command
 	BPID=$!
 
+	## Call Progress_Spinner function
+	Progress_Spinner
+
 	## Wait until the process is done to get its exit status.
 	wait $BPID
 
@@ -462,9 +465,6 @@ Manjaro_Sys_Update () {
 
 	## Call Exit_Status function
 	Exit_Status
-
-	## Call Progress_Spinner function
-	Progress_Spinner
 }
 
 ## Set desktop theme
@@ -518,9 +518,11 @@ Boot_Manager_Config () {
 		output_text="Refind boot manager download"
 		error_txt="while downloading refind boot manager"
 
-		$PACSTALL refind-efi 2>> $errorpath >> $outputpath &
-		status=$?
+		pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
+		BPID=$!
 		Progress_Spinner
+		wait $BPID
+		status=$?
 		Exit_Status
 
 		printf "$line\n"
