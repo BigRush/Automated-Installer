@@ -85,9 +85,7 @@ Arch_Config () {
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	# "$PACSTALL" xorg xorg-xinit 2>> $errorpath >> $outputpath &
-	PKGNAME="xorg xorg-xinit"
-	$PACSTALL
+	pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -107,9 +105,7 @@ Arch_Config () {
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
 
-		# $PACSTALL xf86-video-intel 2>> $errorpath >> $outputpath &
-		PKGNAME="xf86-video-intel"
-		$PACSTALL
+		pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		wait $BPID
 		status=$?
@@ -262,7 +258,7 @@ KDE_Installation () {
 	error_txt="while installing plasma desktop"
 
 	##	Install plasma desktop environment
-	$PACSTALL plasma --needed 2>> $errorpath >> $outputpath &
+	pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -309,7 +305,7 @@ KDE_Font_Config () {
 	error_txt="while installting fonts"
 
 	## Install some nice fonts
-	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -363,7 +359,7 @@ Deepin_Installation () {
 	error_txt="while installing Deepin desktop"
 
 	##	Install deepin desktop environment
-	$PACSTALL deepin 2>> $errorpath >>$outputpath &
+	pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -385,7 +381,7 @@ SDDM_Installation () {
 	error_txt="while installing sddm"
 
 	## Install sddm
-	$PACSTALL sddm 2>> $errorpath >> $outputpath &
+	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -415,7 +411,7 @@ LightDM_Installation () {
 	error_txt="while installing Lightdm"
 
 	## Install lightdm and webkit greeter for a nice theme
-	$PACSTALL lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan 2>> $errorpath >> $outputpath &
+	pacman -S lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	wait $BPID
 	status=$?
