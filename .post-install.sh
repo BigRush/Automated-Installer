@@ -235,7 +235,7 @@ DE_Menu () {
 				;;
 			Exit)
 				printf "$line\n"
-				printf "Exiting, have a nice day!"
+				printf "Exiting, have a nice day!\n"
 				printf "$line\n"
 				exit 0
 				;;

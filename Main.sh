@@ -207,9 +207,11 @@ Source_And_Validation () {
 		error_txt="while downloading .post-install.sh"
 
         wget $post_script 2>> $errorpath >> $outputpath &
-        status=$?
-        Progress_Spinner
-        Exit_Status
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
     fi
 
     source ./.aurman.sh 2>> $errorpath >> $outputpath
@@ -222,9 +224,11 @@ Source_And_Validation () {
 		error_txt="while downloading .aurman.sh"
 
         wget $aurman_script 2>> $errorpath >> $outputpath &
-        status=$?
-        Progress_Spinner
-        Exit_Status
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
     fi
 }
 
