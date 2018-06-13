@@ -98,7 +98,7 @@ Log_And_Variables () {
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
 	CWD=$(pwd)
-    PACSTALL="pacman -S --needed --noconfirm"
+    PACSTALL="pacman -S"
     AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"

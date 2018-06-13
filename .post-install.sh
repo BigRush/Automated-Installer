@@ -36,6 +36,12 @@ Arch_Config () {
 	## and move the process to the background for the Progress_Spinner function.
 	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
 
+	## Save the background PID to a variable for later use with wait command
+	BPID=$!
+
+	## Wait until the process is done to get its exit status.
+	wait $BPID
+
 	## Save the exxit status of last command to a Varibale
 	status=$?
 
@@ -45,6 +51,30 @@ Arch_Config () {
 	## Call Progress_Spinner function
 	Progress_Spinner
 
+	## Understanding the logic behind the code
+	############################################################################
+	## If I don't use this method of:
+	## 1. Sending the process to the backgroud.
+	## 2. Save its PID.
+	## 4. Executing wait command.
+	## 5. Save the process exit status.
+	## 6. Make sure the exit status is 0.
+	##
+	## I will not be able to:
+	## 1. Run the Progress_Spinner function because it
+	##    depends on the backgroung PID of the last executed command.
+	##
+	## 2. Make sure the command executed successfully or not, because when you
+	##    you compare the exit status of the process that has been sent to the
+	##    the background, you will be getting the exit status of a different
+	##    command, in this case I got the exit status of the declaration of
+	##    "error_txt" variable (before implementing this method of wait command,
+	##    it can be seen on early commits).
+	##
+	## So now by waiting until the process is done, I can safely check the exit
+	## status, because the wait command will return an exit status according to
+	## the success of the process its given.
+	############################################################################
 
 	## Wait for 0.5 seconds for preventing unwanted errors
 	# sleep 0.5
