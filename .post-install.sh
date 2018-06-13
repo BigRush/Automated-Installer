@@ -85,7 +85,9 @@ Arch_Config () {
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	"$PACSTALL" xorg xorg-xinit 2>> $errorpath >> $outputpath &
+	# "$PACSTALL" xorg xorg-xinit 2>> $errorpath >> $outputpath &
+	PKGNAME="xorg xorg-xinit"
+	$PACSTALL
 	BPID=$!
 	wait $BPID
 	status=$?
@@ -105,7 +107,9 @@ Arch_Config () {
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
 
-		$PACSTALL xf86-video-intel 2>> $errorpath >> $outputpath &
+		# $PACSTALL xf86-video-intel 2>> $errorpath >> $outputpath &
+		PKGNAME="xf86-video-intel"
+		$PACSTALL
 		BPID=$!
 		wait $BPID
 		status=$?
