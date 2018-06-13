@@ -92,8 +92,8 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-    errorpath=log/error.log
-    outputpath=log/output.log
+    errorpath=$orig_user/error.log
+    outputpath=$orig_user/Automated-Installer/output.log
     orig_user=$SUDO_USER
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
@@ -114,18 +114,18 @@ Log_And_Variables () {
 	fi
 
 	## Check if log folder exits, if not, create it
-	if ! [[ -d log ]]; then
-		runuser -l $orig_user -c "mkdir $CWD/log"
+	if ! [[ -d $orig_user/Automated-Installer ]]; then
+		runuser -l $orig_user -c "mkdir $orig_user/Automated-Installer"
 	fi
 
 	## Check if error log exits, if not, create it
 	if ! [[ -e $errorpath ]]; then
-		runuser -l $orig_user -c "touch $CWD/$errorpath"
+		runuser -l $orig_user -c "touch $errorpath"
 	fi
 
 	## Check if output log exits, if not, create it
 	if ! [[ -e $outputpath ]]; then
-		runuser -l $orig_user -c "touch $CWD/$outputpath"
+		runuser -l $orig_user -c "touch $outputpath"
 	fi
 }
 
