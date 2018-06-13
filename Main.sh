@@ -98,8 +98,8 @@ Log_And_Variables () {
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
 	CWD=$(pwd)
-    PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
-    AURSTALL="aurman -S --needed --noconfirm --noedit"
+    # PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
+    # AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
 	####  Varibale	####
@@ -169,8 +169,7 @@ Source_And_Validation () {
 
         ## Download wget
         if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
-			PKGNAME="wget"
-            $PACSTALL 2>> $errorpath >> $outputpath &
+            pacman -S wget 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
