@@ -143,19 +143,28 @@ Aurman_Install () {
 
 COM
 
-	## Install "aurman" from AUR
+	## Check if aurman exists, if not, install "aurman" from AUR
 	if ! [[ -n "$(pacman -Qs aurman)" ]]; then
 		output_text="getting aurman with curl from AUR"
 		error_txt="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
-    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower 2>> $errorpath >> $outputpath
+    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
 		Exit_Status
+
 		output_text="cower installation"
 		error_txt="while installing cower"
 
 		## Compile
-		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath
+		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
 		Exit_Status
 	fi
 
@@ -163,6 +172,7 @@ COM
 	popd 2>> $errorpath >> $outputpath
 	rm -rf $user_path/pacaur_install_tmp
 }
+
 
 ## Applications i want to install with pacaur
 Aurman_Applications () {
@@ -175,8 +185,10 @@ Aurman_Applications () {
 					output_text="$i installation"
 					error_txt="while installing $i"
 					$AURSTALL $i 2>> $errorpath >> $outputpath &
-					status=$?
+					BPID=$!
 					Progress_Spinner
+					wait $BPID
+					status=$?
 					Exit_Status
 				done
 		fi

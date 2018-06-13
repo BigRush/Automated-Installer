@@ -123,8 +123,6 @@ Arch_Config () {
 		printf "$line\n\n"
 		# sleep 2
 	fi
-
-	## Call Pacman_Multilib function
 }
 
 ## Enable multilib repo
@@ -431,8 +429,8 @@ LightDM_Installation () {
 	output_text="Lightdm installation"
 	error_txt="while installing Lightdm"
 
-	## Install lightdm and webkit greeter for a nice theme
-	pacman -S lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
+	## Install lightdm and configure it to work with webkit2-greeter
+	pacman -S lightdm --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -452,6 +450,33 @@ LightDM_Installation () {
 	Exit_Status
 
 	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
+
+	## Check if aurman exists, call Aurman_Install function to install aurman
+	if [[ -n "$(pacman -Qs aurman)" ]]; then
+		LightDM_Configuration
+	else
+		Aurman_Install
+		LightDM_Configuration
+	fi
+}
+
+## Download dependencies and configure lightDM
+LightDM_Configuration () {
+
+	printf "$line\n"
+	printf "Installing Lightdm-webkit2-greeter...\n"
+	printf "$line\n\n"
+
+	output_text="Lightdm-webkit2-greeter installation"
+	error_txt="while installing Lightdm-webkit2-greeter"
+
+	## Install webkit greeter for a nice theme
+	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
 }
 
 ## Full system update for manjaro
@@ -567,22 +592,3 @@ Boot_Manager_Config () {
 		Exit_Status
 	fi
 }
-
-<<COM
-## Call Functions
-Post_Main () {
-	Log_And_Variables
-	Root_Check
-	Distro_Check
-	if [[ $Distro_Val == arch ]]; then
-		Arch_Config
-		sleep 0.5
-		Arch_Font_Config
-	else
-		printf "$line\n"
-		printf "This script does not support your distribution\n"
-		printf "$line\n\n"
-	fi
-
-}
-COM
