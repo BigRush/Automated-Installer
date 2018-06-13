@@ -169,7 +169,7 @@ Source_And_Validation () {
 
         ## Download wget
         if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
-            pacman -S wget 2>> $errorpath >> $outputpath &
+            pacman -S wget --needed --noconfirm 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
