@@ -94,7 +94,7 @@ Log_And_Variables () {
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
     errorpath=log/error.log
     outputpath=log/output.log
-    orig_user=$(who |awk {'print $1'})
+    orig_user=$SUDO_USER
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
 	CWD=$(pwd)
