@@ -87,8 +87,8 @@ Arch_Config () {
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
 	pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
-	Progress_Spinner 
 	BPID=$!
+	Progress_Spinner 
 	wait $BPID
 	status=$?
 	Exit_Status
