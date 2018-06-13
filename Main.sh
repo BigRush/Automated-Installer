@@ -247,7 +247,6 @@ select opt in ${scripts[*]} ; do
             Root_Check
         	if [[ $Distro_Val == arch ]]; then
                 Arch_Config
-				exit 0
                 sleep 1
                 Alias_and_Wallpaper
                 sleep 1
