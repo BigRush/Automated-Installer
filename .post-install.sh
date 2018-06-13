@@ -56,9 +56,9 @@ Arch_Config () {
 	## If I don't use this method of:
 	## 1. Sending the process to the backgroud.
 	## 2. Save its PID.
-	## 4. Executing wait command.
-	## 5. Save the process exit status.
-	## 6. Make sure the exit status is 0.
+	## 3. Executing wait command.
+	## 4. Save the process exit status.
+	## 5. Make sure the exit status is 0.
 	##
 	## I will not be able to:
 	## 1. Run the Progress_Spinner function because it
@@ -89,8 +89,8 @@ Arch_Config () {
 	BPID=$!
 	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 	# sleep 0.5
 
 	## Make sure there is an Intel video card and install its drivers.
@@ -259,9 +259,11 @@ KDE_Installation () {
 
 	##	Install plasma desktop environment
 	$PACSTALL plasma --needed 2>> $errorpath >> $outputpath &
+	BPID=$!
+	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 
 	displaymgr=(LightDM SDDM Continue Exit)
 	local PS3="Please choose the desired display manager: "
@@ -304,9 +306,11 @@ KDE_Font_Config () {
 
 	## Install some nice fonts
 	$PACSTALL ttf-dejavu ttf-liberation noto-fonts 2>> $errorpath >> $outputpath &
+	BPID=$!
+	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 
 	## Enable font presets by creating symbolic links
 	## It will disable embedded bitmap for all fonts
@@ -356,9 +360,11 @@ Deepin_Installation () {
 
 	##	Install deepin desktop environment
 	$PACSTALL deepin 2>> $errorpath >>$outputpath &
+	BPID=$!
+	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 
 	## Call the LightDM_Installation function
 	LightDM_Installation
@@ -376,9 +382,11 @@ SDDM_Installation () {
 
 	## Install sddm
 	$PACSTALL sddm 2>> $errorpath >> $outputpath &
+	BPID=$!
+	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 
 	## Enable and start the sddm service
 	printf "$line\n"
@@ -404,9 +412,11 @@ LightDM_Installation () {
 
 	## Install lightdm and webkit greeter for a nice theme
 	$PACSTALL lightdm lightdm-webkit2-greeter lightdm-webkit-theme-litarvan 2>> $errorpath >> $outputpath &
+	BPID=$!
+	wait $BPID
 	status=$?
-	Progress_Spinner
 	Exit_Status
+	Progress_Spinner
 
 	## Enable and start the sddm service
 	printf "$line\n"
@@ -438,14 +448,20 @@ Manjaro_Sys_Update () {
 	## and move the process to the background for the Progress_Spinner function.
 	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
 
+	## Save the background PID to a variable for later use with wait command
+	BPID=$!
+
+	## Wait until the process is done to get its exit status.
+	wait $BPID
+
 	## Save the exxit status of last command to a Varibale
 	status=$?
 
-	## Call Progress_Spinner function
-	Progress_Spinner
-
 	## Call Exit_Status function
 	Exit_Status
+
+	## Call Progress_Spinner function
+	Progress_Spinner
 }
 
 ## Set desktop theme
