@@ -158,47 +158,125 @@ Distro_Check () {
     fi
 }
 
+
+## Installs dependencies
+Dependencies_Installation () {
+
+	## Check if wget is installed,
+	## if not then download it
+	if [[ -z $(command -v wget) ]]; then
+		printf "$line\n"
+		printf "Downloading wget...\n"
+		printf "$line\n\n"
+
+		output_text="wget download"
+		error_txt="while downloading wget"
+
+		## Download wget
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo pacman -S wget --needed --noconfirm 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+			apt-get install wget -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+			yum install wget -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+	fi
+
+	## Check if curl is installed,
+	## if not then download it
+	if [[ -z $(command -v curl) ]]; then
+		printf "$line\n"
+		printf "Downloading curl...\n"
+		printf "$line\n\n"
+
+		output_text="curl download"
+		error_txt="while downloading curl"
+
+		## Download wget
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo pacman -S curl --needed --noconfirm 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+			apt-get install curl -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+			yum install curl -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+	fi
+
+	## Check if git is installed,
+	## if not then download it
+	if [[ -z $(command -v git) ]]; then
+		printf "$line\n"
+		printf "Downloading git...\n"
+		printf "$line\n\n"
+
+		output_text="git download"
+		error_txt="while downloading git"
+
+		## Download wget
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo pacman -S git --needed --noconfirm 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+			apt-get install git -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+			yum install git -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+	fi
+}
+
 ## Source functions from other scripts
 ## If they doesn't exists, pull them from GitHub
 Source_And_Validation () {
-
-    ## Check if wget is installed,
-    ## if not then download it
-    ## (It's a dependency for later anyways)
-    if [[ -z $(command -v wget) ]]; then
-        printf "$line\n"
-        printf "Downloading wget...\n"
-        printf "$line\n\n"
-
-        output_text="wget download"
-        error_txt="while downloading wget"
-
-        ## Download wget
-        if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
-            pacman -S wget --needed --noconfirm 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-        elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
-            apt-get install wget -y 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-        elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
-            yum install wget -y 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-        fi
-    fi
 
     ## Source the functions from the other scripts.
     ## Check if it was successfull with exit status,
