@@ -343,6 +343,9 @@ Log_And_Variables
 ## Call Distro_Check function
 Distro_Check
 
+## Call Dependencies_Installation function
+Dependencies_Installation
+
 ## Call Source_And_Validation function
 Source_And_Validation
 
@@ -387,10 +390,10 @@ select opt in ${scripts[*]} ; do
             ;;
 
 		"Clean Logs")
-			output_text="Clearing log files"
-			error_txt="while Clearing log files"
+			output_text="Cleaning log files"
+			error_txt="while cleaning log files"
 
-			sudo rm -rf $user_path/Automated-Installer-Logs
+			sudo rm -rf $user_path/Automated-Installer-Log
 			status=$?
 			Exit_Status
 			;;
