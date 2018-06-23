@@ -46,10 +46,10 @@ Exit_Status () {
 
         ## Propmet the user if he wants to continue with the script
         ## although the last command failed to execute successfully.
-        read -p "Would you like to continue anyway?[y/n]: " answer
+        read -p "Would you like to continue anyway?[y/N]: " answer
         printf "\n"
         if [[ -z $answer ]]; then
-            :
+            exit 1
         elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
             :
         elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
@@ -92,12 +92,17 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-    errorpath=$user_path/error.log
-    outputpath=$user_path/Automated-Installer/output.log
-    orig_user=$SUDO_USER
+    errorpath=$user_path/Automated-Installer-Log/error.log
+    outputpath=$user_path/Automated-Installer-Log/output.log
     user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
-	CWD=$(pwd)
+	  CWD=$(pwd)
+
+		if [[ -z $SUDO_USER ]]; then
+			orig_user=$(whoami)
+		else
+			orig_user=$SUDO_USER
+		fi
     # PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
     # AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
@@ -114,8 +119,8 @@ Log_And_Variables () {
 	fi
 
 	## Check if log folder exits, if not, create it
-	if ! [[ -d $user_path/Automated-Installer ]]; then
-		runuser -l $orig_user -c "mkdir $user_path/Automated-Installer"
+	if ! [[ -d $user_path/Automated-Installer-Log ]]; then
+		runuser -l $orig_user -c "mkdir $user_path/Automated-Installer-Log"
 	fi
 
 	## Check if error log exits, if not, create it
