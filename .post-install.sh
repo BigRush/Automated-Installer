@@ -34,7 +34,7 @@ Arch_Config () {
 
 	## Update the system, send stdout, sterr to log files
 	## and move the process to the background for the Progress_Spinner function.
-	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
 
 	## Save the background PID to a variable for later use with wait command
 	BPID=$!
@@ -87,7 +87,7 @@ Arch_Config () {
 
 	output_text="Xorg installation"
 	error_txt=" while installing Xorg"
-	pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -108,7 +108,7 @@ Arch_Config () {
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
 
-		pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
+		sudo pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
 		Progress_Spinner
 		BPID=$!
 		wait $BPID
@@ -129,11 +129,25 @@ Arch_Config () {
 Pacman_Multilib () {
 
 	## Validate the multilib section is in the place that we are going to replace
+
+	## Set conf file under a variable
 	pac_path=/etc/pacman.conf
+	## If you can't find '#[multilib]'
 	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
+		## Set line counter to 1
 		i=1
+		## On each loop increase i value by 1 until 100
 		for ((i; i<=100; i++)); do
+			## Set the output of line "i" unser a variable
 			pac_line=$(sed -n "$i"p $pac_path)
+			## Check if "#[multilib]" is in that line,
+			## then check if it's line 93 (because i know that the specific
+			## "#[multilib]" should be in line 93 for the time i wrote this),
+			## If it's on line 93 remove the first characters in lines 93 & 94
+			## (which will be '#') to apply multilib repo, then break the loop,
+			## If it's not on line 93 tell the user that file probably changed
+			## and he should do it manually,
+			## If it didn't find it at all then tell the user: multib failed
 			if [[ "#[multilib]" == "$pac_line" ]]; then
 				if [[ $i -eq 93 ]]; then
 					sudo sed -ie "93,94s/.//" $pac_path
@@ -145,6 +159,28 @@ Pacman_Multilib () {
 					printf "$line\n\n"
 					break
 				fi
+			elif [[ $i -eq 100 && ! "#[multilib]" == "$pac_line" ]];then
+				printf "$line\n"
+				printf "Adding multilib repo failed...\n"
+				printf "$line\n\n"
+
+				read -p "Would you like to continue anyway?[y/N]: " answer
+				printf "\n"
+				if [[ -z $answer ]]; then
+					exit 1
+				elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+					:
+				elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+					printf "$line\n"
+					printf "Exiting...\n"
+					printf "$line\n\n"
+					exit 1
+				else
+					printf "$line\n"
+					printf "Invalid answer - exiting\n"
+					printf "$line\n\n"
+					exit 1
+				fi
 			fi
 		done
 
@@ -155,7 +191,7 @@ Pacman_Multilib () {
 		output_text="Multilib sync"
 		error_txt="while syncing multilib"
 
-		pacman -Sy 2>> $errorpath >> $outputpath &
+		sudo pacman -Sy 2>> $errorpath >> $outputpath &
 		Progress_Spinner
 		BPID=$!
 		wait $BPID
@@ -176,12 +212,12 @@ Alias_and_Wallpaper () {
 
 	## If the directory doesn't exits, create it
 	if ! [[ -d $user_path/Pictures ]]; then
-		runuser -l $orig_user -c "mkdir $user_path/Pictures"
+		sudo runuser -l $orig_user -c "mkdir $user_path/Pictures"
 	fi
 
 	## If the background picture doesn't already exists, download it
 	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
-		runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+		sudo runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
 	fi
@@ -208,23 +244,23 @@ Alias_and_Wallpaper () {
 	fi
 
 	if ! [[ -e /root/.bashrc ]]; then
-		touch /root/.bashrc
+		sudo touch /root/.bashrc
 	fi
 
 	if [[ -z $(grep "alias ll='ls -l'" /root/.bashrc) ]]; then
-		printf "alias ll='ls -l'\n" >> /root/.bashrc
+		sudo printf "alias ll='ls -l'\n" >> /root/.bashrc
 	fi
 
 	if [[ -z $(grep "alias lh='ls -lh'" /root/.bashrc) ]]; then
-		printf "alias lh='ls -lh'\n" >> /root/.bashrc
+		sudo printf "alias lh='ls -lh'\n" >> /root/.bashrc
 	fi
 
 	if [[ -z $(grep "alias la ='ls -la'" /root/.bashrc) ]]; then
-		printf "alias la='ls -la'\n" >> /root/.bashrc
+		sudo printf "alias la='ls -la'\n" >> /root/.bashrc
 	fi
 
 	if [[ -z $(grep "alias log=/var/log" $user_path/.bashrc) ]]; then
-		printf "alias log=/var/log\n" >> /root/.bashrc
+		sudo printf "alias log=/var/log\n" >> /root/.bashrc
 	fi
 }
 
@@ -266,7 +302,7 @@ DE_Menu () {
 KDE_Installation () {
 
 	## Add the option to start the deepin desktop environment with xinit
-	printf "exec startkde\n" > $user_path/.xinitrc
+	sudo printf "exec startkde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
 	printf "Installing Plasma desktop environment...\n"
@@ -276,7 +312,7 @@ KDE_Installation () {
 	error_txt="while installing plasma desktop"
 
 	##	Install plasma desktop environment
-	pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -323,7 +359,7 @@ KDE_Font_Config () {
 	error_txt="while installting fonts"
 
 	## Install some nice fonts
-	pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -334,13 +370,13 @@ KDE_Font_Config () {
 	## It will disable embedded bitmap for all fonts
 	## Enable sub-pixel RGB rendering
 	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
+	sudo ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
+	sudo ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
+	sudo ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
 
-	sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
+	sudo sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
-	printf "
+	sudo printf "
 	<?xml version="1.0"?>
 	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 	<fontconfig>
@@ -377,7 +413,7 @@ Deepin_Installation () {
 	error_txt="while installing Deepin desktop"
 
 	##	Install deepin desktop environment
-	pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
+	sudo pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -399,7 +435,7 @@ SDDM_Installation () {
 	error_txt="while installing sddm"
 
 	## Install sddm
-	pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -430,7 +466,7 @@ LightDM_Installation () {
 	error_txt="while installing Lightdm"
 
 	## Install lightdm and configure it to work with webkit2-greeter
-	pacman -S lightdm --needed --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -S lightdm --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -445,11 +481,11 @@ LightDM_Installation () {
 	output_text="Enable Lightdm service"
 	error_txt="while enabling Lightdm service"
 
-	systemctl enable lightdm 2>> $errorpath >> $outputpath
+	sudo systemctl enable lightdm 2>> $errorpath >> $outputpath
 	status=$?
 	Exit_Status
 
-	sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
+	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 
 	## Check if aurman exists, call Aurman_Install function to install aurman
 	if [[ -n "$(pacman -Qs aurman)" ]]; then
@@ -471,7 +507,7 @@ LightDM_Configuration () {
 	error_txt="while installing Lightdm-webkit2-greeter"
 
 	## Install webkit greeter for a nice theme
-	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+	sudo aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -493,7 +529,7 @@ Manjaro_Sys_Update () {
 
 	## Update the system, send stdout, sterr to log files
 	## and move the process to the background for the Progress_Spinner function.
-	pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
+	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
 
 	## Save the background PID to a variable for later use with wait command
 	BPID=$!
@@ -528,12 +564,12 @@ Boot_Manager_Config () {
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
 
-		sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-		sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
-		sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
+		sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
+		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
 		## apply changes to grub
-		grub-mkconfig -o /boot/grub/grub.cfg
+		sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 		## Ask the user if he wants to install refined boot manager
 		read -p "Would you like to install refined boot manager?[y/n]: " answer
@@ -562,7 +598,7 @@ Boot_Manager_Config () {
 		output_text="Refind boot manager download"
 		error_txt="while downloading refind boot manager"
 
-		pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
+		sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -576,7 +612,7 @@ Boot_Manager_Config () {
 		output_text="'refind-install'"
 		error_txt="while configuring refind with 'refind-install'"
 
-		refind-install 2>> $errorpath >> $outputpath
+		sudo refind-install 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
 
@@ -587,7 +623,7 @@ Boot_Manager_Config () {
 		output_text="'mkrlconf'"
 		error_txt="while configuring refind with 'mkrlconf'"
 
-		mkrlconf 2>> $errorpath >> $outputpath
+		sudo mkrlconf 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
 	fi

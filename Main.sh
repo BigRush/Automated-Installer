@@ -92,17 +92,18 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
-    errorpath=$user_path/Automated-Installer-Log/error.log
+	if [[ -z $SUDO_USER ]]; then
+		orig_user=$(whoami)
+	else
+		orig_user=$SUDO_USER
+	fi
+	user_path=/home/$orig_user
+	errorpath=$user_path/Automated-Installer-Log/error.log
     outputpath=$user_path/Automated-Installer-Log/output.log
-    user_path=/home/$orig_user
     lightconf=/etc/lightdm/lightdm.conf
-	  CWD=$(pwd)
+	CWD=$(pwd)
 
-		if [[ -z $SUDO_USER ]]; then
-			orig_user=$(whoami)
-		else
-			orig_user=$SUDO_USER
-		fi
+
     # PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
     # AURSTALL="aurman -S --needed --noconfirm --noedit"
     post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
@@ -120,17 +121,17 @@ Log_And_Variables () {
 
 	## Check if log folder exits, if not, create it
 	if ! [[ -d $user_path/Automated-Installer-Log ]]; then
-		runuser -l $orig_user -c "mkdir $user_path/Automated-Installer-Log"
+		sudo runuser -l $orig_user -c "mkdir $user_path/Automated-Installer-Log"
 	fi
 
 	## Check if error log exits, if not, create it
 	if ! [[ -e $errorpath ]]; then
-		runuser -l $orig_user -c "touch $errorpath"
+		sudo runuser -l $orig_user -c "touch $errorpath"
 	fi
 
 	## Check if output log exits, if not, create it
 	if ! [[ -e $outputpath ]]; then
-		runuser -l $orig_user -c "touch $outputpath"
+		sudo runuser -l $orig_user -c "touch $outputpath"
 	fi
 }
 
@@ -262,7 +263,7 @@ Source_And_Validation
 
 ## Propmet the user with a menu to start the script
 IFS=","
-scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**","Exit")
+scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**","Clean Logs","Exit")
 PS3="Please choose what would you like to do: "
 select opt in ${scripts[*]} ; do
     case $opt in
@@ -301,6 +302,13 @@ select opt in ${scripts[*]} ; do
             exit 0
             ;;
 
+		"Clean Logs")
+			output_text="Clearing log files"
+			error_txt="while Clearing log files"
+
+			sudo rm -rf $user_path/Automated-Installer-Logs
+			status=$?
+			Exit_Status
         *)
             printf "Invalid option\n"
             ;;
