@@ -71,18 +71,20 @@ COM
 		error_txt="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
-    	curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower 2>> $errorpath >> $outputpath &
+    	curl -L -O PKGBUILD https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
+		cd aurman.tar.gz
+
 		output_text="cower installation"
 		error_txt="while installing cower"
 
 		## Compile
-		sudo makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
+		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
