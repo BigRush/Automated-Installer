@@ -138,11 +138,18 @@ Log_And_Variables () {
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
 Distro_Check () {
 
+	## Put all the distros i want to check in an array
     Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
-    status=1
+	## set the initial success variable to 1 (0=success 1=failed)
+	status=1
+	## Go other each element of the array and check if that element (in this
+	## case the element will be a distro) exists in the distro check file
+	## (/etc/*-release), if it does set the Distro_Val to the current element
+	## ($i) and set the status to 0 (success), if it doesn't find any element
+	## of the array that matches the file, then status will remain 1 (failed)
+	## and propmet the user that the script did not find his distribution
     for i in ${Distro_Array[@]}; do
-        tmp_dist=$i
-        DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$tmp_dist$")
+        DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$i$")
     	if ! [[ -z $DistroChk ]]; then
     	  	Distro_Val="$i"
             status=0
