@@ -348,12 +348,11 @@ Source_And_Validation
 
 ## Propmet the user with a menu to start the script
 IFS=","
-scripts=("Post install **Run as Root**","Aurman **Run as Non-Root**","Clean Logs","Exit")
+scripts=("Post install","Aurman **Run as Non-Root**","Clean Logs","Exit")
 PS3="Please choose what would you like to do: "
 select opt in ${scripts[*]} ; do
     case $opt in
-        "Post install **Run as Root**")
-            Root_Check
+        "Post install")
         	if [[ $Distro_Val == arch ]]; then
                 Arch_Config
                 sleep 1
@@ -394,6 +393,7 @@ select opt in ${scripts[*]} ; do
 			sudo rm -rf $user_path/Automated-Installer-Logs
 			status=$?
 			Exit_Status
+			;;
         *)
             printf "Invalid option\n"
             ;;
