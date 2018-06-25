@@ -387,24 +387,24 @@ KDE_Font_Config () {
 
 	sudo sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
-	sudo printf "
+	sudo runuser -l "root" -c "printf \"
 	<?xml version="1.0"?>
-	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+	<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">
 	<fontconfig>
 	    <match>
-	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
+	        <edit mode=\"prepend\" name=\"family\"><string>Noto Sans</string></edit>
 	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
+	    <match target=\"pattern\">
+	        <test qual=\"any\" name=\"family\"><string>serif</string></test>
+	        <edit name=\"family\" mode=\"assign\" binding=\"same\"><string>Noto Serif</string></edit>
 	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>sans-serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
+	    <match target=\"pattern\">
+	        <test qual=\"any\" name=\"family\"><string>sans-serif</string></test>
+	        <edit name="family" mode=\"assign\" binding=\"same\"><string>Noto Sans</string></edit>
 	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>monospace</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
+	    <match target=\"pattern\">
+	        <test qual=\"any\" name=\"family\"><string>monospace</string></test>
+	        <edit name=\"family\" mode=\"assign\" binding=\"same\"><string>Noto Mono</string></edit>
 	    </match>
 	</fontconfig>
 	" > /etc/fonts/local.conf
