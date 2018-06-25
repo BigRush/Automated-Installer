@@ -71,7 +71,7 @@ COM
 		error_txt="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
-    	curl -L -O PKGBUILD https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
+    	curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
