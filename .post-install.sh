@@ -526,12 +526,14 @@ LightDM_Configuration () {
 	error_txt="while installing Lightdm-webkit2-greeter"
 
 	## Install webkit greeter for a nice theme
-	sudo aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
 	status=$?
 	Exit_Status
+
+	sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 }
 
 ## Full system update for manjaro
@@ -582,7 +584,7 @@ xfce_theme () {
 Boot_Manager_Config () {
 
 	sudo echo
-	
+
 	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then

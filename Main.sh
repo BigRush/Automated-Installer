@@ -101,6 +101,7 @@ Log_And_Variables () {
 	errorpath=$user_path/Automated-Installer-Log/error.log
     outputpath=$user_path/Automated-Installer-Log/output.log
     lightconf=/etc/lightdm/lightdm.conf
+	lightwebconf=/etc/lightdm-Webkit2-greeter.conf
 	CWD=$(pwd)
 
 

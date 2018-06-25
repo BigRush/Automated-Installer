@@ -43,27 +43,6 @@ Aurman_Install () {
 
 	pushd . 2>> $errorpath >> $outputpath
 	cd $user_path/Automated-Installer-Log/pacaur_install_tmp
-	# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 2>> $errorpath >> $outputpath
-<<COM
-	printf "$line\n"
-	printf "Installing pacaur dependencies...\n"
-	printf "$line\n\n"
-
-	output_text="base-devel packages installation"
-	error_txt="while installing base-devel packages"
-
-	## If didn't install the "base-devel" group and git
-	sudo pacman -S binutils make gcc fakeroot pkg-config git --noconfirm --needed 2>> $errorpath >> $outputpath
-	Exit_Status
-
-	output_text="base-devel pacaur dependencies installation"
-	error_txt="while installing pacaur dependencies"
-
-	## Install pacaur dependencies from arch repos
-	sudo pacman -S expac yajl git --noconfirm --needed 2>> $errorpath >> $outputpath
-	Exit_Status
-
-COM
 
 	## Check if aurman exists, if not, install "aurman" from AUR
 	if ! [[ -n "$(pacman -Qs aurman)" ]]; then
