@@ -23,6 +23,8 @@
 ## Configure arch after a clean install with KDE desktop environment
 Arch_Config () {
 
+	## Prompet sudo
+	sudo echo
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
@@ -78,6 +80,8 @@ Arch_Config () {
 	## the success of the process its given.
 	############################################################################
 
+	sudo echo
+
 	## Wait for 0.5 seconds for preventing unwanted errors
 	# sleep 0.5
 
@@ -107,6 +111,8 @@ Arch_Config () {
 
 		output_text="Video card drivers installationl"
 		error_txt="while installing video card's drivers"
+
+		sudo echo
 
 		sudo pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
 		Progress_Spinner
@@ -301,6 +307,8 @@ DE_Menu () {
 ## Installs KDE desktop environment
 KDE_Installation () {
 
+	sudo echo
+
 	## Add the option to start the deepin desktop environment with xinit
 	sudo printf "exec startkde\n" > $user_path/.xinitrc
 
@@ -355,6 +363,9 @@ KDE_Installation () {
 
 ## Configure ugly arch kde fonts
 KDE_Font_Config () {
+
+	sudo echo
+
 	output_text="Font installation"
 	error_txt="while installting fonts"
 
@@ -402,6 +413,8 @@ KDE_Font_Config () {
 ## Installs Deepin desktop environment
 Deepin_Installation () {
 
+	sudo echo
+
 	## Add the option to start the deepin desktop environment with xinit
 	printf "exec startdde\n" > $user_path/.xinitrc
 
@@ -426,6 +439,8 @@ Deepin_Installation () {
 
 ## Install SDDM display manager
 SDDM_Installation () {
+
+	sudo echo
 
 	printf "$line\n"
 	printf "Installing sddm...\n"
@@ -457,6 +472,8 @@ SDDM_Installation () {
 
 ## Installs LightDM display manager and configures it
 LightDM_Installation () {
+
+	sudo echo
 
 	printf "$line\n"
 	printf "Installing Lightdm...\n"
@@ -499,6 +516,8 @@ LightDM_Installation () {
 ## Download dependencies and configure lightDM
 LightDM_Configuration () {
 
+	sudo echo
+
 	printf "$line\n"
 	printf "Installing Lightdm-webkit2-greeter...\n"
 	printf "$line\n\n"
@@ -517,6 +536,8 @@ LightDM_Configuration () {
 
 ## Full system update for manjaro
 Manjaro_Sys_Update () {
+
+	sudo echo
 
 	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
@@ -560,6 +581,8 @@ xfce_theme () {
 ## Config the grub background and fast boot time
 Boot_Manager_Config () {
 
+	sudo echo
+	
 	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
 	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
