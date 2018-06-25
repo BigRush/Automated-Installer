@@ -85,6 +85,9 @@ COM
 		output_text="aurman building"
 		error_txt="while building aurman"
 
+		## Add gpg key
+		gpg --recv-keys 465022E743D71E39 2>> $errorpath >> $outputpath
+
 		## Compile
 		makepkg -si PKGBUILD --noconfirm --needed 2>> $errorpath >> $outputpath &
 		BPID=$!
