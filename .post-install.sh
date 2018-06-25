@@ -341,13 +341,13 @@ KDE_Installation () {
 	            ;;
 			Continue)
 				printf "$line\n"
-				printf "Continuing"
+				printf "Continuing...\n"
 				printf "$line\n"
 				break
 				;;
 	        Exit)
 	            printf "$line\n"
-	            printf "Exiting, have a nice day!"
+	            printf "Exiting, have a nice day!\n"
 	            printf "$line\n"
 	            exit 0
 				;;
