@@ -592,10 +592,11 @@ Boot_Manager_Config () {
 		sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
-	fi
+
 		## apply changes to grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
-
+	fi
+	
 	## Ask the user if he wants to install refined boot manager
 	read -p "Would you like to install refined boot manager?[y/N]: " answer
 	printf "\n"
