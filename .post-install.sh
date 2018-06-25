@@ -533,7 +533,7 @@ LightDM_Configuration () {
 	status=$?
 	Exit_Status
 
-	sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
+	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 }
 
 ## Full system update for manjaro
