@@ -329,7 +329,7 @@ KDE_Installation () {
 
 	displaymgr=(LightDM SDDM Continue Exit)
 	local PS3="Please choose the desired display manager: "
-	select dm in ${displaymgr[*]} ; do
+	select opt in ${displaymgr[*]} ; do
 	    case $opt in
 	        LightDm)
 				LightDM_Installation
