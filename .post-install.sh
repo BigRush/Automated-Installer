@@ -592,64 +592,63 @@ Boot_Manager_Config () {
 		sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
-
+	fi
 		## apply changes to grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-		## Ask the user if he wants to install refined boot manager
-		read -p "Would you like to install refined boot manager?[y/N]: " answer
-		printf "\n"
-		if [[ -z $answer ]]; then
-			exit 0
-		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-			:
-		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-			printf "$line\n"
-			printf "Exiting...\n"
-			printf "$line\n\n"
-			exit 0
-		else
-			printf "$line\n"
-			printf "Invalid answer - exiting\n"
-			printf "$line\n\n"
-			exit 1
-		fi
-
-		## install refinds boot manager and configure it
+	## Ask the user if he wants to install refined boot manager
+	read -p "Would you like to install refined boot manager?[y/N]: " answer
+	printf "\n"
+	if [[ -z $answer ]]; then
+		exit 0
+	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+		:
+	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 		printf "$line\n"
-		printf "Downloading refind boot manager...\n"
+		printf "Exiting...\n"
 		printf "$line\n\n"
-
-		output_text="Refind boot manager download"
-		error_txt="while downloading refind boot manager"
-
-		sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
+		exit 0
+	else
 		printf "$line\n"
-		printf "Configuring refind with 'refind-install'...\n"
+		printf "Invalid answer - exiting\n"
 		printf "$line\n\n"
-
-		output_text="'refind-install'"
-		error_txt="while configuring refind with 'refind-install'"
-
-		sudo refind-install 2>> $errorpath >> $outputpath
-		status=$?
-		Exit_Status
-
-		printf "$line\n"
-		printf "Configuring refind with 'mkrlconf'...\n"
-		printf "$line\n\n"
-
-		output_text="'mkrlconf'"
-		error_txt="while configuring refind with 'mkrlconf'"
-
-		sudo mkrlconf 2>> $errorpath >> $outputpath
-		status=$?
-		Exit_Status
+		exit 1
 	fi
+
+	## install refinds boot manager and configure it
+	printf "$line\n"
+	printf "Downloading refind boot manager...\n"
+	printf "$line\n\n"
+
+	output_text="Refind boot manager download"
+	error_txt="while downloading refind boot manager"
+
+	sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	printf "$line\n"
+	printf "Configuring refind with 'refind-install'...\n"
+	printf "$line\n\n"
+
+	output_text="'refind-install'"
+	error_txt="while configuring refind with 'refind-install'"
+
+	sudo refind-install 2>> $errorpath >> $outputpath
+	status=$?
+	Exit_Status
+
+	printf "$line\n"
+	printf "Configuring refind with 'mkrlconf'...\n"
+	printf "$line\n\n"
+
+	output_text="'mkrlconf'"
+	error_txt="while configuring refind with 'mkrlconf'"
+
+	sudo mkrlconf 2>> $errorpath >> $outputpath
+	status=$?
+	Exit_Status
 }
