@@ -261,11 +261,11 @@ Alias_and_Wallpaper () {
 		sudo runuser -l "root" -c "printf \"alias lh='ls -lh'\n\" >> /root/.bashrc"
 	fi
 
-	if [[ -z $(sudo grep "alias la ='ls -la'" /root/.bashrc) ]]; then
+	if [[ -z $(sudo grep "alias la='ls -la'" /root/.bashrc) ]]; then
 		sudo runuser -l "root" -c "printf \"alias la='ls -la'\n\" >> /root/.bashrc"
 	fi
 
-	if [[ -z $(sudo grep "alias log=/var/log" $user_path/.bashrc) ]]; then
+	if [[ -z $(sudo grep "alias log=/var/log" /root/.bashrc) ]]; then
 		sudo runuser -l "root" -c "printf \"alias log=/var/log\n\" >> /root/.bashrc"
 	fi
 }
@@ -387,27 +387,30 @@ KDE_Font_Config () {
 
 	sudo sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
-	sudo runuser -l "root" -c "printf \"
+	printf "
 	<?xml version="1.0"?>
-	<!DOCTYPE fontconfig SYSTEM \"fonts.dtd\">
+	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 	<fontconfig>
 	    <match>
-	        <edit mode=\"prepend\" name=\"family\"><string>Noto Sans</string></edit>
+	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
 	    </match>
-	    <match target=\"pattern\">
-	        <test qual=\"any\" name=\"family\"><string>serif</string></test>
-	        <edit name=\"family\" mode=\"assign\" binding=\"same\"><string>Noto Serif</string></edit>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
 	    </match>
-	    <match target=\"pattern\">
-	        <test qual=\"any\" name=\"family\"><string>sans-serif</string></test>
-	        <edit name="family" mode=\"assign\" binding=\"same\"><string>Noto Sans</string></edit>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>sans-serif</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
 	    </match>
-	    <match target=\"pattern\">
-	        <test qual=\"any\" name=\"family\"><string>monospace</string></test>
-	        <edit name=\"family\" mode=\"assign\" binding=\"same\"><string>Noto Mono</string></edit>
+	    <match target="pattern">
+	        <test qual="any" name="family"><string>monospace</string></test>
+	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
 	    </match>
 	</fontconfig>
-	" > /etc/fonts/local.conf
+	" > tmp_font
+
+	sudo runuser -l "root" -c "cat tmp_font > /etc/fonts/local.conf"
+	rm tmp_font
 }
 
 ## Installs Deepin desktop environment
