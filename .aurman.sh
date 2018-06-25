@@ -31,7 +31,7 @@ Aurman_Install () {
 	error_txt="while updating"
 
 	## Update the system, send stdout and sterr to log files
-	sudo $PACSTALL 2>> $errorpath >> $outputpath &
+	sudo pacman -Syu 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
