@@ -37,12 +37,12 @@ Aurman_Install () {
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_path/pacaur_install_tmp ]]; then
-		mkdir -p $user_path/pacaur_install_tmp
+	if ! [[ -e $user_path/Automated-Installer-Log/pacaur_install_tmp ]]; then
+		mkdir -p $user_path/Automated-Installer-Log/pacaur_install_tmp
 	fi
 
 	pushd . 2>> $errorpath >> $outputpath
-	cd $user_path/pacaur_install_tmp
+	cd $user_path/Automated-Installer-Log/pacaur_install_tmp
 	# gpg --recv-keys --keyserver hkp://pgp.mit.edu 1EB2638FF56C0C53 2>> $errorpath >> $outputpath
 <<COM
 	printf "$line\n"
