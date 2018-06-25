@@ -387,7 +387,7 @@ KDE_Font_Config () {
 
 	sudo sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
 
-	printf "
+	printf '
 	<?xml version="1.0"?>
 	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
 	<fontconfig>
@@ -407,7 +407,7 @@ KDE_Font_Config () {
 	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
 	    </match>
 	</fontconfig>
-	" > tmp_font
+	' > tmp_font
 
 	sudo runuser -l "root" -c "cat tmp_font > /etc/fonts/local.conf"
 	rm tmp_font
