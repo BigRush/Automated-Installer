@@ -86,7 +86,7 @@ COM
 		error_txt="while building aurman"
 
 		## Compile
-		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
+		makepkg -si PKGBUILD --noconfirm --needed 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
