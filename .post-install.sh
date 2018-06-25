@@ -248,19 +248,19 @@ Alias_and_Wallpaper () {
 	fi
 
 	if [[ -z $(sudo grep "alias ll='ls -l'" /root/.bashrc) ]]; then
-		sudo printf "alias ll='ls -l'\n" >> /root/.bashrc
+		sudo runuser -l "root" -c "printf \"alias ll='ls -l'\n\" >> /root/.bashrc"
 	fi
 
 	if [[ -z $(sudo grep "alias lh='ls -lh'" /root/.bashrc) ]]; then
-		sudo printf "alias lh='ls -lh'\n" >> /root/.bashrc
+		sudo runuser -l "root" -c "printf \"alias lh='ls -lh'\n\" >> /root/.bashrc"
 	fi
 
 	if [[ -z $(sudo grep "alias la ='ls -la'" /root/.bashrc) ]]; then
-		sudo printf "alias la='ls -la'\n" >> /root/.bashrc
+		sudo runuser -l "root" -c "printf \"alias la='ls -la'\n\" >> /root/.bashrc"
 	fi
 
 	if [[ -z $(sudo grep "alias log=/var/log" $user_path/.bashrc) ]]; then
-		sudo printf "alias log=/var/log\n" >> /root/.bashrc
+		sudo runuser -l "root" -c "printf \"alias log=/var/log\n\" >> /root/.bashrc"
 	fi
 }
 
