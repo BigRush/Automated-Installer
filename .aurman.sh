@@ -78,10 +78,12 @@ COM
 		status=$?
 		Exit_Status
 
-		cd aurman.tar.gz
+		tar -xf aurman.tar.gz 2>> $errorpath >> $outputpath
 
-		output_text="cower installation"
-		error_txt="while installing cower"
+		cd aurman
+
+		output_text="aurman building"
+		error_txt="while building aurman"
 
 		## Compile
 		makepkg -si PKGBUILD--noconfirm --needed 2>> $errorpath >> $outputpath &
