@@ -102,12 +102,7 @@ Log_And_Variables () {
     outputpath=$user_path/Automated-Installer-Log/output.log
     lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
-	CWD=$(pwd)
-
-
-    # PACSTALL="$(pacman -S $PKGNAME --needed --noconfirm)"
-    # AURSTALL="aurman -S --needed --noconfirm --noedit"
-    post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
+	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
     aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
 	####  Varibale	####
 

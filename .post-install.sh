@@ -329,7 +329,7 @@ KDE_Installation () {
 
 	displaymgr=(LightDM SDDM Continue Exit)
 	local PS3="Please choose the desired display manager: "
-	select opt in ${scripts[@]} ; do
+	select dm in ${displaymgr[*]} ; do
 	    case $opt in
 	        LightDm)
 				LightDM_Installation
@@ -596,7 +596,7 @@ Boot_Manager_Config () {
 		## apply changes to grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 	fi
-	
+
 	## Ask the user if he wants to install refined boot manager
 	read -p "Would you like to install refined boot manager?[y/N]: " answer
 	printf "\n"

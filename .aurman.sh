@@ -92,7 +92,7 @@ Aurman_Applications () {
 					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
-					$AURSTALL $i 2>> $errorpath >> $outputpath &
+					aurman -S --needed --noconfirm --noedit  $i 2>> $errorpath >> $outputpath &
 					BPID=$!
 					Progress_Spinner
 					wait $BPID
@@ -130,7 +130,7 @@ Vbox_Installation () {
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		$AURSTALL $i 2>> $errorpath >> $outputpath &
+		aurman -S --needed --noconfirm --noedit $i 2>> $errorpath >> $outputpath &
 		status=$?
 		Progress_Spinner
 		Exit_Status
@@ -141,26 +141,3 @@ Vbox_Installation () {
 	sudo gpasswd -a tom vboxusers 2>> $errorpath >> $outputpath
 	Exit_Status
 }
-
-<<COM
-Aur_Main () {	## Call functions and source functions from post-install.sh
-	Non_Root_Check
-	Log_And_Variables
-	Distro_Check
-	if [[ $Distro_Val == arch ]]; then
-		Pacman_Multilib
-		sleep 1
-		Pacaur_Install
-		sleep 0.5
-		Webkit2_greeter
-		sleep 0.5
-		Pacaur_applications
-		sleep 0.5
-		Vbox_Installation
-	else
-		printf "$line\n"
-		printf "This script does not support your distribution\n"
-		printf "$line\n\n"
-	fi
-}
-COM
