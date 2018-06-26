@@ -86,30 +86,31 @@ Aurman_Install () {
 
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
-				app=(firefox ncdu guake teamviewer openssh vlc atom discord screenfetch)
-				for i in ${app[*]}; do
-					printf "$line\n"
-					printf "Installing $i\n"
-					printf "$line\n\n"
-					output_text="$i installation"
-					error_txt="while installing $i"
-					aurman -S --needed --noconfirm --noedit --pgp_fetch  $i 2>> $errorpath >> $outputpath &
-					BPID=$!
-					Progress_Spinner
-					wait $BPID
-					status=$?
-					Exit_Status
-				done
-
-				## special attention packages that out need to be seen
+			sudo echo
+			app=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch)
+			for i in ${app[*]}; do
 				printf "$line\n"
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
 				error_txt="while installing $i"
-				aurman -S steam
+				aurman -S $i --needed --noconfirm --noedit --pgp_fetch 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
 				status=$?
 				Exit_Status
+			done
+
+			## special attention packages that out need to be seen
+			printf "$line\n"
+			printf "Installing steam\n"
+			printf "$line\n\n"
+			output_text="steam installation"
+			error_txt="while installing steam"
+			aurman -S steam --needed
+			status=$?
+			Exit_Status
 		fi
 }
 
