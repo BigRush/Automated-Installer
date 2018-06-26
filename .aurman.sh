@@ -83,16 +83,17 @@ Aurman_Install () {
 
 
 ## Applications i want to install with pacaur
+
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
-				app=(firefox ncdu guake git teamviewer synergy-1.6 openssh vlc atom discord screenfetch)
+				app=(firefox ncdu guake teamviewer openssh vlc atom discord screenfetch)
 				for i in ${app[*]}; do
 					printf "$line\n"
 					printf "Installing $i\n"
 					printf "$line\n\n"
 					output_text="$i installation"
 					error_txt="while installing $i"
-					aurman -S --needed --noconfirm --noedit  $i 2>> $errorpath >> $outputpath &
+					aurman -S --needed --noconfirm --noedit --pgp_fetch  $i 2>> $errorpath >> $outputpath &
 					BPID=$!
 					Progress_Spinner
 					wait $BPID
