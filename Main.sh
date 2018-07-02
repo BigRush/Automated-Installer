@@ -360,6 +360,8 @@ select opt in ${scripts[*]} ; do
 				Pacman_Multilib
 				sleep 1
                 DE_Menu
+				sleep 1
+				DM_Menu
                 sleep 1
                 Boot_Manager_Config
             fi
@@ -369,9 +371,37 @@ select opt in ${scripts[*]} ; do
         "Aurman **Run as Non-Root**")
             Non_Root_Check
             if [[ $Distro_Val == arch ]]; then
-                Aurman_Install
-                sleep 1
-                Aurman_Applications
+
+				## Use getopts so I'll have the option to
+				## choose between aurman and yay
+				while getopts :a:h opt do;
+					a)
+						if [[ "aurman" == "$OPTARG" ]]; then
+							Aurman_Install
+			                sleep 1
+			                Aurman_Applications
+							break
+						elif [[ "yay" == "$OPTARG" ]]; then
+							Yay_Install
+							sleep 1
+							Yay_Applications
+							break
+						fi
+						;;
+
+					h)
+						printf "$line\n"
+						printf "Usage: \n-a <argumant>\tchoose which aurhelper would you like to use [aurman|yay]\n"
+						printf "$line\n\n"
+						;;
+
+					\?)
+						printf "$line\n"
+						printf "Invalid option -$OPTARG\ntry -h for help\n"
+						printf "$line\n\n"
+						;;
+					esac
+				done
                 sleep 1
                 Vbox_Installation
             fi

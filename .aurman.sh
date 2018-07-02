@@ -122,7 +122,7 @@ Yay_Install () {
 
 		tar -xf yay.tar.gz 2>> $errorpath >> $outputpath
 
-		cd aurman
+		cd yay
 
 		output_text="yay building"
 		error_txt="while building yay"
@@ -144,11 +144,11 @@ Yay_Install () {
 	rm -rf $user_path/yay_install_tmp
 }
 
-## Applications i want to install with pacaur
+## Applications i want to install with aurman
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 			sudo echo
-			app=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch)
+			app=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch speedtest-cli)
 			for i in ${app[*]}; do
 				printf "$line\n"
 				printf "Installing $i\n"
@@ -173,6 +173,38 @@ Aurman_Applications () {
 			status=$?
 			Exit_Status
 		fi
+}
+
+## Applications i want to install with yay
+Yay_Applications () {
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
+			sudo echo
+			app=(discord steam firefox ncdu guake teamviewer openssh vlc atom screenfetch speedtest-cli)
+			for i in ${app[*]}; do
+				printf "$line\n"
+				printf "Installing $i\n"
+				printf "$line\n\n"
+				output_text="$i installation"
+				error_txt="while installing $i"
+				yay -S $i --needed --noconfirm --noedit --pgp_fetch 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+<<COM
+			## special attention packages that out need to be seen
+			printf "$line\n"
+			printf "Installing steam\n"
+			printf "$line\n\n"
+			output_text="steam installation"
+			error_txt="while installing steam"
+			aurman -S steam --needed
+			status=$?
+			Exit_Status
+		fi
+COM
 }
 
 ## Virtualbox installation

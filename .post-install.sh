@@ -327,38 +327,11 @@ KDE_Installation () {
 	status=$?
 	Exit_Status
 
-	displaymgr=(LightDM SDDM Continue Exit)
-	local PS3="Please choose the desired display manager: "
-	select opt in ${displaymgr[*]} ; do
-	    case $opt in
-	        LightDm)
-				LightDM_Installation
-	            break
-	            ;;
-	        SDDM)
-				SDDM_Installation
-	            break
-	            ;;
-			Continue)
-				printf "$line\n"
-				printf "Continuing...\n"
-				printf "$line\n"
-				break
-				;;
-	        Exit)
-	            printf "$line\n"
-	            printf "Exiting, have a nice day!\n"
-	            printf "$line\n"
-	            exit 0
-				;;
-	        *)
-	        printf "Invalid option\n"
-	        ;;
-	    esac
-	done
-
 	## Call KDE_Font_Config function to fix the fonts
 	KDE_Font_Config
+
+	## Declare a variable for DM_Menu function to use
+	de_env="deepin"
 }
 
 ## Configure ugly arch kde fonts
@@ -437,8 +410,55 @@ Deepin_Installation () {
 	status=$?
 	Exit_Status
 
-	## Call the LightDM_Installation function
-	LightDM_Installation
+	## Declare a variable for DM_Menu function to use
+	de_env="deepin"
+}
+
+## Choose which display manager to install
+DM_Menu () {
+
+	## Check which desktop environment was chosen,
+	## If KDE was chosen then prompt a menu to the user which display manager
+	## to install, if Deeping was chosen then automatically install LightDM
+	if [[ $de_env == "kde" ]]; then
+		displaymgr=(LightDM SDDM Continue Exit)
+		local PS3="Please choose the desired display manager: "
+		select opt in ${displaymgr[*]} ; do
+		    case $opt in
+		        LightDm)
+					LightDM_Installation
+		            break
+		            ;;
+		        SDDM)
+					SDDM_Installation
+		            break
+		            ;;
+				Continue)
+					printf "$line\n"
+					printf "Continuing...\n"
+					printf "$line\n"
+					break
+					;;
+		        Exit)
+		            printf "$line\n"
+		            printf "Exiting, have a nice day!\n"
+		            printf "$line\n"
+		            exit 0
+					;;
+		        *)
+		        printf "Invalid option\n"
+		        ;;
+		    esac
+		done
+
+	elif [[ $de_env == "deepin" ]]; then
+		LightDM_Installation
+
+	else
+		printf "$line\n"
+		printf "Somehow something went wrong somewhere\n"
+		printf "$line\n\n"
+	fi
 }
 
 ## Install SDDM display manager
@@ -508,13 +528,8 @@ LightDM_Installation () {
 
 	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 
-	## Check if aurman exists, call Aurman_Install function to install aurman
-	if [[ -n "$(pacman -Qs aurman)" ]]; then
-		LightDM_Configuration
-	else
-		Aurman_Install
-		LightDM_Configuration
-	fi
+	## Call LightDM_Configuration function
+	LightDM_Configuration
 }
 
 ## Download dependencies and configure lightDM
