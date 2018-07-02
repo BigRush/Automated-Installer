@@ -347,7 +347,7 @@ Source_And_Validation
 
 ## Propmet the user with a menu to start the script
 IFS=","
-scripts=("Post install","Aurman **Run as Non-Root**","Clean Logs","Exit")
+scripts=("Post install","Aurhelper **Run as Non-Root**","Clean Logs","Exit")
 PS3="Please choose what would you like to do: "
 select opt in ${scripts[*]} ; do
     case $opt in
@@ -365,10 +365,13 @@ select opt in ${scripts[*]} ; do
                 sleep 1
                 Boot_Manager_Config
             fi
-            break
+			printf "$line\n"
+			printf "Aurhelper completed successfully\n"
+			printf "$line\n\n"
+			exit 0
             ;;
 
-        "Aurman **Run as Non-Root**")
+        "Aurhelper **Run as Non-Root**")
             Non_Root_Check
             if [[ $Distro_Val == arch ]]; then
 
@@ -380,32 +383,44 @@ select opt in ${scripts[*]} ; do
 							Aurman_Install
 			                sleep 1
 			                Aurman_Applications
-							break
+							sleep 1
+			                Vbox_Installation
+							exit 0
 						elif [[ "yay" == "$OPTARG" ]]; then
 							Yay_Install
 							sleep 1
 							Yay_Applications
-							break
+							sleep 1
+			                Vbox_Installation
+							exit 0
 						fi
 						;;
 
 					h)
 						printf "$line\n"
-						printf "Usage: \n-a <argumant>\tchoose which aurhelper would you like to use [aurman|yay]\n"
+						printf "Usage: \n-a <argumant>\tchoose which aurhelper would you like to use [aurman|yay] (yay is the default option)\n"
 						printf "$line\n\n"
+						exit 0
 						;;
 
 					\?)
 						printf "$line\n"
 						printf "Invalid option -$OPTARG\ntry -h for help\n"
 						printf "$line\n\n"
+						exit 1
 						;;
 					esac
 				done
-                sleep 1
-                Vbox_Installation
+				Yay_Install
+				sleep 1
+				Yay_Applications
+				sleep 1
+				Vbox_Installation
             fi
-            break
+            printf "$line\n"
+			printf "Aurhelper completed successfully\n"
+			printf "$line\n\n"
+			exit 0
             ;;
 
         Exit)
