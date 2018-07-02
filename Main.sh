@@ -378,37 +378,38 @@ select opt in ${scripts[*]} ; do
 				## Use getopts so I'll have the option to
 				## choose between aurman and yay
 				while getopts :a:h opt do;
-					a)
-						if [[ "aurman" == "$OPTARG" ]]; then
-							Aurman_Install
-			                sleep 1
-			                Aurman_Applications
-							sleep 1
-			                Vbox_Installation
-							exit 0
-						elif [[ "yay" == "$OPTARG" ]]; then
-							Yay_Install
-							sleep 1
-							Yay_Applications
-							sleep 1
-			                Vbox_Installation
-							exit 0
-						fi
-						;;
+					case $opt in
+						a)
+							if [[ "aurman" == "$OPTARG" ]]; then
+								Aurman_Install
+				                sleep 1
+				                Aurman_Applications
+								sleep 1
+				                Vbox_Installation
+								exit 0
+							elif [[ "yay" == "$OPTARG" ]]; then
+								Yay_Install
+								sleep 1
+								Yay_Applications
+								sleep 1
+				                Vbox_Installation
+								exit 0
+							fi
+							;;
 
-					h)
-						printf "$line\n"
-						printf "Usage: \n-a <argumant>\tchoose which aurhelper would you like to use [aurman|yay] (yay is the default option)\n"
-						printf "$line\n\n"
-						exit 0
-						;;
+						h)
+							printf "$line\n"
+							printf "Usage: \n-a <argumant>\tchoose which aurhelper would you like to use [aurman|yay] (yay is the default option)\n"
+							printf "$line\n\n"
+							exit 0
+							;;
 
-					\?)
-						printf "$line\n"
-						printf "Invalid option -$OPTARG\ntry -h for help\n"
-						printf "$line\n\n"
-						exit 1
-						;;
+						\?)
+							printf "$line\n"
+							printf "Invalid option -$OPTARG\ntry -h for help\n"
+							printf "$line\n\n"
+							exit 1
+							;;
 					esac
 				done
 				Yay_Install
