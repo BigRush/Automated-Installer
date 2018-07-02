@@ -425,30 +425,30 @@ DM_Menu () {
 		local PS3="Please choose the desired display manager: "
 		select opt in ${displaymgr[*]} ; do
 		    case $opt in
-		        LightDm)
+				LightDm)
 					LightDM_Installation
-		            break
-		            ;;
-		        SDDM)
+					break
+					;;
+				SDDM)
 					SDDM_Installation
-		            break
-		            ;;
+					break
+					;;
 				Continue)
 					printf "$line\n"
 					printf "Continuing...\n"
 					printf "$line\n"
 					break
 					;;
-		        Exit)
-		            printf "$line\n"
-		            printf "Exiting, have a nice day!\n"
-		            printf "$line\n"
-		            exit 0
+				Exit)
+					printf "$line\n"
+					printf "Exiting, have a nice day!\n"
+					printf "$line\n"
+					exit 0
 					;;
-		        *)
-		        printf "Invalid option\n"
-		        ;;
-		    esac
+				*)
+					printf "Invalid option\n"
+					;;
+			esac
 		done
 
 	elif [[ $de_env == "deepin" ]]; then
