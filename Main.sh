@@ -62,7 +62,7 @@ Exit_Status () {
             printf "Invalid answer - exiting\n"
             printf "$line\n\n"
             exit 1
-        fi
+		fi
 	fi
 }
 
@@ -135,7 +135,7 @@ Log_And_Variables () {
 Distro_Check () {
 
 	## Put all the distros i want to check in an array
-    Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
+	Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
 	## set the initial success variable to 1 (0=success 1=failed)
 	status=1
 	## Go other each element of the array and check if that element (in this
@@ -144,13 +144,13 @@ Distro_Check () {
 	## ($i) and set the status to 0 (success), if it doesn't find any element
 	## of the array that matches the file, then status will remain 1 (failed)
 	## and propmet the user that the script did not find his distribution
-    for i in ${Distro_Array[@]}; do
-        DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$i$")
-    	if ! [[ -z $DistroChk ]]; then
-    	  	Distro_Val="$i"
-            status=0
-    	fi
-    done
+	for i in ${Distro_Array[@]}; do
+		DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$i$")
+		if ! [[ -z $DistroChk ]]; then
+		  	Distro_Val="$i"
+		    status=0
+		fi
+	done
 
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
@@ -293,7 +293,7 @@ Source_And_Validation () {
 		output_text=".post-install.sh download"
 		error_txt="while downloading .post-install.sh"
 
-        wget $post_script 2>> $errorpath >> $outputpath &
+		wget $post_script 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -317,7 +317,7 @@ Source_And_Validation () {
 		output_text=".aurhelper.sh download"
 		error_txt="while downloading .aurhelper.sh"
 
-        wget $aurhelper_script 2>> $errorpath >> $outputpath &
+		wget $aurhelper_script 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -364,12 +364,12 @@ select opt in ${scripts[*]} ; do
 				DM_Menu
 				sleep 1
 				Boot_Manager_Config
-            fi
+			fi
 			printf "$line\n"
 			printf "Aurhelper completed successfully\n"
 			printf "$line\n\n"
 			exit 0
-            ;;
+			;;
 
         "Aurhelper **Run as Non-Root**")
 			Non_Root_Check
@@ -417,19 +417,19 @@ select opt in ${scripts[*]} ; do
 				Yay_Applications
 				sleep 1
 				Vbox_Installation
-            fi
-            printf "$line\n"
+			fi
+			printf "$line\n"
 			printf "Aurhelper completed successfully\n"
 			printf "$line\n\n"
 			exit 0
-            ;;
+			;;
 
-        Exit)
-            printf "$line\n"
-            printf "Exiting, have a nice day!\n"
-            printf "$line\n"
-            exit 0
-            ;;
+		Exit)
+			printf "$line\n"
+			printf "Exiting, have a nice day!\n"
+			printf "$line\n"
+			exit 0
+			;;
 
 		"Clean Logs")
 			output_text="Cleaning log files"
@@ -439,8 +439,9 @@ select opt in ${scripts[*]} ; do
 			status=$?
 			Exit_Status
 			;;
-        *)
-            printf "Invalid option\n"
-            ;;
-    esac
+
+		*)
+			printf "Invalid option\n"
+			;;
+	esac
 done
