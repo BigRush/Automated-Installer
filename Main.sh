@@ -103,7 +103,7 @@ Log_And_Variables () {
     lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
-    aurman_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurman.sh"
+    aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
 	####  Varibale	####
 
 	## Validate that the original user that logged in isn't root
@@ -308,26 +308,26 @@ Source_And_Validation () {
 		Exit_Status
     fi
 
-    source ./.aurman.sh 2>> $errorpath >> $outputpath
+    source ./.aurhelper.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
 		printf "$line\n"
-		printf "Downloading .aurman.sh...\n"
+		printf "Downloading .aurhelper.sh...\n"
 		printf "$line\n\n"
 
-		output_text=".aurman.sh download"
-		error_txt="while downloading .aurman.sh"
+		output_text=".aurhelper.sh download"
+		error_txt="while downloading .aurhelper.sh"
 
-        wget $aurman_script 2>> $errorpath >> $outputpath &
+        wget $aurhelper_script 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		output_text=".aurman.sh source"
-		error_txt="while sourcing .aurman.sh"
+		output_text=".aurhelper.sh source"
+		error_txt="while sourcing .aurhelper.sh"
 
-		source ./.aurman.sh 2>> $errorpath >> $outputpath
+		source ./.aurhelper.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
