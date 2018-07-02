@@ -377,8 +377,8 @@ select opt in ${scripts[*]} ; do
 
 				## Use getopts so I'll have the option to
 				## choose between aurman and yay
-				while getopts :a:h opt do;
-					case $opt in
+				while getopts :a:h flag do;
+					case $flag in
 						a)
 							if [[ "aurman" == "$OPTARG" ]]; then
 								Aurman_Install
