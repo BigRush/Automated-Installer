@@ -374,7 +374,7 @@ select opt in ${scripts[*]} ; do
         "Aurhelper **Run as Non-Root**")
 			Non_Root_Check
 			if [[ $Distro_Val == arch ]]; then
-
+<<COM
 				## Use getopts so I'll have the option to
 				## choose between aurman and yay
 				while getopts :a:h flag do;
@@ -412,6 +412,7 @@ select opt in ${scripts[*]} ; do
 							;;
 					esac
 				done
+COM
 				Yay_Install
 				sleep 1
 				Yay_Applications
