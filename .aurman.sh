@@ -44,7 +44,7 @@ Aurman_Install () {
 	pushd . 2>> $errorpath >> $outputpath
 	cd $user_path/Automated-Installer-Log/pacaur_install_tmp
 
-	## Check if aurman exists, if not, install "aurman" from AUR
+	## Check if "aurman" exists, if not, install "aurman" from AUR
 	if ! [[ -n "$(pacman -Qs aurman)" ]]; then
 		output_text="getting aurman with curl from AUR"
 		error_txt="while getting aurman with curl from AUR"
@@ -81,9 +81,70 @@ Aurman_Install () {
 	rm -rf $user_path/pacaur_install_tmp
 }
 
+## Install yay manually
+Yay_Install () {
+
+	## Propmet the user with what the script will now do (with cosmetics :D)
+	printf "$line\n"
+	printf "Updating the system...\n"
+	printf "$line\n\n"
+
+	## Will be used in Exit_Status function to output text for the user
+	output_text="Update"
+	error_txt="while updating"
+
+	## Update the system, send stdout and sterr to log files
+	sudo pacman -Syu 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Create a tmp-working-dir if it does't exits and navigate into it
+	if ! [[ -e $user_path/Automated-Installer-Log/pacaur_install_tmp ]]; then
+		mkdir -p $user_path/Automated-Installer-Log/pacaur_install_tmp
+	fi
+
+	pushd . 2>> $errorpath >> $outputpath
+	cd $user_path/Automated-Installer-Log/yay_install_tmp
+
+	## Check if "yay" exists, if not, install "yay" from AUR
+	if ! [[ -n "$(pacman -Qs yay)" ]]; then
+		output_text="getting yay with curl from AUR"
+		error_txt="while getting yay with curl from AUR"
+
+		## Get the build files for AUR
+    	curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		tar -xf yay.tar.gz 2>> $errorpath >> $outputpath
+
+		cd aurman
+
+		output_text="yay building"
+		error_txt="while building yay"
+
+		## Add gpg key
+		# gpg --recv-keys 465022E743D71E39 2>> $errorpath >> $outputpath
+
+		## Compile
+		makepkg -si PKGBUILD --noconfirm --needed 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+	fi
+
+	## Clean up on aisle four
+	popd 2>> $errorpath >> $outputpath
+	rm -rf $user_path/yay_install_tmp
+}
 
 ## Applications i want to install with pacaur
-
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 			sudo echo
