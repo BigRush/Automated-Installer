@@ -537,20 +537,38 @@ LightDM_Configuration () {
 
 	sudo echo
 
-	printf "$line\n"
-	printf "Installing Lightdm-webkit2-greeter...\n"
-	printf "$line\n\n"
+	if [[ "aurman" == $OPTARG ]]; then
+		printf "$line\n"
+		printf "Installing Lightdm-webkit2-greeter...\n"
+		printf "$line\n\n"
 
-	output_text="Lightdm-webkit2-greeter installation"
-	error_txt="while installing Lightdm-webkit2-greeter"
+		output_text="Lightdm-webkit2-greeter installation"
+		error_txt="while installing Lightdm-webkit2-greeter"
 
-	## Install webkit greeter for a nice theme
-	aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+		## Install webkit greeter for a nice theme
+		aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ "yay" == $OPTARG || -z $OPTARG ]]; then
+		printf "$line\n"
+		printf "Installing Lightdm-webkit2-greeter...\n"
+		printf "$line\n\n"
+
+		output_text="Lightdm-webkit2-greeter installation"
+		error_txt="while installing Lightdm-webkit2-greeter"
+
+		## Install webkit greeter for a nice theme
+		yay -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+	fi
 
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 }
