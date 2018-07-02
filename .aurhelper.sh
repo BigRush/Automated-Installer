@@ -37,15 +37,15 @@ Aurman_Install () {
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_path/Automated-Installer-Log/pacaur_install_tmp ]]; then
-		mkdir -p $user_path/Automated-Installer-Log/pacaur_install_tmp
+	if ! [[ -e $user_path/Automated-Installer-Log/aurman_install_tmp ]]; then
+		mkdir -p $user_path/Automated-Installer-Log/aurman_install_tmp
 	fi
 
 	pushd . 2>> $errorpath >> $outputpath
-	cd $user_path/Automated-Installer-Log/pacaur_install_tmp
+	cd $user_path/Automated-Installer-Log/aurman_install_tmp
 
 	## Check if "aurman" exists, if not, install "aurman" from AUR
-	if ! [[ -n "$(pacman -Qs aurman)" ]]; then
+	if [[ -z $(command -v aurman) ]]; then
 		output_text="getting aurman with curl from AUR"
 		error_txt="while getting aurman with curl from AUR"
 
@@ -78,7 +78,7 @@ Aurman_Install () {
 
 	## Clean up on aisle four
 	popd 2>> $errorpath >> $outputpath
-	rm -rf $user_path/pacaur_install_tmp
+	rm -rf $user_path/aurman_install_tmp
 }
 
 ## Install yay manually
@@ -100,8 +100,8 @@ Yay_Install () {
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_path/Automated-Installer-Log/pacaur_install_tmp ]]; then
-		mkdir -p $user_path/Automated-Installer-Log/pacaur_install_tmp
+	if ! [[ -e $user_path/Automated-Installer-Log/yay_install_tmp ]]; then
+		mkdir -p $user_path/Automated-Installer-Log/yay_install_tmp
 	fi
 
 	pushd . 2>> $errorpath >> $outputpath
@@ -193,6 +193,7 @@ Yay_Applications () {
 				status=$?
 				Exit_Status
 			done
+		fi
 <<COM
 			## special attention packages that out need to be seen
 			printf "$line\n"
