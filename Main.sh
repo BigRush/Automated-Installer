@@ -454,6 +454,8 @@ while getopts :a:h flag; do
 			printf "Usage: \n-a <argument>\tchoose which aurhelper would you like to use [aurman|yay] (yay is the default option)\n"
 			printf "$line\n\n"
 			exit 0
+			;;
+			
 		\?)
 			printf "$line\n"
 			printf "Invalid option -$OPTARG\ntry -h for help\n"
