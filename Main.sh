@@ -443,8 +443,8 @@ while getopts :a:h flag; do
 
 		h)
 			printf "$line\n"
-			printf "Usage: \n-a <argument>\t\tchoose which AURhelper would you like to use [ 'aurman' or 'yay' ]\n"
-			printf "\t\t\t\t\t  ('yay' is the default option)\n"
+			printf "Usage:\n  -a <argument>\t\tchoose which AURhelper you would like to use [ 'aurman' or 'yay' ]\n"
+			printf "\t\t\t  ('yay' is the default option if '-a' is not used)\n"
 			printf "$line\n\n"
 			exit 0
 			;;
@@ -452,8 +452,8 @@ while getopts :a:h flag; do
 		:)
 			printf "$line\n"
 			printf "-a needs an argument\n"
-			printf "Usage: \n-a <argument>\t\t  choose which AURhelper would you like to use [ 'aurman' or 'yay' ]\n"
-			printf "\t\t\t('yay' is the default option)\n"
+			printf "Usage:\n  -a <argument>\t\tchoose which AURhelper you would like to use [ 'aurman' or 'yay' ]\n"
+			printf "\t\t\t  ('yay' is the default option if '-a' is not used)\n"
 			printf "$line\n\n"
 			exit 0
 			;;
