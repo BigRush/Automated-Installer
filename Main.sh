@@ -424,7 +424,7 @@ Main_Menu () {
 
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay
-while getopts :a:h flag do;
+while getopts :a:h flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
@@ -448,6 +448,12 @@ while getopts :a:h flag do;
 			exit 0
 			;;
 
+		:)
+			printf "$line\n"
+			printf "-a needs an argument\n"
+			printf "Usage: \n-a <argument>\tchoose which aurhelper would you like to use [aurman|yay] (yay is the default option)\n"
+			printf "$line\n\n"
+			exit 0
 		\?)
 			printf "$line\n"
 			printf "Invalid option -$OPTARG\ntry -h for help\n"
