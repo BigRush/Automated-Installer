@@ -430,14 +430,9 @@ while getopts :a:h flag; do
 			if [[ "aurman" == "$OPTARG" ]]; then
 				aur_helper="aurman"
 				Main_Menu
-				Aurman_Install
 			elif [[ "yay" == "$OPTARG" ]]; then
 				aur_helper="yay"
-				Yay_Install
-				sleep 1
-				Yay_Applications
-				sleep 1
-				Vbox_Installation
+				Main_Menu
 			else
 				printf "$line\n"
 				printf "Invalid argument, use '-h' for help\n"
@@ -473,6 +468,9 @@ while getopts :a:h flag; do
 			;;
 	esac
 done
+
+## declare a variable for funtions to use later
+aur_helper="yay"
 
 ## Call Main_Menu function if getopts did not detected any arguments
 Main_Menu
