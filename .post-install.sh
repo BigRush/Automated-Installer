@@ -650,14 +650,14 @@ Boot_Manager_Config () {
 	read -p "Would you like to install refined boot manager?[y/N]: " answer
 	printf "\n"
 	if [[ -z $answer ]]; then
-		exit 0
+		Main_Menu
 	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
 		:
 	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 		printf "$line\n"
 		printf "Exiting...\n"
 		printf "$line\n\n"
-		exit 0
+		Main_Menu
 	else
 		printf "$line\n"
 		printf "Invalid answer - exiting\n"
