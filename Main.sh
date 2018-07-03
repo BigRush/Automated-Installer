@@ -438,6 +438,7 @@ while getopts :a:h flag; do
 				printf "$line\n"
 				printf "Invalid argument, use '-h' for help\n"
 				printf "$line\n\n"
+				exit 1
 			fi
 			;;
 
@@ -465,7 +466,7 @@ while getopts :a:h flag; do
 			printf "$line\n"
 			printf "Invalid option -$OPTARG\ntry -h for help\n"
 			printf "$line\n\n"
-			exit 0
+			exit 1
 			;;
 	esac
 done
