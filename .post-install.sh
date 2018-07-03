@@ -538,6 +538,12 @@ LightDM_Configuration () {
 	sudo echo
 
 	if [[ $aur_helper == "aurman" ]]; then
+
+		## Check if "aurman" exists, if not, call the function that installs it
+		if [[ -z $(command -v aurman) ]]; then
+			Aurman_Install
+		fi
+
 		printf "$line\n"
 		printf "Installing Lightdm-webkit2-greeter...\n"
 		printf "$line\n\n"
@@ -554,6 +560,12 @@ LightDM_Configuration () {
 		Exit_Status
 
 	elif [[ $aur_helper == "yay" ]]; then
+
+		## Check if "yay" exists, if not, call the function that installs it
+		if [[ -z $(command -v yay) ]]; then
+			Yay_Install
+		fi
+
 		printf "$line\n"
 		printf "Installing Lightdm-webkit2-greeter...\n"
 		printf "$line\n\n"
