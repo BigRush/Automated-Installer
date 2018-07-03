@@ -438,24 +438,35 @@ while getopts :a:h flag; do
 				Yay_Applications
 				sleep 1
 				Vbox_Installation
+			else
+				printf "$line\n"
+				printf "Invalid argument, use '-h' for help\n"
+				printf "$line\n\n"
 			fi
 			;;
 
 		h)
-			printf " Usage:\n  -a <argument>\t\tchoose which AURhelper you would like to use [ 'aurman' or 'yay' ]\n"
-			printf "\t\t\t('yay' is the default option if '-a' is not used)\n"
+			printf "$line\n"
+			printf " Usage:\n -a <argument>"
+			printf "\t\tchoose which AURhelper you would like to use [ 'aurman' or 'yay' ]\n"
+			printf "\t\t('yay' is the default option if '-a' is not used)\n"
+			printf "$line\n\n"
 			exit 0
 			;;
 
 		:)
-			printf " -a needs an argument\n"
-			printf " Usage:\n  -a <argument>\t\tchoose which AURhelper you would like to use  [ 'aurman' or 'yay' ]\n"
-			printf "\t\t\t('yay' is the default option if '-a' is not used)\n"
+			printf "$line\n"
+			printf " Usage:\n -a <argument>"
+			printf "\t\tchoose which AURhelper you would like to use  [ 'aurman' or 'yay' ]\n"
+			printf "\t\t('yay' is the default option if '-a' is not used)\n"
+			printf "$line\n\n"
 			exit 0
 			;;
 
 		\?)
+			printf "$line\n"
 			printf "Invalid option -$OPTARG\ntry -h for help\n"
+			printf "$line\n\n"
 			exit 1
 			;;
 	esac
