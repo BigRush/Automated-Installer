@@ -413,6 +413,7 @@ Main_Menu () {
 				sudo rm -rf $user_path/Automated-Installer-Log
 				status=$?
 				Exit_Status
+				Log_And_Variables
 				;;
 
 			*)
