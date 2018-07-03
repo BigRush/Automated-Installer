@@ -279,6 +279,8 @@ DE_Menu () {
 		case $opt in
 			Plasma)
 				KDE_Installation
+				sleep 0.5
+				KDE_Font_Config
 				break
 				;;
 			Deepin)
@@ -327,11 +329,8 @@ KDE_Installation () {
 	status=$?
 	Exit_Status
 
-	## Call KDE_Font_Config function to fix the fonts
-	KDE_Font_Config
-
 	## Declare a variable for DM_Menu function to use
-	de_env="deepin"
+	de_env="kde"
 }
 
 ## Configure ugly arch kde fonts
@@ -427,6 +426,8 @@ DM_Menu () {
 		    case $opt in
 				LightDm)
 					LightDM_Installation
+					sleep 0.5
+					LightDM_Configuration
 					break
 					;;
 				SDDM)
@@ -453,6 +454,8 @@ DM_Menu () {
 
 	elif [[ $de_env == "deepin" ]]; then
 		LightDM_Installation
+		sleep 0.5
+		LightDM_Configuration
 
 	else
 		printf "$line\n"
@@ -527,9 +530,6 @@ LightDM_Installation () {
 	Exit_Status
 
 	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
-
-	## Call LightDM_Configuration function
-	LightDM_Configuration
 }
 
 ## Download dependencies and configure lightDM
@@ -537,7 +537,7 @@ LightDM_Configuration () {
 
 	sudo echo
 
-	if [[ "aurman" == $OPTARG ]]; then
+	if [[ $aur_helper == "aurman" ]]; then
 		printf "$line\n"
 		printf "Installing Lightdm-webkit2-greeter...\n"
 		printf "$line\n\n"
@@ -553,7 +553,7 @@ LightDM_Configuration () {
 		status=$?
 		Exit_Status
 
-	elif [[ "yay" == $OPTARG || -z $OPTARG ]]; then
+	elif [[ $aur_helper == "yay" ]]; then
 		printf "$line\n"
 		printf "Installing Lightdm-webkit2-greeter...\n"
 		printf "$line\n\n"
