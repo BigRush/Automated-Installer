@@ -150,6 +150,7 @@ Aurman_Applications () {
 			sudo echo
 			app=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch speedtest-cli)
 			for i in ${app[*]}; do
+				sudo echo
 				printf "$line\n"
 				printf "Installing $i\n"
 				printf "$line\n\n"
@@ -186,7 +187,7 @@ Yay_Applications () {
 				printf "$line\n\n"
 				output_text="$i installation"
 				error_txt="while installing $i"
-				yay -S $i --needed --noconfirm --noedit --pgp_fetch 2>> $errorpath >> $outputpath &
+				yay -S $i --needed --noconfirm --sudoloop 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
 				wait $BPID
