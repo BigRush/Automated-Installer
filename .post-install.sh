@@ -583,6 +583,10 @@ LightDM_Configuration () {
 	fi
 
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
+
+	## Disable deepin's login and log out sound
+	mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
+	mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
 }
 
 ## Full system update for manjaro

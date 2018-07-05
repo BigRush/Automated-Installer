@@ -99,11 +99,12 @@ Log_And_Variables () {
 	fi
 	user_path=/home/$orig_user
 	errorpath=$user_path/Automated-Installer-Log/error.log
-    outputpath=$user_path/Automated-Installer-Log/output.log
-    lightconf=/etc/lightdm/lightdm.conf
+	outputpath=$user_path/Automated-Installer-Log/output.log
+	lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
-    aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	deepin_sound_path=/usr/share/sounds/deepin/stereo/
 	####  Varibale	####
 
 	## Validate that the original user that logged in isn't root
