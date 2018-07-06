@@ -212,7 +212,7 @@ COM
 ## Virtualbox installation
 Vbox_Installation () {
 
-	read -p "Would you like to install virtualbox?[y/n]: " answer
+	read -p "Would you like to install virtualbox?[Y/n]: " answer
 	printf "\n"
 	if [[ -z $answer ]]; then
 		:
@@ -230,7 +230,7 @@ Vbox_Installation () {
 		printf "$line\n\n"
 	fi
 
-	vb=(virtualbox linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
+	vb=(virtualbox virtualbox-host-modules-arch linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
 	for i in ${vb[*]}; do
 		printf "$line\n"
 		printf "Installing $i\n"
