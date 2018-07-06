@@ -195,18 +195,6 @@ Yay_Applications () {
 				Exit_Status
 			done
 		fi
-<<COM
-			## special attention packages that out need to be seen
-			printf "$line\n"
-			printf "Installing steam\n"
-			printf "$line\n\n"
-			output_text="steam installation"
-			error_txt="while installing steam"
-			aurman -S steam --needed
-			status=$?
-			Exit_Status
-		fi
-COM
 }
 
 ## Virtualbox installation
@@ -230,18 +218,53 @@ Vbox_Installation () {
 		printf "$line\n\n"
 	fi
 
-	vb=(virtualbox virtualbox-host-modules-arch linux97-virtualbox-host-modules virtualbox-guest-iso virtualbox-ext-vnc virtualbox-ext-oracle)
-	for i in ${vb[*]}; do
+	vbox_pkg=(virtualbox virtualbox-host-modules-arch linux-headers virtualbox-ext-oracle)
+
+	## Check which AUR helper is installed
+	if [[ $aur_helper == "aurman" ]]; then
+		for i in ${vbox_pkg[*]}; do
+			printf "$line\n"
+			printf "Installing $i\n"
+			printf "$line\n\n"
+			output_text="$i installation"
+			error_txt="while installing $i"
+			aurman -S $i --needed --noconfirm --noedit 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+		done
+
+	elif [[ $aur_helper == "yay" ]]; then
+		for i in ${vbox_pkg[*]}; do
+			printf "$line\n"
+			printf "Installing $i\n"
+			printf "$line\n\n"
+			output_text="$i installation"
+			error_txt="while installing $i"
+			yay -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+		done
+
+	else
 		printf "$line\n"
-		printf "Installing $i\n"
-		printf "$line\n\n"
-		output_text="$i installation"
-		error_txt="while installing $i"
-		aurman -S --needed --noconfirm --noedit $i 2>> $errorpath >> $outputpath &
-		status=$?
-		Progress_Spinner
-		Exit_Status
-	done
+		printf "No AUR helper detected, can't install  virtualbox extension pack,\n"
+		printf "Please install it manually later... Continueing with the Vbox installation...\n"
+
+		vbox_pkg_pac=(virtualbox virtualbox-host-modules-arch linux-headers)
+		for i in ${vbox_pkg_pac[*]}; do
+			printf "$line\n"
+			printf "Installing $i\n"
+			printf "$line\n\n"
+			output_text="$i installation"
+			error_txt="while installing $i"
+			pacman -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
+			status=$?
+			Progress_Spinner
+			Exit_Status
+		done
+	fi
 
 	sudo modprobe vboxdrv 2>> $errorpath >> $outputpath
 	Exit_Status
