@@ -17,7 +17,7 @@ Root_Check () {
 
 	if ! [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
-		printf "The 'Post install' option must run with root privileges\n"
+		printf "This option must run with root privileges\n"
 		printf "$line\n"
 		exit 1
 	fi
@@ -27,7 +27,7 @@ Root_Check () {
 Non_Root_Check () {
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
-		printf "The 'Aurman' option must run as non-root\n"
+		printf "This option must run as non-root\n"
 		printf "$line\n"
 		exit 1
 	fi
@@ -44,14 +44,50 @@ Exit_Status () {
 		printf "Something went wrong $error_txt, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
-        ## Propmet the user if he wants to continue with the script
+        ## Prompt the user if he want to continue with the script
         ## although the last command failed to execute successfully.
         read -p "Would you like to continue anyway?[y/N]: " answer
         printf "\n"
         if [[ -z $answer ]]; then
-            exit 1
+
+			## Prompt the user if he want to read the log files
+			read -p "Would you like to read log files?[Y/n]: " answer
+	        printf "\n"
+	        if [[ -z $answer ]]; then
+	            less $errorpath
+	        elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+	            less $errorpath
+	        elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+	            printf "$line\n"
+	            printf "Exiting...\n"
+	            printf "$line\n\n"
+	            exit 1
+	        else
+	            printf "$line\n"
+	            printf "Invalid answer - exiting\n"
+	            printf "$line\n\n"
+	            exit 1
+			fi
+
         elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-            :
+			read -p "Would you like to read log files?[Y/n]: " answer
+	        printf "\n"
+	        if [[ -z $answer ]]; then
+	            less $errorpath
+	        elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+	            less $errorpath
+	        elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+	            printf "$line\n"
+	            printf "Exiting...\n"
+	            printf "$line\n\n"
+	            exit 1
+	        else
+	            printf "$line\n"
+	            printf "Invalid answer - exiting\n"
+	            printf "$line\n\n"
+	            exit 1
+			fi
+
         elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
             printf "$line\n"
             printf "Exiting...\n"
@@ -145,7 +181,7 @@ Distro_Check () {
 	## (/etc/*-release), if it does set the Distro_Val to the current element
 	## ($i) and set the status to 0 (success), if it doesn't find any element
 	## of the array that matches the file, then status will remain 1 (failed)
-	## and propmet the user that the script did not find his distribution
+	## and prompt the user that the script did not find his distribution
 	for i in ${Distro_Array[@]}; do
 		DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$i$")
 		if ! [[ -z $DistroChk ]]; then
@@ -347,7 +383,7 @@ Dependencies_Installation
 ## Call Source_And_Validation function
 Source_And_Validation
 
-## Propmet the user with a menu to start the script
+## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
 	scripts=("Post install","Aurhelper **Run as Non-Root**","Clean Logs","Exit")
