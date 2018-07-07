@@ -403,7 +403,15 @@ Main_Menu () {
 					DM_Menu
 					sleep 1
 					Boot_Manager_Config
+
+				elif [[ $Distro_Val == "manjaro" ]]; then
+					Alias_and_Wallpaper
+					sleep 1
+					Pacman_Multilib
+					sleep 1
+					Boot_Manager_Config
 				fi
+
 				printf "$line\n"
 				printf "Aurhelper completed successfully\n"
 				printf "$line\n\n"
@@ -412,7 +420,7 @@ Main_Menu () {
 
 	        "Aurhelper **Run as Non-Root**")
 				Non_Root_Check
-				if [[ $Distro_Val == arch ]]; then
+				if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 					if [[ $aur_helper == "yay" || -z $aur_helper ]]; then
 						Yay_Install
 						sleep 1
