@@ -273,7 +273,7 @@ Alias_and_Wallpaper () {
 ## Menu, to choose which desktop environment to install
 DE_Menu () {
 
-	desk_env=(Plasma Deepin xfce4 Exit)
+	desk_env=(Plasma Deepin xfce4 Continue Exit)
 	local PS3="Please choose a desktop environment to install: "
 	select opt in ${desk_env[@]} ; do
 		case $opt in
@@ -291,6 +291,12 @@ DE_Menu () {
 				printf "$line\n"
 				printf "Not avaliable at the moment, coming soon...\n"
 				printf "$line\n\n"
+				;;
+			Continue)
+				printf "$line\n"
+				printf "Continuing...\n"
+				printf "$line\n"
+				break
 				;;
 			Exit)
 				printf "$line\n"
@@ -484,6 +490,11 @@ SDDM_Installation () {
 	status=$?
 	Exit_Status
 
+	## Check if LightDM service is enabled, if it is, disable it
+	if ! [[ -z $(systemctl status lightdm |awk "{print $4}" |grep -w "enabled;") ]] &> /dev/null; then
+		sudo systemctl disable lightdm
+	fi
+
 	## Enable and start the sddm service
 	printf "$line\n"
 	printf "Enabling sddm service...\n"
@@ -517,7 +528,12 @@ LightDM_Installation () {
 	status=$?
 	Exit_Status
 
-	## Enable and start the sddm service
+	## Check if sddm service is enabled, if it is, disable it
+	if ! [[ -z $(systemctl status sddm |awk "{print $4}" |grep -w "enabled;") ]] &> /dev/null; then
+		sudo systemctl disable sddm
+	fi
+
+	## Enable and start the LightDm service
 	printf "$line\n"
 	printf "Enabling Lightdm service...\n"
 	printf "$line\n\n"
@@ -528,8 +544,6 @@ LightDM_Installation () {
 	sudo systemctl enable lightdm 2>> $errorpath >> $outputpath
 	status=$?
 	Exit_Status
-
-	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 }
 
 ## Download dependencies and configure lightDM
@@ -582,11 +596,16 @@ LightDM_Configuration () {
 		Exit_Status
 	fi
 
+	## Change LightDm's greeter and theme
+	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 
 	## Disable deepin's login and log out sound
 	mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
 	mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
+
+	## Copy the wallpaper to deepin's wallpaper folder
+	sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
 }
 
 ## Full system update for manjaro
