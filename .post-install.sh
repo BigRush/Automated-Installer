@@ -241,10 +241,6 @@ Alias_and_Wallpaper () {
 		printf "alias la='ls -la'\n" >> $user_path/.bashrc
 	fi
 
-	if [[ -z $(grep "alias log=/var/log" $user_path/.bashrc) ]]; then
-		printf "alias log=/var/log\n" >> $user_path/.bashrc
-	fi
-
 	if [[ -z $(grep "screenfetch -E" $user_path/.bashrc) ]]; then
 		printf "screenfetch -E\n" >> $user_path/.bashrc
 	fi
@@ -263,10 +259,6 @@ Alias_and_Wallpaper () {
 
 	if [[ -z $(sudo grep "alias la='ls -la'" /root/.bashrc) ]]; then
 		sudo runuser -l "root" -c "printf \"alias la='ls -la'\n\" >> /root/.bashrc"
-	fi
-
-	if [[ -z $(sudo grep "alias log=/var/log" /root/.bashrc) ]]; then
-		sudo runuser -l "root" -c "printf \"alias log=/var/log\n\" >> /root/.bashrc"
 	fi
 }
 
@@ -318,7 +310,7 @@ KDE_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo printf "exec startkde\n" > $user_path/.xinitrc
+	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $user_path/.xinitrc"
 
 	printf "$line\n"
 	printf "Installing Plasma desktop environment...\n"
@@ -398,7 +390,7 @@ Deepin_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo printf "exec startdde\n" > $user_path/.xinitrc
+	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $user_path/.xinitrc"
 
 	printf "$line\n"
 	printf "Installing Deepin desktop environment...\n"
