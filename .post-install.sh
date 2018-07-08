@@ -601,11 +601,17 @@ LightDM_Configuration () {
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 
 	## Disable deepin's login and log out sound
-	sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
-	sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
+	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+		sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
+	fi
+	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+		sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
+	fi
 
 	## Copy the wallpaper to deepin's wallpaper folder
-	sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
+	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
+		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
+	fi
 }
 
 ## Full system update for manjaro
