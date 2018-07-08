@@ -756,8 +756,4 @@ Boot_Manager_Config () {
 
 		sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
 	fi
-
-
-
-
 }
