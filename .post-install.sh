@@ -601,8 +601,8 @@ LightDM_Configuration () {
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
 
 	## Disable deepin's login and log out sound
-	mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
-	mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
+	sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
+	sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
 
 	## Copy the wallpaper to deepin's wallpaper folder
 	sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
