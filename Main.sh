@@ -55,8 +55,10 @@ Exit_Status () {
 	        printf "\n"
 	        if [[ -z $answer ]]; then
 	            less $errorpath
+				exit 1
 	        elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
 	            less $errorpath
+				exit 1
 	        elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 	            printf "$line\n"
 	            printf "Exiting...\n"
