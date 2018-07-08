@@ -411,15 +411,15 @@ Deepin_Installation () {
 	de_env="deepin"
 
 	## Disable deepin's login and log out sound
-	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+	if [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
 		sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
 	fi
-	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+	if [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
 		sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
 	fi
 
 	## Copy the wallpaper to deepin's wallpaper folder
-	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
+	if ! [[ -e /usr/share/wallpapers/deepin/archbk.jpg ]]; then
 		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
 	fi
 }
