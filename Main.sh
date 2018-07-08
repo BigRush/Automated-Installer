@@ -72,6 +72,9 @@ Exit_Status () {
 			fi
 
         elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+
+        elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			read -p "Would you like to read log files?[Y/n]: " answer
 	        printf "\n"
 	        if [[ -z $answer ]]; then
@@ -89,12 +92,6 @@ Exit_Status () {
 	            printf "$line\n\n"
 	            exit 1
 			fi
-
-        elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-            printf "$line\n"
-            printf "Exiting...\n"
-            printf "$line\n\n"
-            exit 1
         else
             printf "$line\n"
             printf "Invalid answer - exiting\n"
