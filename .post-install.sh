@@ -398,7 +398,7 @@ Deepin_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	printf "exec startdde\n" > $user_path/.xinitrc
+	sudo printf "exec startdde\n" > $user_path/.xinitrc
 
 	printf "$line\n"
 	printf "Installing Deepin desktop environment...\n"
