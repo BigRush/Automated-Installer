@@ -737,7 +737,7 @@ Boot_Manager_Config () {
 	fi
 
 	## Check if the theme exits, if not, clone from git and add it to refind.conf
-	if ! [[ -d $refind_path/themes/rEFInd-minimal]]; then
+	if ! [[ -d $refind_path/themes/rEFInd-minimal ]]; then
 		sudo mkdir $refind_path/themes/rEFInd-minimal
 		printf "$line\n"
 		printf "Cloning refind's theme from git...\n"
