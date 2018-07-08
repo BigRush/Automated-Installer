@@ -409,6 +409,19 @@ Deepin_Installation () {
 
 	## Declare a variable for DM_Menu function to use
 	de_env="deepin"
+
+	## Disable deepin's login and log out sound
+	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+		sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
+	fi
+	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
+		sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
+	fi
+
+	## Copy the wallpaper to deepin's wallpaper folder
+	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
+		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
+	fi
 }
 
 ## Choose which display manager to install
@@ -591,19 +604,6 @@ LightDM_Configuration () {
 	## Change LightDm's greeter and theme
 	sudo sed -ie "s/\#greeter-session=.*/greeter-session=lightdm-webkit2-greeter/" $lightconf
 	sudo sed -ie "s/webkit_theme.*/webkit_theme        = litarvan/" $lightwebconf
-
-	## Disable deepin's login and log out sound
-	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
-		sudo mv $deepin_sound_path/desktop-login.ogg $deepin_sound_path/disable.login
-	fi
-	if ! [[ -e $deepin_sound_path/desktop-login.ogg ]]; then
-		sudo mv $deepin_sound_path/desktop-logout.ogg $deepin_sound_path/disable.logout
-	fi
-
-	## Copy the wallpaper to deepin's wallpaper folder
-	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
-		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
-	fi
 }
 
 ## Full system update for manjaro
