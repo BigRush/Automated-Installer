@@ -411,7 +411,6 @@ Main_Menu () {
 					sleep 1
 					DM_Menu
 					sleep 1
-					DE_Menu
 					Boot_Manager_Config
 				fi
 
