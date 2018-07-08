@@ -655,16 +655,24 @@ Boot_Manager_Config () {
 
 	sudo echo
 
-	if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
-	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
-	[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
+	## Check if grub's configuration file exits
+	if [[ -e /etc/default/grub ]]; then
+		if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
+		[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
+		[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
 
-		sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
-		sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
+			sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
+			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
-		## apply changes to grub
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
+			## apply changes to grub
+			sudo grub-mkconfig -o /boot/grub/grub.cfg
+		fi
+
+	else
+		error_txt=", could not find GRUB's configuraion file"
+		status=1
+		Exit_Status
 	fi
 
 	## Ask the user if he wants to install refined boot manager
@@ -719,7 +727,37 @@ Boot_Manager_Config () {
 	output_text="'mkrlconf'"
 	error_txt="while configuring refind with 'mkrlconf'"
 
-	sudo mkrlconf 2>> $errorpath >> $outputpath
+	sudo refind-mkdefault 2>> $errorpath >> $outputpath
 	status=$?
 	Exit_Status
+
+	## Check if "themes" directory exits in refind, if not, create one
+	if ! [[ -d $refind_path/themes ]]; then
+		sudo mkdir $refind_path/themes
+	fi
+
+	## Check if the theme exits, if not, clone from git and add it to refind.conf
+	if ! [[ -d $refind_path/themes/rEFInd-minimal]]; then
+		sudo mkdir $refind_path/themes/rEFInd-minimal
+		printf "$line\n"
+		printf "Cloning refind's theme from git...\n"
+		printf "$line\n\n"
+
+		output_text="Cloning theme from git"
+		error_txt="while cloning from git"
+
+		## Get the build files for AUR
+		git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
+	fi
+
+
+
+
 }

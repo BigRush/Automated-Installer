@@ -46,7 +46,7 @@ Aurman_Install () {
 
 	## Check if "aurman" exists, if not, install "aurman" from AUR
 	if [[ -z $(command -v aurman) ]]; then
-		output_text="getting aurman with curl from AUR"
+		output_text="Getting aurman with curl from AUR"
 		error_txt="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
@@ -61,7 +61,7 @@ Aurman_Install () {
 
 		cd aurman
 
-		output_text="aurman building"
+		output_text="Aurman building"
 		error_txt="while building aurman"
 
 		## Add gpg key

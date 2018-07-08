@@ -144,6 +144,7 @@ Log_And_Variables () {
 	aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
 	deepin_sound_path=/usr/share/sounds/deepin/stereo/
 	kernel_ver=$(uname -r |cut -d "." -f 1,2 |tr -d ".s")
+	refind_path=$(find /boot -path *refind)
 	####  Varibale	####
 
 	## Validate that the original user that logged in isn't root
