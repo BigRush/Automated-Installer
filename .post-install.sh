@@ -721,11 +721,11 @@ Boot_Manager_Config () {
 	Exit_Status
 
 	printf "$line\n"
-	printf "Configuring refind with 'mkrlconf'...\n"
+	printf "Configuring refind to be the default boot manager...\n"
 	printf "$line\n\n"
 
-	output_text="'mkrlconf'"
-	error_txt="while configuring refind with 'mkrlconf'"
+	output_text="Setting refind to be the default boot manager"
+	error_txt="while setting refind to be the default boot manager"
 
 	sudo refind-mkdefault 2>> $errorpath >> $outputpath
 	status=$?
@@ -747,7 +747,7 @@ Boot_Manager_Config () {
 		error_txt="while cloning from git"
 
 		## Get the build files for AUR
-		git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+		sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
