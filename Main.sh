@@ -393,24 +393,24 @@ Main_Menu () {
 	        "Post install")
 				if [[ $Distro_Val == arch ]]; then
 					Arch_Config
-					sleep 1
+					sleep 2.5
 					Alias_and_Wallpaper
-					sleep 1
+					sleep 2.5
 					Pacman_Multilib
-					sleep 1
+					sleep 2.5
 					DE_Menu
-					sleep 1
+					sleep 2.5
 					DM_Menu
-					sleep 1
+					sleep 2.5
 					Boot_Manager_Config
 
 				elif [[ $Distro_Val == "manjaro" ]]; then
 					Alias_and_Wallpaper
-					sleep 1
+					sleep 2.5
 					Pacman_Multilib
-					sleep 1
+					sleep 2.5
 					DM_Menu
-					sleep 1
+					sleep 2.5
 					Boot_Manager_Config
 				fi
 
@@ -425,9 +425,9 @@ Main_Menu () {
 				if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 					if [[ $aur_helper == "yay" || -z $aur_helper ]]; then
 						Yay_Install
-						sleep 1
+						sleep 2.5
 						Yay_Applications
-						sleep 1
+						sleep 2.5
 						Vbox_Installation
 
 					elif [[ $aur_helper == "aurman" ]]; then
