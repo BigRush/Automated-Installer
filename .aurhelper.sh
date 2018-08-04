@@ -180,7 +180,7 @@ Aurman_Applications () {
 Yay_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 			sudo echo
-			app=(discord steam firefox ncdu guake teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
+			app=(discord steam firefox ncdu guake plank teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
 			for i in ${app[*]}; do
 				printf "$line\n"
 				printf "Installing $i\n"
