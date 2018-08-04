@@ -414,6 +414,105 @@ KDE_Font_Config () {
 	rm tmp_font
 }
 
+## Download themes and icons for KDE
+KDE_Theme_Config () {
+
+	if ! [[ -d $user_path/Themes ]]; then
+		mkdir $user_path/Themes
+	fi
+
+	## Chili theme
+	printf "$line\n"
+	printf "Installing Chili...\n"
+	printf "$line\n\n"
+
+	output_text="Getting Chili theme with curl"
+	error_txt="while getting Chili with curl"
+
+	curl -L -o $user_path/theme/chili.tar.gz https://store.kde.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1532309746%2Fs%2F26c6c2d285f3f0c4bd3b58e3cce11405%2Ft%2F1533398358%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
+
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	## Shadow icons
+	printf "$line\n"
+	printf "Installing Shadow icons...\n"
+	printf "$line\n\n"
+
+	output_text="Getting shadow icons with curl"
+	error_txt="while getting shadow icons curl"
+
+	curl -L -o $user_path/theme/shadow.tar.gz https://store.kde.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1524023480%2Fs%2F569b779a1863207f6f7753dcb1aef818%2Ft%2F1533403092%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
+
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	## Papirus icons
+	sudo echo
+
+	printf "$line\n"
+	printf "Installing Papirus icons...\n"
+	printf "$line\n\n"
+
+	output_text="Installing Papirus icons"
+	error_txt="while installing Papirus icons"
+
+	sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	## Arc theme
+	printf "$line\n"
+	printf "Installing Arc theme...\n"
+	printf "$line\n\n"
+
+	output_text="Installing Arc theme"
+	error_txt="while installing Arc theme curl"
+
+	if [[ $aur_helper == "aurman" ]]; then
+
+		## Check if "aurman" exists, if not, call the function that installs it
+		if [[ -z $(command -v aurman) ]]; then
+			Aurman_Install
+		fi
+
+		aurman -S arc-kde-git --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ $aur_helper == "yay" ]]; then
+
+		## Check if "yay" exists, if not, call the function that installs it
+		if [[ -z $(command -v yay) ]]; then
+			Yay_Install
+		fi
+
+		yay -S arc-kde-git --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	fi
+
+}
+
 ## Installs Deepin desktop environment
 Deepin_Installation () {
 
@@ -601,7 +700,7 @@ LightDM_Configuration () {
 		error_txt="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
-		aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+		aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -623,7 +722,7 @@ LightDM_Configuration () {
 		error_txt="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
-		yay -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --noconfirm 2>> $errorpath >> $outputpath &
+		yay -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -698,6 +797,16 @@ Boot_Manager_Config () {
 			## apply changes to grub
 			sudo grub-mkconfig -o /boot/grub/grub.cfg
 		fi
+
+		printf "$line\n"
+		printf "Cloning grub theme from git...\n"
+		printf "$line\n\n"
+
+		output_text="Lightdm-webkit2-greeter installation"
+		error_txt="while installing Lightdm-webkit2-greeter"
+
+#		git clone https://github.com/shvchk/poly-light/raw/master/install.sh
+
 
 	else
 		error_txt=", could not find GRUB's configuraion file"
