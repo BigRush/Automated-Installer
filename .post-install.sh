@@ -511,7 +511,26 @@ KDE_Theme_Config () {
 
 	fi
 
-	## Install plank foggy theme
+	## Install Adapta theme
+
+	sudo echo
+
+	printf "$line\n"
+	printf "Installing Adapta theme...\n"
+	printf "$line\n\n"
+
+	output_text="Installing Adapta theme"
+	error_txt="while installing Adapta theme"
+
+	sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	## Install Foggy theme for plank
 	if ! [[ -d /usr/share/plank/themes/Foggy ]]; then
 		mkdir /usr/share/plank/themes/Foggy
 	fi
@@ -540,7 +559,7 @@ KDE_Theme_Config () {
 	output_text="Getting Transparent theme with curl"
 	error_txt="while getting Transparent.tar.gz theme curl"
 
-	curl -L -o /usr/share/plank/themes/ https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+	curl -L -o /usr/share/plank/themes https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -548,7 +567,47 @@ KDE_Theme_Config () {
 	status=$?
 	Exit_Status
 
-	tar -xvf Transparent.tar.gz
+	printf "$line\n"
+	printf "Extracting theme...\n"
+	printf "$line\n\n"
+
+	output_text="Extraction"
+	error_txt="while extracting Transparent.tar.gz theme"
+
+	tar -xvf /usr/share/plank/themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+
+	status=$?
+	Exit_Status
+
+	## Install Zero theme for plank
+
+	printf "$line\n"
+	printf "Installing Zero theme for Plank...\n"
+	printf "$line\n\n"
+
+	output_text="Getting Zero theme with curl"
+	error_txt="while getting Zero.tar.gz theme curl"
+
+	curl -L -o /usr/share/plank/themes https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
+
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	printf "$line\n"
+	printf "Extracting theme...\n"
+	printf "$line\n\n"
+
+	output_text="Extraction"
+	error_txt="while extracting Zero.tar.gz theme"
+
+	tar -xvf /usr/share/plank/themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+
+	status=$?
+	Exit_Status
+
 }
 
 ## Installs Deepin desktop environment
