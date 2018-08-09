@@ -586,7 +586,7 @@ KDE_Theme_Config () {
 	printf "$line\n\n"
 
 	output_text="Getting Zero theme with curl"
-	error_txt="while getting Zero.tar.gz theme curl"
+	error_txt="while getting zero.tar.gz theme curl"
 
 	curl -L -o /usr/share/plank/themes https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
 
@@ -895,15 +895,43 @@ Boot_Manager_Config () {
 			sudo grub-mkconfig -o /boot/grub/grub.cfg
 		fi
 
+		if ! [[ -d /boot/grub/themes ]]; then
+			mkdir /boot/grub/themes
+		fi
+
 		printf "$line\n"
-		printf "Cloning grub theme from git...\n"
+		printf "Installing Vimix theme for GRUB...\n"
 		printf "$line\n\n"
 
-		output_text="Lightdm-webkit2-greeter installation"
-		error_txt="while installing Lightdm-webkit2-greeter"
+		output_text="Getting Vimix theme with curl"
+		error_txt="while getting vimix.tar.gz theme curl"
 
-#		git clone https://github.com/shvchk/poly-light/raw/master/install.sh
+		sudo curl -L -o /boot/grub/themes/Vimix.tar.xz https://www.opendesktop.org/p/1009236/startdownload?file_id=1526991604&file_name=grub-theme-vimix.tar.xz&file_type=application/x-xz&file_size=876340&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1526991604%2Fs%2F587e3a581c96f63b707c9ba7d4f0ddb4%2Ft%2F1533801384%2Fu%2F%2Fgrub-theme-vimix.tar.xz 2>> $errorpath >> $outputpath &
 
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Extracting theme...\n"
+		printf "$line\n\n"
+
+		output_text="Extraction"
+		error_txt="while extracting Vimix.tar.gz theme"
+
+		sudo tar -xvf /boot/grub/themes/Vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
+
+		status=$?
+		Exit_Status
+
+		sudo rm /boot/grub/themes/Vimix.tar.xz
+
+		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
+			printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix\"" >> /etc
+"
+)]]
 
 	else
 		error_txt=", could not find GRUB's configuraion file"
