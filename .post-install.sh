@@ -417,8 +417,8 @@ KDE_Font_Config () {
 ## Download themes and icons for KDE
 KDE_Theme_Config () {
 
-	if ! [[ -d $user_path/Themes ]]; then
-		mkdir $user_path/Themes
+	if ! [[ -d $user_path/Documents/Themes ]]; then
+		mkdir $user_path/Documents/Themes
 	fi
 
 	## Chili theme
@@ -429,7 +429,7 @@ KDE_Theme_Config () {
 	output_text="Getting Chili theme with curl"
 	error_txt="while getting Chili with curl"
 
-	curl -L -o $user_path/theme/chili.tar.gz https://store.kde.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1532309746%2Fs%2F26c6c2d285f3f0c4bd3b58e3cce11405%2Ft%2F1533398358%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
+	curl -L -o $user_path/Documents/Themes/chili.tar.gz https://store.kde.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1532309746%2Fs%2F26c6c2d285f3f0c4bd3b58e3cce11405%2Ft%2F1533398358%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -445,7 +445,7 @@ KDE_Theme_Config () {
 	output_text="Getting shadow icons with curl"
 	error_txt="while getting shadow icons curl"
 
-	curl -L -o $user_path/theme/shadow.tar.gz https://store.kde.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1524023480%2Fs%2F569b779a1863207f6f7753dcb1aef818%2Ft%2F1533403092%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
+	curl -L -o $user_path/Documents/Themes/shadow.tar.gz https://store.kde.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1524023480%2Fs%2F569b779a1863207f6f7753dcb1aef818%2Ft%2F1533403092%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -559,7 +559,7 @@ KDE_Theme_Config () {
 	output_text="Getting Transparent theme with curl"
 	error_txt="while getting Transparent.tar.gz theme curl"
 
-	curl -L -o /usr/share/plank/themes https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+	curl -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -588,7 +588,7 @@ KDE_Theme_Config () {
 	output_text="Getting Zero theme with curl"
 	error_txt="while getting zero.tar.gz theme curl"
 
-	curl -L -o /usr/share/plank/themes https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
+	curl -L -o /usr/share/plank/themes/zero.tar.gz https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -890,9 +890,6 @@ Boot_Manager_Config () {
 			sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
-
-			## apply changes to grub
-			sudo grub-mkconfig -o /boot/grub/grub.cfg
 		fi
 
 		if ! [[ -d /boot/grub/themes ]]; then
@@ -929,9 +926,12 @@ Boot_Manager_Config () {
 		sudo rm /boot/grub/themes/Vimix.tar.xz
 
 		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
-			printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix\"" >> /etc
-"
-)]]
+			printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub
+		else
+			sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
+		fi
+		## apply changes to grub
+		sudo grub-mkconfig -o /boot/grub/grub.cfg
 
 	else
 		error_txt=", could not find GRUB's configuraion file"
