@@ -887,13 +887,25 @@ Boot_Manager_Config () {
 
 	## Check if grub's configuration file exits
 	if [[ -e /etc/default/grub ]]; then
-		if [[ -z $(egrep "^GRUB_TIMEOUT=0$" /etc/default/grub) ]] && \
-		[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=1$" /etc/default/grub) ]] && \
-		[[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=true$" /etc/default/grub) ]]; then
+		sudo cp /etc/default/grub /etc/default/grub.bck
 
+		if [[ -z $(egrep "^GRUB_TIMEOUT=.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
-			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
-			sudo sed -ie 's/#GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
+		fi
+
+		if [[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=.*" /etc/default/grub) ]]; then
+			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=0/' /etc/default/grub
+
+		else
+			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT=1\" >> /etc/default/grub"
+		fi
+
+
+		if [[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=.*" /etc/default/grub) ]]; then
+			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
+
+		else
+			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT_QUIET=true\" >> /etc/default/grub"
 		fi
 
 		if ! [[ -d /boot/grub/themes ]]; then
@@ -934,6 +946,7 @@ Boot_Manager_Config () {
 		else
 			sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
+		
 		## apply changes to grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 
