@@ -579,6 +579,8 @@ KDE_Theme_Config () {
 	status=$?
 	Exit_Status
 
+	rm /usr/share/plank/themes/Transparent.tar.gz
+
 	## Install Zero theme for plank
 
 	printf "$line\n"
@@ -601,12 +603,14 @@ KDE_Theme_Config () {
 	printf "$line\n\n"
 
 	output_text="Extraction"
-	error_txt="while extracting Zero.tar.gz theme"
+	error_txt="while extracting zero.tar.gz theme"
 
 	tar -xvf /usr/share/plank/themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 	status=$?
 	Exit_Status
+
+	rm /usr/share/plank/themes/zero.tar.gz
 
 }
 
