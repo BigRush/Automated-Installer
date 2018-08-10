@@ -409,6 +409,9 @@ Main_Menu () {
 					sleep 2.5
 					Pacman_Multilib
 					sleep 2.5
+					if ! [[ -z $(echo $DESKTOP_SESSION | grep plasma) ]]; then
+						KDE_Theme_Config
+					fi
 					DM_Menu
 					sleep 2.5
 					Boot_Manager_Config

@@ -303,6 +303,8 @@ DE_Menu () {
 				KDE_Installation
 				sleep 0.5
 				KDE_Font_Config
+				sleep 0.5
+				KDE_Theme_Config
 				break
 				;;
 			Deepin)
