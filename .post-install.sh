@@ -946,7 +946,7 @@ Boot_Manager_Config () {
 		else
 			sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
-		
+
 		## apply changes to grub
 		sudo grub-mkconfig -o /boot/grub/grub.cfg
 
