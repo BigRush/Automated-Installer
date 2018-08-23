@@ -246,8 +246,8 @@ Alias_and_Wallpaper () {
 	fi
 
 
-	if [[ -z $(grep "alias pls='sudo $(history -p !!)'" $user_path/.bashrc) ]]; then
-		printf "alias pls='sudo $(history -p !!)'\n" >> $user_path/.bashrc
+	if [[ -z $(grep "alias pls='sudo \$(history -p !!)'" $user_path/.bashrc) ]]; then
+		printf "alias pls='sudo \$(history -p !!)'\n" >> $user_path/.bashrc
 	fi
 
 	if [[ -z $(grep "alias fuck='pkill $1'" $user_path/.bashrc) ]]; then
@@ -287,7 +287,7 @@ Alias_and_Wallpaper () {
 		sudo runuser -l "root" -c "printf \"alias syse='systemctl enable'\n\" >> /root/.bashrc"
 	fi
 
-	if [[ -z $(sudo grep "alias fuck='pkill $1'" /root/.bashrc) ]]; then
+	if [[ -z $(sudo grep "alias fuck='pkill \$1'" /root/.bashrc) ]]; then
 		sudo runuser -l "root" -c "printf \"alias fuck='pkill $1'\n\" >> /root/.bashrc"
 	fi
 }
