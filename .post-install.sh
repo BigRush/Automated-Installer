@@ -420,7 +420,7 @@ KDE_Font_Config () {
 KDE_Theme_Config () {
 
 	if ! [[ -d $user_path/Documents/Themes ]]; then
-		mkdir $user_path/Documents/Themes
+		mkdir -p $user_path/Documents/Themes
 	fi
 
 	## Chili theme
