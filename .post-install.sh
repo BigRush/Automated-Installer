@@ -425,7 +425,7 @@ KDE_Font_Config () {
 KDE_Theme_Config () {
 
 	if ! [[ -d $user_path/Documents/Themes ]]; then
-		mkdir $user_path/Documents/Themes
+		mkdir -p $user_path/Documents/Themes
 	fi
 
 	## Chili theme
@@ -486,37 +486,13 @@ KDE_Theme_Config () {
 	output_text="Installing Arc theme"
 	error_txt="while installing Arc theme curl"
 
-	if [[ $aur_helper == "aurman" ]]; then
+	sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-		## Check if "aurman" exists, if not, call the function that installs it
-		if [[ -z $(command -v aurman) ]]; then
-			Aurman_Install
-		fi
-
-		aurman -S arc-kde-git --needed --noconfirm 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	elif [[ $aur_helper == "yay" ]]; then
-
-		## Check if "yay" exists, if not, call the function that installs it
-		if [[ -z $(command -v yay) ]]; then
-			Yay_Install
-		fi
-
-		yay -S arc-kde-git --needed --noconfirm 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	fi
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
 
 	## Install Adapta theme
 
