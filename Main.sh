@@ -398,9 +398,27 @@ Main_Menu () {
 					sleep 2.5
 					Pacman_Multilib
 					sleep 2.5
-					DE_Menu
+					if [[ "$desktop_env" == "plasma" ]]; then
+						KDE_Installation
+						sleep 0.5
+						KDE_Font_Config
+						sleep 0.5
+						KDE_Theme_Config
+					elif [[ "$desktop_env" == "deepin" ]]; then
+						Deepin_Installation
+					else
+						DE_Menu
+					fi
 					sleep 2.5
-					DM_Menu
+					if [[ "$display_mgr" == "sddm" ]]; then
+						SDDM_Installation
+					elif [[ "$display_mgr" == "sddm" ]]; then
+						LightDM_Installation
+						sleep 0.5
+						LightDM_Configuration
+					else
+						DM_Menu
+					fi
 					sleep 2.5
 					Boot_Manager_Config
 
@@ -476,15 +494,13 @@ Main_Menu () {
 
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay
-while getopts :a:d:h flag; do
+while getopts :a:e:d:h flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
 				aur_helper="aurman"
-				Main_Menu
 			elif [[ "yay" == "$OPTARG" ]]; then
 				aur_helper="yay"
-				Main_Menu
 			else
 				printf "$line\n"
 				printf "Invalid argument, use '-h' for help\n"
@@ -493,7 +509,7 @@ while getopts :a:d:h flag; do
 			fi
 			;;
 
-		d)
+		e)
 			if [[ "plasma" == "$OPTARG" ]]; then
 				desktop_env="plasma"
 			elif [[ "deepin" == "$OPTARG" ]]; then
@@ -506,26 +522,49 @@ while getopts :a:d:h flag; do
 			fi
 			;;
 
+		d)
+			if [[ "sddm" == "$OPTARG" ]]; then
+				display_mgr="sddm"
+			elif [[ "lightdm" == "$OPTARG" ]]; then
+				display_mgr="lightdm"
+			else
+				printf "$line\n"
+				printf "Invalid argument, use '-h' for help\n"
+				printf "$line\n\n"
+				exit 1
+			fi
+			;;
+
 		h)
 			printf "$line\n"
-			printf " Usage: -a <argument> -d <argument>\n"
+			printf " Usage: -a <argument> -e <argument> -d <argument>\n"
 			printf " -a <argument>"
 			printf "\t\tchoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
 			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
-			printf " -d <argument>"
+			printf " -e <argument>"
 			printf "\t\tchoose which desktop environment\n"
-			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n"
+			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n\n"
+			printf " -d <argument>"
+			printf "\t\tchoose which display manager\n"
+			printf "      \t\t\tyou would tlike to use [ 'sddm' or 'lightdm' ]\n"
 			printf "$line\n\n"
 			exit 0
 			;;
 
 		:)
 			printf "$line\n"
-			printf " Usage:\n -a <argument>\n"
+			printf " Usage: -a <argument> -d <argument>\n"
+			printf " -a <argument>"
 			printf "\t\tchoose which AUR helper you would\n"
-			printf "\t\tlike to use [ 'aurman' or 'yay' ]\n"
-			printf "\t\t('yay' is the default option if '-a' is not triggered)\n"
+			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
+			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
+			printf " -e <argument>"
+			printf "\t\tchoose which desktop environment\n"
+			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n\n"
+			printf " -d <argument>"
+			printf "\t\tchoose which display manager\n"
+			printf "      \t\t\tyou would tlike to use [ 'sddm' or 'lightdm' ]\n"
 			printf "$line\n\n"
 			exit 0
 			;;
@@ -539,8 +578,6 @@ while getopts :a:d:h flag; do
 	esac
 done
 
-## declare a variable for funtions to use later
-aur_helper="yay"
 
-## Call Main_Menu function if getopts did not detected any arguments
+## Call Main_Menu function
 Main_Menu
