@@ -476,7 +476,7 @@ Main_Menu () {
 
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay
-while getopts :a:h flag; do
+while getopts :a:d:h flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
@@ -493,12 +493,29 @@ while getopts :a:h flag; do
 			fi
 			;;
 
+		d)
+			if [[ "plasma" == "$OPTARG" ]]; then
+				desktop_env="plasma"
+			elif [[ "deepin" == "$OPTARG" ]]; then
+				desktop_env="deepin"
+			else
+				printf "$line\n"
+				printf "Invalid argument, use '-h' for help\n"
+				printf "$line\n\n"
+				exit 1
+			fi
+			;;
+
 		h)
 			printf "$line\n"
-			printf " Usage:\n -a <argument>\n"
-			printf "\t\tchoose which AUR helper you would\n"
-			printf "\t\tlike to use [ 'aurman' or 'yay' ]\n"
-			printf "\t\t('yay' is the default option if '-a' is not triggered)\n"
+			printf " Usage: -a <argument> -d <argument>\n"
+			printf " -a <argument>"
+			printf "      \t\t\tchoose which AUR helper you would\n"
+			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
+			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n"
+			printf " -d <argument>"
+			printf "      \t\t\tchoose which desktop environment\n"
+			printf "      \t\t\you would tlike to use [ 'plasma' or 'deepin' ]\n"
 			printf "$line\n\n"
 			exit 0
 			;;
