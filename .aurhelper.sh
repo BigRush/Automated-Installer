@@ -50,7 +50,7 @@ Aurman_Install () {
 		error_txt="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
-    	curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
+    	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -113,7 +113,7 @@ Yay_Install () {
 		error_txt="while getting yay with curl from AUR"
 
 		## Get the build files for AUR
-    	curl -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath >> $outputpath &
+    	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
