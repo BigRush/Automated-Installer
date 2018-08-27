@@ -525,7 +525,7 @@ KDE_Theme_Config () {
 	output_text="Getting Foggy theme with curl"
 	error_txt="while getting Foggy theme curl"
 
-	curl -s -L -o /usr/share/plank/themes/Foggy/dock.theme https://www.gnome-look.org/p/1201603/startdownload?file_id=1512191545&file_name=dock.theme&file_type=text/plain&file_size=2629&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1512191545%2Fs%2F42bee53934ad708552ad9542456f8421%2Ft%2F1533624363%2Fu%2F%2Fdock.theme 2>> $errorpath >> $outputpath &
+	sudo curl -s -L -o /usr/share/plank/themes/Foggy/dock.theme https://www.gnome-look.org/p/1201603/startdownload?file_id=1512191545&file_name=dock.theme&file_type=text/plain&file_size=2629&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1512191545%2Fs%2F42bee53934ad708552ad9542456f8421%2Ft%2F1533624363%2Fu%2F%2Fdock.theme 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -542,7 +542,7 @@ KDE_Theme_Config () {
 	output_text="Getting Transparent theme with curl"
 	error_txt="while getting Transparent.tar.gz theme curl"
 
-	curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+	sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
@@ -573,7 +573,7 @@ KDE_Theme_Config () {
 	output_text="Getting Zero theme with curl"
 	error_txt="while getting zero.tar.gz theme curl"
 
-	curl -s -L -o /usr/share/plank/themes/zero.tar.gz https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
+	sudo curl -s -L -o /usr/share/plank/themes/zero.tar.gz https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
