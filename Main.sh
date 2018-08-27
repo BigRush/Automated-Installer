@@ -512,10 +512,10 @@ while getopts :a:d:h flag; do
 			printf " -a <argument>"
 			printf "\t\tchoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
-			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n"
+			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
 			printf " -d <argument>"
 			printf "\t\tchoose which desktop environment\n"
-			printf "      \t\t\you would tlike to use [ 'plasma' or 'deepin' ]\n"
+			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n"
 			printf "$line\n\n"
 			exit 0
 			;;
