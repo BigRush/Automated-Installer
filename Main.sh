@@ -412,7 +412,7 @@ Main_Menu () {
 					sleep 2.5
 					if [[ "$display_mgr" == "sddm" ]]; then
 						SDDM_Installation
-					elif [[ "$display_mgr" == "sddm" ]]; then
+					elif [[ "$display_mgr" == "lightdm" ]]; then
 						LightDM_Installation
 						sleep 0.5
 						LightDM_Configuration
