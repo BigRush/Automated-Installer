@@ -542,7 +542,7 @@ KDE_Theme_Config () {
 	output_text="Getting Transparent theme with curl"
 	error_txt="while getting Transparent.tar.gz theme curl"
 
-	sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518676837%2Fs%2Ff5656ea688e3d7cf201e9dcb15125ab1%2Ft%2F1533624802%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+	sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518676837%2Fs%2Ffddc97ba6df454cecdd7364b8ad7522d%2Ft%2F1535389536%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
 
 	BPID=$!
 	Progress_Spinner
