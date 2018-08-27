@@ -515,7 +515,7 @@ KDE_Theme_Config () {
 
 	## Install Foggy theme for plank
 	if ! [[ -d /usr/share/plank/themes/Foggy ]]; then
-		mkdir -p /usr/share/plank/themes/Foggy
+		sudo mkdir -p /usr/share/plank/themes/Foggy
 	fi
 
 	printf "$line\n"
