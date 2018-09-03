@@ -437,7 +437,7 @@ KDE_Theme_Config () {
 		output_text="Getting Chili theme with curl"
 		error_txt="while getting Chili with curl"
 
-		curl -s -L -o $user_path/Documents/Themes/chili.tar.gz https://store.kde.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1532309746%2Fs%2F26c6c2d285f3f0c4bd3b58e3cce11405%2Ft%2F1533398358%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
+		curl -s -L -o $user_path/Documents/Themes/chili.tar.gz https://www.opendesktop.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1532309746%2Fs%2F1b043c552ca456f095a6b478a0e7cde9%2Ft%2F1535996684%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -455,7 +455,7 @@ KDE_Theme_Config () {
 		output_text="Getting shadow icons with curl"
 		error_txt="while getting shadow icons curl"
 
-		curl -s -L -o $user_path/Documents/Themes/shadow.tar.gz https://store.kde.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1524023480%2Fs%2F569b779a1863207f6f7753dcb1aef818%2Ft%2F1533403092%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
+		curl -s -L -o $user_path/Documents/Themes/shadow.tar.gz https://www.opendesktop.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1524023480%2Fs%2F27f4ab549f4372d89d7ff3b8b043d5a8%2Ft%2F1535996570%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -530,7 +530,7 @@ KDE_Theme_Config () {
 		output_text="Getting Foggy theme with curl"
 		error_txt="while getting Foggy theme curl"
 
-		sudo curl -s -L -o /usr/share/plank/themes/Foggy/dock.theme https://www.gnome-look.org/p/1201603/startdownload?file_id=1512191545&file_name=dock.theme&file_type=text/plain&file_size=2629&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1512191545%2Fs%2F42bee53934ad708552ad9542456f8421%2Ft%2F1533624363%2Fu%2F%2Fdock.theme 2>> $errorpath >> $outputpath &
+		sudo curl -s -L -o /usr/share/plank/themes/Foggy/dock.theme https://www.opendesktop.org/p/1201603/startdownload?file_id=1512191545&file_name=dock.theme&file_type=text/plain&file_size=2629&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1512191545%2Fs%2Fa0272a457b80f616e4bf4b2316ff8c6d%2Ft%2F1535996821%2Fu%2F%2Fdock.theme 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -548,7 +548,7 @@ KDE_Theme_Config () {
 		output_text="Getting Transparent theme with curl"
 		error_txt="while getting Transparent.tar.gz theme curl"
 
-		sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.gnome-look.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518676837%2Fs%2Ffddc97ba6df454cecdd7364b8ad7522d%2Ft%2F1535389536%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+		sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.opendesktop.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518676837%2Fs%2F0f9dff8efc07250bdc6376245ccf154d%2Ft%2F1535996882%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -580,7 +580,7 @@ KDE_Theme_Config () {
 		output_text="Getting Zero theme with curl"
 		error_txt="while getting zero.tar.gz theme curl"
 
-		sudo curl -s -L -o /usr/share/plank/themes/zero.tar.gz https://www.gnome-look.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1518018019%2Fs%2Fc93b6ff0adba506f83b4044e4b4e3840%2Ft%2F1533800323%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
+		sudo curl -s -L -o /usr/share/plank/themes/zero.tar.gz https://www.opendesktop.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518018019%2Fs%2F813fb3f14d8501c2bc472e1762cca92c%2Ft%2F1535996924%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -910,7 +910,7 @@ Boot_Manager_Config () {
 			output_text="Getting Vimix theme with curl"
 			error_txt="while getting vimix.tar.gz theme curl"
 
-			sudo curl -s -L -o /boot/grub/themes/Vimix.tar.xz https://www.opendesktop.org/p/1009236/startdownload?file_id=1526991604&file_name=grub-theme-vimix.tar.xz&file_type=application/x-xz&file_size=876340&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownloadfile%2Fid%2F1526991604%2Fs%2F587e3a581c96f63b707c9ba7d4f0ddb4%2Ft%2F1533801384%2Fu%2F%2Fgrub-theme-vimix.tar.xz 2>> $errorpath >> $outputpath &
+			sudo curl -s -L -o /boot/grub/themes/Vimix.tar.xz https://www.opendesktop.org/p/1009236/startdownload?file_id=1526991604&file_name=grub-theme-vimix.tar.xz&file_type=application/x-xz&file_size=876340&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1526991604%2Fs%2F304a46257318d7d933cd7b5672b45c96%2Ft%2F1535997031%2Fu%2F%2Fgrub-theme-vimix.tar.xz 2>> $errorpath >> $outputpath &
 
 			BPID=$!
 			Progress_Spinner
