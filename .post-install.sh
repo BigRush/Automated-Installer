@@ -103,7 +103,7 @@ Arch_Config () {
 	## Make sure there is an Intel video card and install its drivers.
 	## If no Intel video card detected,
 	## tell the user and continue the script
-	lspci |grep VGA |grep Intel
+	lspci |grep VGA |grep Intel &> /dev/null
 	if [[ $? -eq 0 ]]; then
 		printf "$line\n"
 		printf "Installing video drivers...\n"
