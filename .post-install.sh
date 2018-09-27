@@ -551,7 +551,7 @@ KDE_Theme_Config () {
 
 
 	## Chili theme
-	if ! [[ -e $user_path/Documents/Themes/chili.tar.gz ]]; then
+	if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
 		printf "$line\n"
 		printf "Chili theme doesn't exists...\n"
 		printf "$line\n\n"
@@ -564,7 +564,7 @@ KDE_Theme_Config () {
 	fi
 
 	## Shadow icons
-	if ! [[ -e $user_path/Documents/Themes/shadow.tar.gz ]]; then
+	if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
 		printf "$line\n"
 		printf "Shadow icons doesn't exists...\n"
 		printf "$line\n\n"
@@ -586,13 +586,48 @@ KDE_Theme_Config () {
 	output_text="Installing Papirus icons"
 	error_txt="while installing Papirus icons"
 
-	sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+	if [[ $Distro_Val == arch ]]; then
 
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ $Distro_Val == debian ]]; then
+		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+
+		printf "$line\n"
+		printf "Installing dirmngr for Paoirus icons...\n"
+		printf "$line\n\n"
+
+		output_text="Installing dirmngr"
+		error_txt="while installing dirmngr"
+
+		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Installing dirmngr for Paoirus icons...\n"
+		printf "$line\n\n"
+
+		output_text="Installing dirmngr"
+		error_txt="while installing dirmngr"
+		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
+
+		sudo apt-get update -y 2>> $errorpath >> $outputpath &
+		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
+
+	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+		sudo add-apt-repository ppa:papirus/papirus
+sudo apt-get update
+sudo apt-get install papirus-icon-theme
 
 	## Arc theme
 	printf "$line\n"
@@ -635,20 +670,20 @@ KDE_Theme_Config () {
 	fi
 
 	if ! [[ -e /usr/share/plank/themes/Foggy/dock.theme ]]; then
-		printf "$line\n"
-		printf "Installing Foggy theme for Plank...\n"
-		printf "$line\n\n"
+		if [[ -e $user_path/Documents/Themes/dock.theme ]]; then
+			sudo cp $user_path/Documents/Themes/dock.theme /usr/share/plank/themes/Foggy
 
-		output_text="Getting Foggy theme with curl"
-		error_txt="while getting Foggy theme curl"
+		else
+			printf "$line\n"
+			printf "Foggy theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		sudo curl -s -L -o /usr/share/plank/themes/Foggy/dock.theme https://www.opendesktop.org/p/1201603/startdownload?file_id=1512191545&file_name=dock.theme&file_type=text/plain&file_size=2629&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1512191545%2Fs%2Fa0272a457b80f616e4bf4b2316ff8c6d%2Ft%2F1535996821%2Fu%2F%2Fdock.theme 2>> $errorpath >> $outputpath &
+			output_text="Getting Foggy theme with megatools"
+			error_txt="while getting Foggy theme megatools"
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			status=1
+			Exit_Status
+		fi
 	fi
 
 	## Install Transparent theme for plank
