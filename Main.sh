@@ -215,6 +215,7 @@ Dependencies_Installation () {
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo echo
 			sudo pacman -S wget --needed --noconfirm 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
@@ -223,7 +224,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
-			apt-get install wget -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudo apt-get install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -231,7 +233,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
-			yum install wget -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudo yum install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -252,6 +255,7 @@ Dependencies_Installation () {
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo echo
 			sudo pacman -S curl --needed --noconfirm 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
@@ -260,7 +264,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
-			apt-get install curl -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudo apt-get install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -268,7 +273,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
-			yum install curl -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudo yum install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -289,6 +295,7 @@ Dependencies_Installation () {
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+			sudo echo
 			sudo pacman -S git --needed --noconfirm 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
@@ -297,7 +304,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
-			apt-get install git -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudp apt-get install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -305,7 +313,8 @@ Dependencies_Installation () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
-			yum install git -y 2>> $errorpath >> $outputpath &
+			sudo echo
+			sudo yum install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID

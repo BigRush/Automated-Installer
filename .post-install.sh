@@ -230,7 +230,7 @@ Alias_and_Wallpaper () {
 
 	## customize shell, check if the config exists, if not, add it to .bashrc
 	if [[ -z $(grep "alias ll='ls -l'" $HOME/.bashrc) ]]; then
-	        printf "alias ll='ls -l'\n" >> $HOME/.bashrc
+        printf "alias ll='ls -l'\n" >> $HOME/.bashrc
 	fi
 
 	if [[ -z $(grep "alias lh='ls -lh'" $HOME/.bashrc) ]]; then
@@ -245,6 +245,31 @@ Alias_and_Wallpaper () {
 	        printf "alias syst='systemctl status'\n" >> $HOME/.bashrc
 	fi
 
+	if [[ -z $(grep "alias sysr='systemctl restart'" $HOME/.bashrc) ]]; then
+	        printf "alias sysr='sudo systemctl restart'\n" >> $HOME/.bashrc
+	fi
+
+	if [[ -z $(grep "alias syse='systemctl enable'" $HOME/.bashrc) ]]; then
+	        printf "alias syse='sudo systemctl enable'\n" >> $HOME/.bashrc
+	fi
+
+	if [[ -z $(grep "alias sysd='systemclt disable'" $HOME/.bashrc) ]]; then
+	        printf "alias sysd='sudo systemctl disable'\n" >> $HOME/.bashrc
+	fi
+
+	if ! [[ -z $(command -v git) ]]; then
+	        if [[ -z $(grep "alias gita='git add'" $HOME/.bashrc) ]]; then
+	                printf "alias gita='git add'\n" >> $HOME/.bashrc
+	        fi
+
+	        if [[ -z $(grep "alias gitc='git commit -m'" $HOME/.bashrc) ]]; then
+	                printf "alias gitc='git commit -m'\n" >> $HOME/.bashrc
+	        fi
+
+	        if [[ -z $(grep "alias gitp='git push'" $HOME/.bashrc) ]]; then
+	                printf "alias gitp='git push'\n" >> $HOME/.bashrc
+	        fi
+	fi
 
 	if [[ -z $(grep "alias pls='sudo \$(history -p !!)'" $HOME/.bashrc) ]]; then
 	        printf "alias pls='sudo \$(history -p !!)'\n" >> $HOME/.bashrc
@@ -288,9 +313,14 @@ Alias_and_Wallpaper () {
 	        sudo runuser -l "root" -c "printf \"alias syse='systemctl enable'\n\" >> /root/.bashrc"
 	fi
 
+	if [[ -z $(sudo grep "alias sysd='systemclt disable'" /root/.bashrc) ]]; then
+	        sudo runuser -l "root" -c "printf \"alias sysd='systemctl disable'\n\" >> /root/.bashrc"
+	fi
+
 	if [[ -z $(sudo grep "alias fuck='pkill \$1'" /root/.bashrc) ]]; then
 	        sudo runuser -l "root" -c "printf 'alias fuck=\"pkill \$1\"\n' >> /root/.bashrc"
 	fi
+
 
 	printf "$line\n"
 	printf "Aliases added...\n"
@@ -424,20 +454,93 @@ KDE_Font_Config () {
 ## Download themes and icons for KDE
 KDE_Theme_Config () {
 
-	if ! [[ -d $user_path/Documents/Themes ]]; then
-		mkdir -p $user_path/Documents/Themes
+	## Check if megatools is available, if not download it
+	if [[ -z $(command -v megadl) ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			if [[ $aur_helper == "aurman" ]]; then
+				sudo echo
+
+				## Check if "aurman" exists, if not, call the function that installs it
+				if [[ -z $(command -v aurman) ]]; then
+					Aurman_Install
+				fi
+
+				printf "$line\n"
+				printf "Installing Megatools...\n"
+				printf "$line\n\n"
+
+				output_text="Megatools installation"
+				error_txt="while installing Megatools"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				aurman -S megatools --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $aur_helper == "yay" ]]; then
+
+				## Check if "yay" exists, if not, call the function that installs it
+				if [[ -z $(command -v yay) ]]; then
+					Yay_Install
+				fi
+
+				printf "$line\n"
+				printf "Installing Megatools...\n"
+				printf "$line\n\n"
+
+				output_text="Megatools installation"
+				error_txt="while installing Megatools"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				yay -S megatools --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+
+		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+
+			## Install megatools to get theme files from mega cloud
+			sudo echo
+			sudo apt-get install megatools -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+
+			## Install megatools to get theme files from mega cloud
+			sudo echo
+			sudo yum install megatools -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
 	fi
 
-	## Chili theme
-	if ! [[ -e $user_path/Documents/Themes/chili.tar.gz ]]; then
+
+	if ! [[ -d $user_path/Documents/Themes ]]; then
+		mkdir -p $user_path/Documents/Themes
+
 		printf "$line\n"
-		printf "Installing Chili...\n"
+		printf "Installing themes form Mega cloud...\n"
 		printf "$line\n\n"
 
-		output_text="Getting Chili theme with curl"
-		error_txt="while getting Chili with curl"
+		output_text="Getting themes form Mega cloud"
+		error_txt="while getting themes form Mega cloud"
 
-		curl -s -L -o $user_path/Documents/Themes/chili.tar.gz https://www.opendesktop.org/p/1214121/startdownload?file_id=1532309746&file_name=kde-plasma-chili.tar.gz&file_type=application/x-gzip&file_size=1000489&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1532309746%2Fs%2F1b043c552ca456f095a6b478a0e7cde9%2Ft%2F1535996684%2Fu%2F%2Fkde-plasma-chili.tar.gz 2>> $errorpath >> $outputpath &
+		megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -446,21 +549,30 @@ KDE_Theme_Config () {
 		Exit_Status
 	fi
 
+
+	## Chili theme
+	if ! [[ -e $user_path/Documents/Themes/chili.tar.gz ]]; then
+		printf "$line\n"
+		printf "Chili theme doesn't exists...\n"
+		printf "$line\n\n"
+
+		output_text="Getting Chili theme with megatools"
+		error_txt="while getting Chili with megatools"
+
+		status=1
+		Exit_Status
+	fi
+
 	## Shadow icons
 	if ! [[ -e $user_path/Documents/Themes/shadow.tar.gz ]]; then
 		printf "$line\n"
-		printf "Installing Shadow icons...\n"
+		printf "Shadow icons doesn't exists...\n"
 		printf "$line\n\n"
 
-		output_text="Getting shadow icons with curl"
-		error_txt="while getting shadow icons curl"
+		output_text="Getting shadow icons with megatools"
+		error_txt="while getting shadow icons megatools"
 
-		curl -s -L -o $user_path/Documents/Themes/shadow.tar.gz https://www.opendesktop.org/p/1012532/startdownload?file_id=1524023480&file_name=shadow-kde-04-2018.tar.xz&file_type=application/x-xz&file_size=80842336&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1524023480%2Fs%2F27f4ab549f4372d89d7ff3b8b043d5a8%2Ft%2F1535996570%2Fu%2F%2Fshadow-kde-04-2018.tar.xz 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
+		status=1
 		Exit_Status
 	fi
 
