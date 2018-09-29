@@ -1150,13 +1150,13 @@ Boot_Manager_Config () {
 		fi
 
 		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
-			printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub
+			sudo runuser -l "root" -c 'printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub'
 		else
 			sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
 
 		## apply changes to grub
-		sudo grub-mkconfig -o /boot/grub/grub.cfg
+		sudo grub-mkconfig -o /boot/grub/grub.cfg 2>> $errorpath >> $outputpath
 
 	else
 		error_txt=", could not find GRUB's configuraion file"
