@@ -579,14 +579,13 @@ KDE_Theme_Config () {
 	## Papirus icons
 	sudo echo
 
-	printf "$line\n"
-	printf "Installing Papirus icons...\n"
-	printf "$line\n\n"
-
-	output_text="Installing Papirus icons"
-	error_txt="while installing Papirus icons"
-
 	if [[ $Distro_Val == arch ]]; then
+		printf "$line\n"
+		printf "Installing Papirus icons...\n"
+		printf "$line\n\n"
+
+		output_text="Installing Papirus icons"
+		error_txt="while installing Papirus icons"
 
 		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -702,7 +701,7 @@ KDE_Theme_Config () {
 
 		output_text="Installing Papirus icons"
 		error_txt="while installing Papirus icons"
-		
+
 		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
