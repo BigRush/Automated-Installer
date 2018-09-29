@@ -445,7 +445,7 @@ Main_Menu () {
 				fi
 
 				printf "$line\n"
-				printf "Aurhelper completed successfully\n"
+				printf "Post-Install completed successfully\n"
 				printf "$line\n\n"
 				exit 0
 				;;

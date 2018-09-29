@@ -1155,8 +1155,34 @@ Boot_Manager_Config () {
 			sudo sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
 
-		## apply changes to grub
+		## Apply changes to grub
+		printf "$line\n"
+		printf "Applying changes to GRUB...\n"
+		printf "$line\n\n"
+
 		sudo grub-mkconfig -o /boot/grub/grub.cfg 2>> $errorpath >> $outputpath
+
+		## If GRUB changes failed, rollback to backup file
+		if [[ $? -ne 0 ]]; then
+			sudo mv /etc/default/grub.bck /etc/default/grub
+
+			printf "$line\n"
+			printf "Applying changes to GRUB failed, roolling back to backup GRUB file...\n"
+			printf "$line\n\n"
+
+			output_text="Roolling back to backup GRUB file"
+			error_txt="while rolling back to backup GRUB file"
+
+			sudo grub-mkconfig -o /boot/grub/grub.cfg 2>> $errorpath >> $outputpath
+			status=$?
+			Exit_Status
+
+		else
+			output_text="GRUB changes"
+			error_txt="while applying changes to GRUB"
+			status=0
+			Exit_Status
+		fi
 
 	else
 		error_txt=", could not find GRUB's configuraion file"
@@ -1168,14 +1194,17 @@ Boot_Manager_Config () {
 	read -p "Would you like to install refined boot manager?[y/N]: " answer
 	printf "\n"
 	if [[ -z $answer ]]; then
-		Main_Menu
+		printf "$line\n"
+		printf "Post-Install completed successfully\n"
+		printf "$line\n\n"
+		exit 0
 	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
 		:
 	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 		printf "$line\n"
-		printf "Exiting...\n"
+		printf "Post-Install completed successfully\n"
 		printf "$line\n\n"
-		Main_Menu
+		exit 0
 	else
 		printf "$line\n"
 		printf "Invalid answer - exiting\n"
