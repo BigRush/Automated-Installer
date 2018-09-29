@@ -767,67 +767,59 @@ KDE_Theme_Config () {
 	fi
 
 	## Install Transparent theme for plank
-	if ! [[ -e /usr/share/plank/themes/Transparent.tar.gz ]]; then
-		printf "$line\n"
-		printf "Installing Transparent theme for Plank...\n"
-		printf "$line\n\n"
+	if ! [[ -e /usr/share/plank/themes/Transparent ]]; then
+		if [[ -e $user_path/Documents/Themes/Transparent.tar.gz ]]; then
+			printf "$line\n"
+			printf "Extracting Transparent theme...\n"
+			printf "$line\n\n"
 
-		output_text="Getting Transparent theme with curl"
-		error_txt="while getting Transparent.tar.gz theme curl"
+			output_text="Extraction"
+			error_txt="while extracting Transparent.tar.gz theme"
 
-		sudo curl -s -L -o /usr/share/plank/themes/Transparent.tar.gz https://www.opendesktop.org/p/1214417/startdownload?file_id=1518676837&file_name=Transparent.tar.gz&file_type=application/x-gzip&file_size=1089&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518676837%2Fs%2F0f9dff8efc07250bdc6376245ccf154d%2Ft%2F1535996882%2Fu%2F%2FTransparent.tar.gz 2>> $errorpath >> $outputpath &
+			tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			status=$?
+			Exit_Status
 
-		printf "$line\n"
-		printf "Extracting theme...\n"
-		printf "$line\n\n"
+		else
+			printf "$line\n"
+			printf "Transparent theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		output_text="Extraction"
-		error_txt="while extracting Transparent.tar.gz theme"
+			output_text="Getting Transparent theme with megatools"
+			error_txt="while getting Transparent theme megatools"
 
-		tar -xvf /usr/share/plank/themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
-
-		status=$?
-		Exit_Status
-
-		rm -f /usr/share/plank/themes/Transparent.tar.gz
+			status=1
+			Exit_Status
+		fi
 	fi
 
 	## Install Zero theme for plank
-	if ! [[ -e /usr/share/plank/themes/zero.tar.gz ]]; then
-		printf "$line\n"
-		printf "Installing Zero theme for Plank...\n"
-		printf "$line\n\n"
+	if ! [[ -e /usr/share/plank/themes/zero ]]; then
+		if [[ -e $user_path/Documents/Themes/zero.tar.gz ]]; then
+			printf "$line\n"
+			printf "Extracting theme...\n"
+			printf "$line\n\n"
 
-		output_text="Getting Zero theme with curl"
-		error_txt="while getting zero.tar.gz theme curl"
+			output_text="Extraction"
+			error_txt="while extracting zero.tar.gz theme"
 
-		sudo curl -s -L -o /usr/share/plank/themes/zero.tar.gz https://www.opendesktop.org/p/1212812/startdownload?file_id=1518018019&file_name=zero.tar.gz&file_type=application/x-gzip&file_size=1091&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1518018019%2Fs%2F813fb3f14d8501c2bc472e1762cca92c%2Ft%2F1535996924%2Fu%2F%2Fzero.tar.gz 2>> $errorpath >> $outputpath &
+			tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			status=$?
+			Exit_Status
 
-		printf "$line\n"
-		printf "Extracting theme...\n"
-		printf "$line\n\n"
+		else
+			printf "$line\n"
+			printf "Zero theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		output_text="Extraction"
-		error_txt="while extracting zero.tar.gz theme"
+			output_text="Getting Zero theme with megatools"
+			error_txt="while getting Zero theme megatools"
 
-		tar -xvf /usr/share/plank/themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
-
-		status=$?
-		Exit_Status
-
-		rm -f /usr/share/plank/themes/zero.tar.gz
+			status=1
+			Exit_Status
+		fi
 	fi
 }
 
@@ -1126,38 +1118,34 @@ Boot_Manager_Config () {
 		fi
 
 		if ! [[ -d /boot/grub/themes ]]; then
-			mkdir /boot/grub/themes
+			sudo mkdir -p /boot/grub/themes
 		fi
 
-		if ! [[ -e /boot/grub/themes/Vimix.tar.xz ]]; then
-			printf "$line\n"
-			printf "Installing Vimix theme for GRUB...\n"
-			printf "$line\n\n"
+		if ! [[ -e /boot/grub/themes/Vimix ]]; then
+			if [[ -e $user_path/Documents/Themes/grub-theme-vimix.tar.xz ]]; then
 
-			output_text="Getting Vimix theme with curl"
-			error_txt="while getting vimix.tar.gz theme curl"
+				printf "$line\n"
+				printf "Extracting theme...\n"
+				printf "$line\n\n"
 
-			sudo curl -s -L -o /boot/grub/themes/Vimix.tar.xz https://www.opendesktop.org/p/1009236/startdownload?file_id=1526991604&file_name=grub-theme-vimix.tar.xz&file_type=application/x-xz&file_size=876340&url=https%3A%2F%2Fdl.opendesktop.org%2Fapi%2Ffiles%2Fdownload%2Fid%2F1526991604%2Fs%2F304a46257318d7d933cd7b5672b45c96%2Ft%2F1535997031%2Fu%2F%2Fgrub-theme-vimix.tar.xz 2>> $errorpath >> $outputpath &
+				output_text="Extraction"
+				error_txt="while extracting Vimix theme"
 
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
+				sudo tar -xvf $user_path/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
-			printf "$line\n"
-			printf "Extracting theme...\n"
-			printf "$line\n\n"
+				status=$?
+				Exit_Status
+			else
+				printf "$line\n"
+				printf "Vimix GRUB theme doesn't exists...\n"
+				printf "$line\n\n"
 
-			output_text="Extraction"
-			error_txt="while extracting Vimix.tar.gz theme"
+				output_text="Getting Vimix GRUB theme with megatools"
+				error_txt="while getting Vimix GRUB theme megatools"
 
-			sudo tar -xvf /boot/grub/themes/Vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
-
-			status=$?
-			Exit_Status
-
-			sudo rm -f /boot/grub/themes/Vimix.tar.xz
+				status=1
+				Exit_Status
+			fi
 		fi
 
 		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
