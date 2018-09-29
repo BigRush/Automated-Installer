@@ -708,6 +708,7 @@ KDE_Theme_Config () {
 		wait $BPID
 		status=$?
 		Exit_Status
+	fi
 
 	## Arc theme
 	printf "$line\n"
