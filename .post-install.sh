@@ -777,7 +777,7 @@ KDE_Theme_Config () {
 			output_text="Extraction"
 			error_txt="while extracting Transparent.tar.gz theme"
 
-			tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -805,7 +805,7 @@ KDE_Theme_Config () {
 			output_text="Extraction"
 			error_txt="while extracting zero.tar.gz theme"
 
-			tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
