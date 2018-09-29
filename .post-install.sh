@@ -1152,7 +1152,7 @@ Boot_Manager_Config () {
 		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
 			sudo runuser -l "root" -c 'printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub'
 		else
-			sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
+			sudo sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
 
 		## apply changes to grub
