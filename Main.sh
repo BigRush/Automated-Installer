@@ -444,6 +444,9 @@ Main_Menu () {
 					Boot_Manager_Config
 				fi
 
+				elif [[ $Distro_Val == "debian" ]]; then
+					Alias_and_Wallpaper
+
 				printf "$line\n"
 				printf "Post-Install completed successfully\n"
 				printf "$line\n\n"

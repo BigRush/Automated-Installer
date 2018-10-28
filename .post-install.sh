@@ -327,6 +327,30 @@ Alias_and_Wallpaper () {
 	printf "$line\n\n"
 }
 
+## Cinnamon theme configuration
+Cinnamon_Thene_Config () {
+
+	sudo echo
+
+	output_text="Font installation"
+	error_txt="while installting fonts"
+
+	## Install some nice fonts
+	sudo pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+
+	sudo apt-get install dirmngr
+	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F
+	sudo apt-get update
+	sudo apt-get install papirus-icon-theme
+}
+
 ## Menu, to choose which desktop environment to install
 DE_Menu () {
 
@@ -551,29 +575,51 @@ KDE_Theme_Config () {
 
 
 	## Chili theme
-	if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
-		printf "$line\n"
-		printf "Chili theme doesn't exists...\n"
-		printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
+			printf "$line\n"
+			printf "Chili theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		output_text="Getting Chili theme with megatools"
-		error_txt="while getting Chili with megatools"
+			output_text="Getting Chili theme with megatools"
+			error_txt="while getting Chili with megatools"
 
-		status=1
-		Exit_Status
+			status=1
+			Exit_Status
+		fi
 	fi
 
 	## Shadow icons
-	if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
+	if [[ $de_env == "kde" ]]; then
+		if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
+			printf "$line\n"
+			printf "Shadow icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting shadow icons with megatools"
+			error_txt="while getting shadow icons megatools"
+
+			status=1
+			Exit_Status
+		fi
+	elif [[ $Distro_Val == "debian" ]]; then
+
+		## Add PPA
 		printf "$line\n"
-		printf "Shadow icons doesn't exists...\n"
+		printf "Adding repository for Shadow icons...\n"
 		printf "$line\n\n"
 
-		output_text="Getting shadow icons with megatools"
-		error_txt="while getting shadow icons megatools"
-
-		status=1
+		output_text="Adding the repository"
+		error_txt="while adding the repository"
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
 		Exit_Status
+
+		sudo add-apt-repository ppa:noobslab/icons 2>> $errorpath >> $outputpath &
+		sudo apt-get update 2>> $errorpath >> $outputpath &
+		sudo apt-get install shadow-icon-theme 2>> $errorpath >> $outputpath &
 	fi
 
 	## Papirus icons
