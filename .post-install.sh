@@ -556,21 +556,38 @@ KDE_Theme_Config () {
 
 	if ! [[ -d $user_path/Documents/Themes ]]; then
 		mkdir -p $user_path/Documents/Themes
+		if [[ $de_env == "kde" ]]; then
+			printf "$line\n"
+			printf "Installing themes form Mega cloud...\n"
+			printf "$line\n\n"
 
-		printf "$line\n"
-		printf "Installing themes form Mega cloud...\n"
-		printf "$line\n\n"
+			output_text="Getting themes form Mega cloud"
+			error_txt="while getting themes form Mega cloud"
 
-		output_text="Getting themes form Mega cloud"
-		error_txt="while getting themes form Mega cloud"
+			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
-		megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+		elif [[ $de_env == "gtk" ]]; then
+			printf "$line\n"
+			printf "Installing themes form Mega cloud...\n"
+			printf "$line\n\n"
+
+			output_text="Getting themes form Mega cloud"
+			error_txt="while getting themes form Mega cloud"
+
+			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
 	fi
 
 
@@ -591,18 +608,70 @@ KDE_Theme_Config () {
 
 	## Shadow icons
 	if [[ $de_env == "kde" ]]; then
-		if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
-			printf "$line\n"
-			printf "Shadow icons doesn't exists...\n"
-			printf "$line\n\n"
+		if [[ $Distro_Val == arch ]]; then
+			if [[ $aur_helper == "aurman" ]]; then
+				sudo echo
 
-			output_text="Getting shadow icons with megatools"
-			error_txt="while getting shadow icons megatools"
+				## Check if "aurman" exists, if not, call the function that installs it
+				if [[ -z $(command -v aurman) ]]; then
+					Aurman_Install
+				fi
 
-			status=1
-			Exit_Status
+				printf "$line\n"
+				printf "Installing Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Shadow icons installation"
+				error_txt="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				aurman -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $aur_helper == "yay" ]]; then
+
+				## Check if "yay" exists, if not, call the function that installs it
+				if [[ -z $(command -v yay) ]]; then
+					Yay_Install
+				fi
+
+				printf "$line\n"
+				printf "Installing Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Shadow icons installation"
+				error_txt="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				yay -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+			
+		elif [[ $Distro_Val == "debian" ]]; then
+			if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
+				printf "$line\n"
+				printf "Shadow icons doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting shadow icons with megatools"
+				error_txt="while getting shadow icons megatools"
+
+				status=1
+				Exit_Status
+			fi
 		fi
-	elif [[ $Distro_Val == "debian" ]]; then
+
+	elif [[ $de_env == "gtk" ]]; then
 
 		## Add PPA
 		printf "$line\n"
@@ -617,9 +686,9 @@ KDE_Theme_Config () {
 		status=$?
 		Exit_Status
 
-		sudo add-apt-repository ppa:noobslab/icons 2>> $errorpath >> $outputpath &
+		sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
 		sudo apt-get update 2>> $errorpath >> $outputpath &
-		sudo apt-get install shadow-icon-theme 2>> $errorpath >> $outputpath &
+		sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
 	fi
 
 	## Papirus icons
