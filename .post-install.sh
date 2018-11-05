@@ -328,7 +328,7 @@ Alias_and_Wallpaper () {
 }
 
 ## Cinnamon theme configuration
-Cinnamon_Thene_Config () {
+Cinnamon_Theme_Config () {
 
 	sudo echo
 
@@ -529,7 +529,7 @@ KDE_Theme_Config () {
 				Exit_Status
 			fi
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 
 			## Install megatools to get theme files from mega cloud
 			sudo echo
@@ -608,6 +608,37 @@ KDE_Theme_Config () {
 
 	## Shadow icons
 	if [[ $de_env == "kde" ]]; then
+		if [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
+			if ! [[ -e $user_path/.icons ]]; then
+				mkdir $user_path/.icons
+			fi
+
+			printf "$line\n"
+			printf "Extracting Shadow icons...\n"
+			printf "$line\n\n"
+
+			output_text="Extraction"
+			error_txt="while extracting Shadow icons"
+
+			sudo tar -xvf $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $user_path/.icons 2>> $errorpath >> $outputpath
+
+			status=$?
+			Exit_Status
+
+		else
+			printf "$line\n"
+			printf "Shadow icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting shadow icons with megatools"
+			error_txt="while getting shadow icons megatools"
+
+			status=1
+			Exit_Status
+
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
 		if [[ $Distro_Val == arch ]]; then
 			if [[ $aur_helper == "aurman" ]]; then
 				sudo echo
@@ -656,9 +687,44 @@ KDE_Theme_Config () {
 				status=$?
 				Exit_Status
 			fi
-			
-		elif [[ $Distro_Val == "debian" ]]; then
-			if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
+
+		elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Shadow icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
+			sudo apt-get update 2>> $errorpath >> $outputpath &
+			sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
+
+		else
+			if [[ -e $user_path/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+				if ! [[ -e $user_path/.icons ]]; then
+					mkdir $user_path/.icons
+				fi
+
+				printf "$line\n"
+				printf "Extracting Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_txt="while extracting Shadow icons"
+
+				sudo tar -xvf $user_path/Documents/Themes/shadow-4.8.3.tar.xz -C $user_path/.icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
 				printf "$line\n"
 				printf "Shadow icons doesn't exists...\n"
 				printf "$line\n\n"
@@ -668,27 +734,9 @@ KDE_Theme_Config () {
 
 				status=1
 				Exit_Status
+
 			fi
 		fi
-
-	elif [[ $de_env == "gtk" ]]; then
-
-		## Add PPA
-		printf "$line\n"
-		printf "Adding repository for Shadow icons...\n"
-		printf "$line\n\n"
-
-		output_text="Adding the repository"
-		error_txt="while adding the repository"
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
-		sudo apt-get update 2>> $errorpath >> $outputpath &
-		sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
 	fi
 
 	## Papirus icons
