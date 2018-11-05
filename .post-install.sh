@@ -742,15 +742,149 @@ KDE_Theme_Config () {
 	## Papirus icons
 	sudo echo
 
-	if [[ $Distro_Val == arch ]]; then
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == debian ]]; then
+
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+
+			sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+			status=$?
+			Exit_Status
+
+			## Install dirmngr to manage and download OpenPGP and X.509 certificates
+			printf "$line\n"
+			printf "Installing dirmngr for certificate management...\n"
+			printf "$line\n\n"
+
+			output_text="Installing dirmngr"
+			error_txt="while installing dirmngr"
+
+			sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Add certificate
+			printf "$line\n"
+			printf "Adding the certificate...\n"
+			printf "$line\n\n"
+
+			output_text="Installing dirmngr"
+			error_txt="while installing dirmngr"
+			sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			printf "$line\n"
+			printf "Updating the package lists...\n"
+			printf "$line\n\n"
+
+			output_text="Updating the package lists"
+			error_txt="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+
+			sudo add-apt-repository ppa:papirus/papirus
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			printf "$line\n"
+			printf "Updating the package lists...\n"
+			printf "$line\n\n"
+
+			output_text="Updating the package lists"
+			error_txt="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		pushd . &> /dev/null
+
 		printf "$line\n"
-		printf "Installing Papirus icons...\n"
+		printf "Cloning from github Papirus icons...\n"
 		printf "$line\n\n"
 
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		output_text="Cloning from github"
+		error_txt="while cloning from github"
 
-		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -758,119 +892,26 @@ KDE_Theme_Config () {
 		status=$?
 		Exit_Status
 
-	elif [[ $Distro_Val == debian ]]; then
+		cd adapta-gtk-theme
 
-		## Add PPA
+		sudo echo
+
 		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
+		printf "Installing dependencies for Papirus icons...\n"
 		printf "$line\n\n"
 
-		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		output_text="Cloning from github"
+		error_txt="while cloning from github"
 
-		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
-		status=$?
-		Exit_Status
+		sudo apt-get install 2>> $errorpath >> $outputpath &
 
-		## Install dirmngr to manage and download OpenPGP and X.509 certificates
-		printf "$line\n"
-		printf "Installing dirmngr for certificate management...\n"
-		printf "$line\n\n"
-
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-
-		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		## Add certificate
-		printf "$line\n"
-		printf "Adding the certificate...\n"
-		printf "$line\n\n"
 
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
-		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-
-		## Add PPA
-		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Adding the repository"
-		error_txt="while adding the repository"
-
-		sudo add-apt-repository ppa:papirus/papirus
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
-		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
 	fi
 
 	## Arc theme
