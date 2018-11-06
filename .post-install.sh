@@ -903,7 +903,7 @@ KDE_Theme_Config () {
 		output_text="Cloning from github"
 		error_txt="while cloning from github"
 
-		sudo apt-get install 2>> $errorpath >> $outputpath &
+		sudo apt-get install autoconf automake inkscape libglib2.0-dev libxml2-utils pkg-config sassc libgdk-pixbuf2.0-dev 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
