@@ -1,4 +1,6 @@
 # Automated-Installer
+Configures and installs application and services 
+for my needs on debian and arch based distributions
 
 
 
