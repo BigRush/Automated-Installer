@@ -59,7 +59,7 @@ There are log files under "log" folder in the directory of the project:
 
 ## License
 
-This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/chn555/timestamp/blob/master/LICENSE) file for details
+This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/BigRush/Automated-Installer/blob/master/LICENSE) file for details
 
 
 ## Acknowledgments
