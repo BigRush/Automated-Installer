@@ -1,14 +1,4 @@
-# Project Title
-
-Automated-Installer
-
-
-
-
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine.
-
+# Automated-Installer
 
 
 
@@ -38,21 +28,14 @@ Change to the project's directory:
 cd Automated-Installer
 ```
 
-### To Run the script you'll need to run it once as **root** and once as **non-root**:
+Run the script **as root**:
 
-
-To run the post-install part (which is **option 1** on the menu under Main.sh) you'll must run the script as **root**
 
 ```
 sudo bash Main.sh
 ```
 
 
-To run the aurman part (which is **option 2** on the menu under Main.sh) you'll must run the script as **non-root**
-
-```
-bash Main.sh
-```
 ## Logs
 There are log files under "log" folder in the directory of the project: 
  * error.log - All **stderr** from the commands of the script will be there
