@@ -327,6 +327,30 @@ Alias_and_Wallpaper () {
 	printf "$line\n\n"
 }
 
+## Cinnamon theme configuration
+Cinnamon_Theme_Config () {
+
+	sudo echo
+
+	output_text="Font installation"
+	error_txt="while installting fonts"
+
+	## Install some nice fonts
+	sudo pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+
+	sudo apt-get install dirmngr
+	sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F
+	sudo apt-get update
+	sudo apt-get install papirus-icon-theme
+}
+
 ## Menu, to choose which desktop environment to install
 DE_Menu () {
 
@@ -505,7 +529,7 @@ KDE_Theme_Config () {
 				Exit_Status
 			fi
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 
 			## Install megatools to get theme files from mega cloud
 			sudo echo
@@ -532,62 +556,335 @@ KDE_Theme_Config () {
 
 	if ! [[ -d $user_path/Documents/Themes ]]; then
 		mkdir -p $user_path/Documents/Themes
+		if [[ $de_env == "kde" ]]; then
+			printf "$line\n"
+			printf "Installing themes form Mega cloud...\n"
+			printf "$line\n\n"
 
-		printf "$line\n"
-		printf "Installing themes form Mega cloud...\n"
-		printf "$line\n\n"
+			output_text="Getting themes form Mega cloud"
+			error_txt="while getting themes form Mega cloud"
 
-		output_text="Getting themes form Mega cloud"
-		error_txt="while getting themes form Mega cloud"
+			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
-		megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+		elif [[ $de_env == "gtk" ]]; then
+			printf "$line\n"
+			printf "Installing themes form Mega cloud...\n"
+			printf "$line\n\n"
+
+			output_text="Getting themes form Mega cloud"
+			error_txt="while getting themes form Mega cloud"
+
+			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
 	fi
 
 
 	## Chili theme
-	if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
-		printf "$line\n"
-		printf "Chili theme doesn't exists...\n"
-		printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
+			printf "$line\n"
+			printf "Chili theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		output_text="Getting Chili theme with megatools"
-		error_txt="while getting Chili with megatools"
+			output_text="Getting Chili theme with megatools"
+			error_txt="while getting Chili with megatools"
 
-		status=1
-		Exit_Status
+			status=1
+			Exit_Status
+		fi
 	fi
 
 	## Shadow icons
-	if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
-		printf "$line\n"
-		printf "Shadow icons doesn't exists...\n"
-		printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
+			if ! [[ -e $user_path/.icons ]]; then
+				mkdir $user_path/.icons
+			fi
 
-		output_text="Getting shadow icons with megatools"
-		error_txt="while getting shadow icons megatools"
+			printf "$line\n"
+			printf "Extracting Shadow icons...\n"
+			printf "$line\n\n"
 
-		status=1
-		Exit_Status
+			output_text="Extraction"
+			error_txt="while extracting Shadow icons"
+
+			sudo tar -xvf $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $user_path/.icons 2>> $errorpath >> $outputpath
+
+			status=$?
+			Exit_Status
+
+		else
+			printf "$line\n"
+			printf "Shadow icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting shadow icons with megatools"
+			error_txt="while getting shadow icons megatools"
+
+			status=1
+			Exit_Status
+
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			if [[ $aur_helper == "aurman" ]]; then
+				sudo echo
+
+				## Check if "aurman" exists, if not, call the function that installs it
+				if [[ -z $(command -v aurman) ]]; then
+					Aurman_Install
+				fi
+
+				printf "$line\n"
+				printf "Installing Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Shadow icons installation"
+				error_txt="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				aurman -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $aur_helper == "yay" ]]; then
+
+				## Check if "yay" exists, if not, call the function that installs it
+				if [[ -z $(command -v yay) ]]; then
+					Yay_Install
+				fi
+
+				printf "$line\n"
+				printf "Installing Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Shadow icons installation"
+				error_txt="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				yay -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+
+		elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Shadow icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
+			sudo apt-get update 2>> $errorpath >> $outputpath &
+			sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
+
+		else
+			if [[ -e $user_path/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+				if ! [[ -e $user_path/.icons ]]; then
+					mkdir $user_path/.icons
+				fi
+
+				printf "$line\n"
+				printf "Extracting Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_txt="while extracting Shadow icons"
+
+				sudo tar -xvf $user_path/Documents/Themes/shadow-4.8.3.tar.xz -C $user_path/.icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
+				printf "$line\n"
+				printf "Shadow icons doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting shadow icons with megatools"
+				error_txt="while getting shadow icons megatools"
+
+				status=1
+				Exit_Status
+
+			fi
+		fi
 	fi
 
 	## Papirus icons
 	sudo echo
 
-	if [[ $Distro_Val == arch ]]; then
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == debian ]]; then
+
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+
+			sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+			status=$?
+			Exit_Status
+
+			## Install dirmngr to manage and download OpenPGP and X.509 certificates
+			printf "$line\n"
+			printf "Installing dirmngr for certificate management...\n"
+			printf "$line\n\n"
+
+			output_text="Installing dirmngr"
+			error_txt="while installing dirmngr"
+
+			sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Add certificate
+			printf "$line\n"
+			printf "Adding the certificate...\n"
+			printf "$line\n\n"
+
+			output_text="Installing dirmngr"
+			error_txt="while installing dirmngr"
+			sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			printf "$line\n"
+			printf "Updating the package lists...\n"
+			printf "$line\n\n"
+
+			output_text="Updating the package lists"
+			error_txt="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Adding the repository"
+			error_txt="while adding the repository"
+
+			sudo add-apt-repository ppa:papirus/papirus
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			printf "$line\n"
+			printf "Updating the package lists...\n"
+			printf "$line\n\n"
+
+			output_text="Updating the package lists"
+			error_txt="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			printf "$line\n"
+			printf "Installing Papirus icons...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Papirus icons"
+			error_txt="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		pushd . &> /dev/null
+
 		printf "$line\n"
-		printf "Installing Papirus icons...\n"
+		printf "Cloning from github Papirus icons...\n"
 		printf "$line\n\n"
 
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		output_text="Cloning from github"
+		error_txt="while cloning from github"
 
-		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
 
 		BPID=$!
 		Progress_Spinner
@@ -595,119 +892,26 @@ KDE_Theme_Config () {
 		status=$?
 		Exit_Status
 
-	elif [[ $Distro_Val == debian ]]; then
+		cd adapta-gtk-theme
 
-		## Add PPA
+		sudo echo
+
 		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
+		printf "Installing dependencies for Papirus icons...\n"
 		printf "$line\n\n"
 
-		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		output_text="Cloning from github"
+		error_txt="while cloning from github"
 
-		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
-		status=$?
-		Exit_Status
+		sudo apt-get install autoconf automake inkscape libglib2.0-dev libxml2-utils pkg-config sassc libgdk-pixbuf2.0-dev 2>> $errorpath >> $outputpath &
 
-		## Install dirmngr to manage and download OpenPGP and X.509 certificates
-		printf "$line\n"
-		printf "Installing dirmngr for certificate management...\n"
-		printf "$line\n\n"
-
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-
-		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		## Add certificate
-		printf "$line\n"
-		printf "Adding the certificate...\n"
-		printf "$line\n\n"
 
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
-		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-
-		## Add PPA
-		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Adding the repository"
-		error_txt="while adding the repository"
-
-		sudo add-apt-repository ppa:papirus/papirus
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
-		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
 	fi
 
 	## Arc theme

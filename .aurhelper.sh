@@ -176,6 +176,10 @@ Aurman_Applications () {
 		fi
 }
 
+## steam 32 lib
+# sudo apt install libgl1-mesa-dri:i386 libgl1-mesa-glx:i386
+#sudo apt install lib32stdc++6
+
 ## Applications i want to install with yay
 Yay_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
