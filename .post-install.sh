@@ -915,20 +915,57 @@ KDE_Theme_Config () {
 EOF
 
 	## Arc theme
-	printf "$line\n"
-	printf "Installing Arc theme...\n"
-	printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			printf "$line\n"
+			printf "Installing Arc theme...\n"
+			printf "$line\n\n"
 
-	output_text="Installing Arc theme"
-	error_txt="while installing Arc theme curl"
+			output_text="Installing Arc theme"
+			error_txt="while installing Arc theme curl"
 
-	sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+			sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == "debian" ]]; then
+			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
+			for i in ${arc_pkg[*]}; do
+				printf "$line\n"
+				printf "Installing Arc theme dependency: $i...\n"
+				printf "$line\n\n"
+
+				output_text="Installing Arc theme dependency: $i"
+				error_txt="while installing Arc theme dependency: $i"
+				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+
+	elif [[ $de_env == "gtk" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			printf "$line\n"
+			printf "Installing Arc theme...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Arc theme"
+			error_txt="while installing Arc theme curl"
+
+			sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
 
 	## Install Adapta theme
 
