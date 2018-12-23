@@ -933,21 +933,36 @@ EOF
 			Exit_Status
 
 		elif [[ $Distro_Val == "debian" ]]; then
-			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
-			for i in ${arc_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing Arc theme dependency: $i...\n"
-				printf "$line\n\n"
+			printf "$line\n"
+			printf "Installing Arc theme\n"
+			printf "$line\n\n"
 
-				output_text="Installing Arc theme dependency: $i"
-				error_txt="while installing Arc theme dependency: $i"
-				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
-				BPID=$!
-				Progress_Spinner
-				wait $BPID
-				status=$?
-				Exit_Status
-			done
+			output_text="Installing Arc theme"
+			error_txt="while installing Arc theme"
+			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+
+			## Install Arc-KDE theme
+			printf "$line\n"
+			printf "Installing Arc-KDE theme...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Arc-KDE theme"
+			error_txt="while installing Arc-KDE theme"
+
+			sudo apt-get install --install-recommends arc-kde -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
 
 	elif [[ $de_env == "gtk" ]]; then
 		if [[ $Distro_Val == arch ]]; then
@@ -965,6 +980,53 @@ EOF
 			wait $BPID
 			status=$?
 			Exit_Status
+
+		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
+			for i in ${arc_pkg[*]}; do
+				printf "$line\n"
+				printf "Installing Arc theme dependency: $i...\n"
+				printf "$line\n\n"
+
+				output_text="Installing Arc theme dependency: $i"
+				error_txt="while installing Arc theme dependency: $i"
+				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+
+			printf "$line\n"
+			printf "Building Arc theme...\n"
+			printf "$line\n\n"
+
+			output_text="Building Arc theme"
+			error_txt="while building Arc theme"
+
+			./autogen.sh --prefix=/usr 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			printf "$line\n"
+			printf "Installing Arc theme...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Arc theme"
+			error_txt="while installing Arc theme"
+
+			sudo make install 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+	fi
 
 
 	## Install Adapta theme
