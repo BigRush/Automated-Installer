@@ -982,6 +982,24 @@ EOF
 			Exit_Status
 
 		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			printf "$line\n"
+			printf "Cloning Arc theme from GitHub...\n"
+			printf "$line\n\n"
+
+			output_text="Cloning Arc theme"
+			error_txt="while Cloning Arc theme"
+
+			git clone https://github.com/horst3180/arc-theme.git 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			pushd .
+
+			cd arc-theme
+
 			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
 			for i in ${arc_pkg[*]}; do
 				printf "$line\n"
@@ -990,6 +1008,7 @@ EOF
 
 				output_text="Installing Arc theme dependency: $i"
 				error_txt="while installing Arc theme dependency: $i"
+
 				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -1025,28 +1044,165 @@ EOF
 			wait $BPID
 			status=$?
 			Exit_Status
+
+			popd
+			rm -rf arc-theme
 		fi
 	fi
 
 
 	## Install Adapta theme
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			sudo echo
 
-	sudo echo
+			printf "$line\n"
+			printf "Installing Adapta theme...\n"
+			printf "$line\n\n"
 
-	printf "$line\n"
-	printf "Installing Adapta theme...\n"
-	printf "$line\n\n"
+			output_text="Installing Adapta theme"
+			error_txt="while installing Adapta theme"
 
-	output_text="Installing Adapta theme"
-	error_txt="while installing Adapta theme"
+			sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-	sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+		elif [[ $Distro_Val == debian ]]; then
+			printf "$line\n"
+			printf "Installing Adapta theme\n"
+			printf "$line\n\n"
+
+			output_text="Installing Adapta theme"
+			error_txt="while installing Adapta theme"
+
+			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/adapta-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+			## Install Arc-KDE theme
+			printf "$line\n"
+			printf "Installing Arc-KDE theme...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Arc-KDE theme"
+			error_txt="while installing Arc-KDE theme"
+
+			sudo apt-get install --install-recommends adapta-kde -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		printf "$line\n"
+		printf "Cloning Arc theme from GitHub...\n"
+		printf "$line\n\n"
+
+		output_text="Cloning Arc theme"
+		error_txt="while Cloning Arc theme"
+
+		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		pushd .
+
+		cd adapta-gtk-theme
+
+		adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
+		if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			for i in ${adapta_pkg[*]}; do
+				printf "$line\n"
+				printf "Installing Adapta theme dependency: $i...\n"
+				printf "$line\n\n"
+
+				output_text="Installing Adapta theme dependency: $i"
+				error_txt="while installing Adapta theme dependency: $i"
+				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+
+		elif [[ $Distro_Val == arch ]]; then
+			for i in ${adapta_pkg[*]}; do
+				printf "$line\n"
+				printf "Installing Adapta theme dependency: $i...\n"
+				printf "$line\n\n"
+
+				output_text="Installing Adapta theme dependency: $i"
+				error_txt="while installing Adapta theme dependency: $i"
+				sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+		fi
+
+		printf "$line\n"
+		printf "Building Adapta theme...\n"
+		printf "$line\n\n"
+
+		output_text="Building Adapta theme"
+		error_txt="while building Adapta theme"
+
+		./autogen.sh --prefix=/usr --enable-plank 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Making Adapta theme...\n"
+		printf "$line\n\n"
+
+		output_text="Making Adapta theme"
+		error_txt="while making Adapta theme"
+
+		make 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Installing Adapta theme...\n"
+		printf "$line\n\n"
+
+		output_text="Installing Adapta theme"
+		error_txt="while installing Adapta theme"
+
+		sudo make install 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		popd
+
+		rm -rf adapta-gtk-theme
+
+
 
 	## Install Foggy theme for plank
 	if ! [[ -d /usr/share/plank/themes/Foggy ]]; then
