@@ -223,7 +223,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
 			sudo apt-get install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -303,7 +303,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
 			sudp apt-get install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -412,7 +412,7 @@ Main_Menu () {
 						sleep 0.5
 						KDE_Font_Config
 						sleep 0.5
-						KDE_Theme_Config
+						Theme_Config
 					elif [[ "$desktop_env" == "deepin" ]]; then
 						Deepin_Installation
 					else
@@ -437,16 +437,20 @@ Main_Menu () {
 					Pacman_Multilib
 					sleep 2.5
 					if ! [[ -z $(echo $DESKTOP_SESSION | grep plasma) ]]; then
-						KDE_Theme_Config
+						Theme_Config
 					fi
 					DM_Menu
 					sleep 2.5
 					Boot_Manager_Config
-				fi
 
 				elif [[ $Distro_Val == "debian" ]]; then
 					Alias_and_Wallpaper
 					sleep 2.5
+					Theme_Config
+					sleep 2.5
+					Boot_Manager_Config
+				fi
+
 
 				printf "$line\n"
 				printf "Post-Install completed successfully\n"

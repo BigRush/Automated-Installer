@@ -363,7 +363,7 @@ DE_Menu () {
 				sleep 0.5
 				KDE_Font_Config
 				sleep 0.5
-				KDE_Theme_Config
+				Theme_Config
 				break
 				;;
 			Deepin)
@@ -476,7 +476,7 @@ KDE_Font_Config () {
 }
 
 ## Download themes and icons for KDE
-KDE_Theme_Config () {
+Theme_Config () {
 
 	## Check if megatools is available, if not download it
 	if [[ -z $(command -v megadl) ]]; then
@@ -1201,8 +1201,7 @@ EOF
 		popd
 
 		rm -rf adapta-gtk-theme
-
-
+	fi
 
 	## Install Foggy theme for plank
 	if ! [[ -d /usr/share/plank/themes/Foggy ]]; then
