@@ -478,6 +478,15 @@ KDE_Font_Config () {
 ## Download themes and icons for KDE
 Theme_Config () {
 
+	## Check Desktop environment
+	if [[ -z $de_env ]]; then
+		if [[ $DESKTOP_SESSION == "plasma" ]]; then
+			de_env=kde
+		else
+			de_env=gtk
+		fi
+	fi
+
 	## Check if megatools is available, if not download it
 	if [[ -z $(command -v megadl) ]]; then
 		if [[ $Distro_Val == arch ]]; then
