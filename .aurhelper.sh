@@ -239,29 +239,59 @@ Deb_Packages () {
 	output_text="Downloading Discord's .deb package"
 	error_txt="while downloading Discord's .deb package"
 
-	curl -s -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
+	curl -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
 
-
-
+	## Installing Discord from .deb package
 	printf "$line\n"
 	printf "Installing Discord\n"
 	printf "$line\n\n"
 
+	sudo echo
+
 	output_text="Installing Discord from .deb package"
 	error_txt="while installing Discord"
 
-	## Installing discord from .deb package
-	sudo apt install $(pwd)/discord.deb 2>> $errorpath >> $outputpath &
+	sudo apt install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
 	status=$?
 	Progress_Spinner
 	Exit_Status
 
-	## Steam installation
+	## Steam installation ##
 
-	prin
+	## Download Steam's .deb package from their website
+
+	output_text="Downloading Steam's .deb package"
+	error_txt="while downloading Steam's .deb package"
+
+	curl -L -o $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Adding i386 architecture
+
+	output_text="Adding i386 architecture"
+	error_txt="while adding i386 architecture"
+
+	sudo dpkg --add-architecture i386 2>> $errorpath >> $outputpath
+	status=$?
+	Exit_Status
+
+	## Installing Steam from .deb package
+
+	output_text="Installing Steam from .deb package"
+	error_txt="while installing Steam"
+
+	sudo echo
+
+	sudo apt install $user_path/Downloads/steam.deb -y 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
 
 
 
