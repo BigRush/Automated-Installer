@@ -225,7 +225,7 @@ Apt_Applications () {
 ## Applications that needs to be installed from .deb files
 Deb_Packages () {
 
-	dpkg_applications=(teamviewer atom etcher)
+	dpkg_applications=( atom etcher)
 
 	##  Discord installation ##
 
@@ -330,6 +330,34 @@ Deb_Packages () {
 	status=$?
 	Progress_Spinner
 	Exit_Status
+
+	## Installing Atom ##
+
+	## Download Atom's .deb package from their website
+
+	output_text="Downloading Atom's .deb package"
+	error_txt="while downloading Atom's .deb package"
+
+	curl -L -o $user_path/Downloads/atom.deb 	https://atom.io/download/deb 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Installing Atom from .deb package
+	printf "$line\n"
+	printf "Installing Atom\n"
+	printf "$line\n\n"
+
+	sudo echo
+
+	output_text="Installing Atom from .deb package"
+	error_txt="while installing Atom"
+
+	sudo apt install $user_path/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
 
 }
 
