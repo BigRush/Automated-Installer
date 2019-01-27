@@ -1005,7 +1005,7 @@ EOF
 			status=$?
 			Exit_Status
 
-			pushd .
+			pushd . 2>> $errorpath >> $outputpath
 
 			cd arc-theme
 
@@ -1054,8 +1054,8 @@ EOF
 			status=$?
 			Exit_Status
 
-			popd
-			rm -rf arc-theme
+			popd 2>> $errorpath >> $outputpath
+			rm -rf arc-theme 
 		fi
 	fi
 

@@ -144,12 +144,12 @@ Yay_Install () {
 	rm -rf $user_path/yay_install_tmp
 }
 
-## Applications i want to install with aurman
+## Applications I want to install with aurman
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 			sudo echo
-			app=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
-			for i in ${app[*]}; do
+			aur_apps=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
+			for i in ${aur_apps[*]}; do
 				sudo echo
 				printf "$line\n"
 				printf "Installing $i\n"
@@ -164,7 +164,7 @@ Aurman_Applications () {
 				Exit_Status
 			done
 
-			## special attention packages that out need to be seen
+			## special attention packages that stdout needs to be seen
 			printf "$line\n"
 			printf "Installing steam\n"
 			printf "$line\n\n"
@@ -180,12 +180,12 @@ Aurman_Applications () {
 # sudo apt install libgl1-mesa-dri:i386 libgl1-mesa-glx:i386
 #sudo apt install lib32stdc++6
 
-## Applications i want to install with yay
+## Applications I want to install with yay
 Yay_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
 			sudo echo
-			app=(discord steam firefox ncdu guake plank teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
-			for i in ${app[*]}; do
+			yay_apps=(discord steam firefox ncdu guake plank teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
+			for i in ${yay_apps[*]}; do
 				printf "$line\n"
 				printf "Installing $i\n"
 				printf "$line\n\n"
@@ -200,6 +200,29 @@ Yay_Applications () {
 			done
 		fi
 }
+
+## Applications I want to install with apt for Debian and Ubuntu based distributions
+Apt_Applications () {
+	sudo echo
+	apt_apps=(ncdu guake plank vlc screenfetch speedtest-cli)
+	for i in ${apt_apps[*]}; do
+		printf "$line\n"
+		printf "Installing $i\n"
+		printf "$line\n\n"
+		output_text="$i installation"
+		error_txt="while installing $i"
+		apt -S $i --needed --noconfirm --sudoloop 2>> $errorpath >> $outputpath &
+		BPID=$!yay
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+	done
+
+
+}
+
+dpkg_applications=(discord steam firefox teamviewer atom etcher)
 
 ## Virtualbox installation
 Vbox_Installation () {
