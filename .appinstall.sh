@@ -75,9 +75,9 @@ Apt_Applications () {
 	apt_apps=(vim ncdu guake plank vlc screenfetch speedtest-cli)
 	for i in ${apt_apps[*]}; do
 		sudo echo
-		printf "$line\n"
-		printf "Installing $i\n"
-		printf "$line\n\n"
+		#printf "$line\n"
+		#printf "Installing $i\n"
+		#printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
 		sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
