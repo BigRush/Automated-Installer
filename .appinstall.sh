@@ -80,7 +80,7 @@ Apt_Applications () {
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		sudo apt install $i -y 2>> $errorpath >> $outputpath &
+		sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -160,7 +160,7 @@ Deb_Packages () {
 	output_text="Updating the package lists"
 	error_txt="while updating the package lists"
 
-	apt-get update 2>> $errorpath >> $outputpath &
+	sudo apt-get update 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -271,7 +271,7 @@ Deb_Packages () {
 	output_text="Updating the package lists"
 	error_txt="while updating the package lists"
 
-	apt-get update 2>> $errorpath >> $outputpath &
+	sudo apt-get update 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -412,7 +412,7 @@ Vbox_Installation () {
 		output_text="Updating the package lists"
 		error_txt="while ufpdating the package lists"
 
-		apt-get update 2>> $errorpath >> $outputpath &
+		sudo apt-get update 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -424,7 +424,7 @@ Vbox_Installation () {
 		output_text="Installing linux-headers"
 		error_txt="while installing linux-headers"
 
-		sudo apt install linux-headers-$(uname -r) dkms -y 2>> $errorpath >> $outputpath &
+		sudo apt-get install linux-headers-$(uname -r) dkms -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
@@ -436,7 +436,7 @@ Vbox_Installation () {
 		output_text="Installing VirtualBox"
 		error_txt="while installing VirtualBox"
 
-		sudo apt install VirtualBox -y 2>> $errorpath >> $outputpath &
+		sudo apt-get install VirtualBox -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
