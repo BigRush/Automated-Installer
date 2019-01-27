@@ -309,7 +309,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
 			sudo apt-get install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
