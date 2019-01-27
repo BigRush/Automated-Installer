@@ -225,7 +225,7 @@ Apt_Applications () {
 ## Applications that needs to be installed from .deb files
 Deb_Packages () {
 
-	dpkg_applications=( steam firefox teamviewer atom etcher)
+	dpkg_applications=(teamviewer atom etcher)
 
 	##  Discord installation ##
 
@@ -273,11 +273,23 @@ Deb_Packages () {
 
 	## Adding i386 architecture
 
+	sudo echo
+
 	output_text="Adding i386 architecture"
 	error_txt="while adding i386 architecture"
 
 	sudo dpkg --add-architecture i386 2>> $errorpath >> $outputpath
 	status=$?
+	Exit_Status
+
+	## Update the package lists
+
+	output_text="Updating the package lists"
+	error_txt="Updating the package lists"
+
+	apt-get update 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
 	Exit_Status
 
 	## Installing Steam from .deb package
@@ -292,8 +304,32 @@ Deb_Packages () {
 	Progress_Spinner
 	Exit_Status
 
+	## Installing TeamViewer ##
 
+	## Download TeamViewer's .deb package from their website
 
+	output_text="Downloading TeamViewer's .deb package"
+	error_txt="while downloading TeamViewer's .deb package"
+
+	curl -L -o $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Installing TeamViewer from .deb package
+	printf "$line\n"
+	printf "Installing TeamViewer\n"
+	printf "$line\n\n"
+
+	sudo echo
+
+	output_text="Installing TeamViewer from .deb package"
+	error_txt="while installing TeamViewer"
+
+	sudo apt install $user_path/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
 
 }
 
