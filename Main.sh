@@ -182,11 +182,66 @@ Distro_Check () {
 
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
+		## Save the exxit status of last command to a Varibale
         printf "Sorry, but the script did not find your distribution,\n"
         printf "Exiting...\n"
         printf "$line\n\n"
         exit 1
     fi
+
+	if [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		printf "$line\n"
+		printf "This script doesn't support $Distro_Val at the moment\n"
+		printf "$line\n"
+
+		exit 1
+	fi
+}
+
+## Update the system
+System_Update () {
+
+	output_text="Updating the package lists"
+	error_txt="Updating the package lists"
+
+	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+
+		apt-get update 2>> $errorpath >> $outputpath &
+		status=$?
+		Progress_Spinner
+		Exit_Status
+
+	elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+		## Prompet sudo
+		sudo echo
+		## Propmet the user with what the script will now do (with cosmetics :D)
+		printf "$line\n"
+		printf "Updating the system...\n"
+		printf "$line\n\n"
+
+		## Will be used in Exit_Status function to output text for the user
+		output_text="Update"
+		error_txt="while updating"
+
+		## Update the system, send stdout, sterr to log files
+		## and move the process to the background for the Progress_Spinner function.
+		sudo pacman -Sy --noconfirm 2>> $errorpath >> $outputpath &
+
+		## Save the background PID to a variable for later use with wait command
+		BPID=$!
+
+		## Call Progress_Spinner function
+		Progress_Spinner
+
+		## Wait until the process is done to get its exit status.
+		wait $BPID
+
+		## Save the exxit status of last command to a Varibale
+		status=$?
+
+		## Call Exit_Status function
+		Exit_Status
+	fi
 }
 
 
@@ -375,6 +430,9 @@ Log_And_Variables
 
 ## Call Distro_Check function
 Distro_Check
+
+## Call System_Update function
+System_Update
 
 ## Call Dependencies_Installation function
 Dependencies_Installation
