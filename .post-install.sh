@@ -1342,87 +1342,89 @@ Boot_Manager_Config () {
 	fi
 
 	## Ask the user if he wants to install refined boot manager
-	read -p "Would you like to install refined boot manager?[y/N]: " answer
-	printf "\n"
-	if [[ -z $answer ]]; then
+	if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+		read -p "Would you like to install refined boot manager?[y/N]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			printf "$line\n"
+			printf "Post-Install completed successfully\n"
+			printf "$line\n\n"
+			exit 0
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Post-Install completed successfully\n"
+			printf "$line\n\n"
+			exit 0
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+			exit 1
+		fi
+
+		## install refinds boot manager and configure it
 		printf "$line\n"
-		printf "Post-Install completed successfully\n"
-		printf "$line\n\n"
-		exit 0
-	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-		:
-	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-		printf "$line\n"
-		printf "Post-Install completed successfully\n"
-		printf "$line\n\n"
-		exit 0
-	else
-		printf "$line\n"
-		printf "Invalid answer - exiting\n"
-		printf "$line\n\n"
-		exit 1
-	fi
-
-	## install refinds boot manager and configure it
-	printf "$line\n"
-	printf "Downloading refind boot manager...\n"
-	printf "$line\n\n"
-
-	output_text="Refind boot manager download"
-	error_txt="while downloading refind boot manager"
-
-	sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
-
-	printf "$line\n"
-	printf "Configuring refind with 'refind-install'...\n"
-	printf "$line\n\n"
-
-	output_text="'refind-install'"
-	error_txt="while configuring refind with 'refind-install'"
-
-	sudo refind-install 2>> $errorpath >> $outputpath
-	status=$?
-	Exit_Status
-
-	printf "$line\n"
-	printf "Configuring refind to be the default boot manager...\n"
-	printf "$line\n\n"
-
-	output_text="Setting refind to be the default boot manager"
-	error_txt="while setting refind to be the default boot manager"
-
-	sudo refind-mkdefault 2>> $errorpath >> $outputpath
-	status=$?
-	Exit_Status
-
-	## Check if "themes" directory exits in refind, if not, create one
-	if ! [[ -d $refind_path/themes ]]; then
-		sudo mkdir $refind_path/themes
-	fi
-
-	## Check if the theme exits, if not, clone from git and add it to refind.conf
-	if ! [[ -d $refind_path/themes/rEFInd-minimal ]]; then
-		sudo mkdir $refind_path/themes/rEFInd-minimal
-		printf "$line\n"
-		printf "Cloning refind's theme from git...\n"
+		printf "Downloading refind boot manager...\n"
 		printf "$line\n\n"
 
-		output_text="Cloning theme from git"
-		error_txt="while cloning from git"
+		output_text="Refind boot manager download"
+		error_txt="while downloading refind boot manager"
 
-		## Get the build files for AUR
-		sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+		sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
+		printf "$line\n"
+		printf "Configuring refind with 'refind-install'...\n"
+		printf "$line\n\n"
+
+		output_text="'refind-install'"
+		error_txt="while configuring refind with 'refind-install'"
+
+		sudo refind-install 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Configuring refind to be the default boot manager...\n"
+		printf "$line\n\n"
+
+		output_text="Setting refind to be the default boot manager"
+		error_txt="while setting refind to be the default boot manager"
+
+		sudo refind-mkdefault 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+
+		## Check if "themes" directory exits in refind, if not, create one
+		if ! [[ -d $refind_path/themes ]]; then
+			sudo mkdir $refind_path/themes
+		fi
+
+		## Check if the theme exits, if not, clone from git and add it to refind.conf
+		if ! [[ -d $refind_path/themes/rEFInd-minimal ]]; then
+			sudo mkdir $refind_path/themes/rEFInd-minimal
+			printf "$line\n"
+			printf "Cloning refind's theme from git...\n"
+			printf "$line\n\n"
+
+			output_text="Cloning theme from git"
+			error_txt="while cloning from git"
+
+			## Get the build files for AUR
+			sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
+		fi
 	fi
 }
