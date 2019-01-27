@@ -204,15 +204,15 @@ Yay_Applications () {
 ## Applications I want to install with apt for Debian and Ubuntu based distributions
 Apt_Applications () {
 	sudo echo
-	apt_apps=(ncdu guake plank vlc screenfetch speedtest-cli)
+	apt_apps=(vim ncdu guake plank vlc screenfetch speedtest-cli)
 	for i in ${apt_apps[*]}; do
 		printf "$line\n"
 		printf "Installing $i\n"
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		apt -S $i --needed --noconfirm --sudoloop 2>> $errorpath >> $outputpath &
-		BPID=$!yay
+		apt install $i -y 2>> $errorpath >> $outputpath &
+		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
@@ -225,9 +225,43 @@ Apt_Applications () {
 ## Applications that needs to be installed from .deb files
 Deb_Packages () {
 
-	dpkg_applications=(discord steam firefox teamviewer atom etcher)
+	dpkg_applications=( steam firefox teamviewer atom etcher)
+
+	##  Discord installation ##
+
+	## Check if Downloads folder exists and if not, create it
+	if ! [[ -d $user_path/Downloads ]]; then
+		mkdir $user_path/Downloads
+	fi
+
+	## Download Discord's .deb package from their website
+
+	output_text="Downloading Discord's .deb package"
+	error_txt="while downloading Discord's .deb package"
+
+	curl -s -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
 
 
+
+	printf "$line\n"
+	printf "Installing Discord\n"
+	printf "$line\n\n"
+
+	output_text="Installing Discord from .deb package"
+	error_txt="while installing Discord"
+
+	## Installing discord from .deb package
+	sudo apt install $(pwd)/discord.deb 2>> $errorpath >> $outputpath &
+	status=$?
+	Progress_Spinner
+	Exit_Status
+
+	## Steam installation
+
+	prin
 
 
 
