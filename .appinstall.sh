@@ -439,4 +439,5 @@ Vbox_Installation () {
 		wait $BPID
 		status=$?
 		Exit_Status
+	fis
 }
