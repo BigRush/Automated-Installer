@@ -880,47 +880,6 @@ Theme_Config () {
 		status=$?
 		Exit_Status
 	fi
-<<EOF
-	elif [[ $de_env == "gtk" ]]; then
-		pushd . &> /dev/null
-
-		printf "$line\n"
-		printf "Cloning from github Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Cloning from github"
-		error_txt="while cloning from github"
-
-		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		cd adapta-gtk-theme
-
-		sudo echo
-
-		printf "$line\n"
-		printf "Installing dependencies for Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Cloning from github"
-		error_txt="while cloning from github"
-
-		sudo apt-get install autoconf automake inkscape libglib2.0-dev libxml2-utils pkg-config sassc libgdk-pixbuf2.0-dev 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-
-	fi
-EOF
 
 	## Arc theme
 	if [[ $de_env == "kde" ]]; then
@@ -1057,7 +1016,6 @@ EOF
 			rm -rf arc-theme
 		fi
 	fi
-
 
 	## Install Adapta theme
 	if [[ $de_env == "kde" ]]; then
@@ -1514,35 +1472,20 @@ LightDM_Configuration () {
 
 ## Full system update for manjaro
 Manjaro_Sys_Update () {
-
 	sudo echo
 
-	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
 	printf "$line\n\n"
 
-	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
 	error_txt="while updating"
 
-	## Update the system, send stdout, sterr to log files
-	## and move the process to the background for the Progress_Spinner function.
 	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
-
-	## Save the background PID to a variable for later use with wait command
-	BPID=$!
-
-	## Call Progress_Spinner function
+	BPID=$
 	Progress_Spinner
-
-	## Wait until the process is done to get its exit status.
 	wait $BPID
-
-	## Save the exxit status of last command to a Varibale
 	status=$?
-
-	## Call Exit_Status function
 	Exit_Status
 }
 
