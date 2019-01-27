@@ -931,7 +931,7 @@ EOF
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme curl"
+			error_txt="while installing Arc theme"
 
 			sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -980,7 +980,7 @@ EOF
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme curl"
+			error_txt="while installing Arc theme"
 
 			sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -1055,7 +1055,7 @@ EOF
 			Exit_Status
 
 			popd 2>> $errorpath >> $outputpath
-			rm -rf arc-theme 
+			rm -rf arc-theme
 		fi
 	fi
 
