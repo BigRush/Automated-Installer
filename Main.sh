@@ -137,7 +137,8 @@ Log_And_Variables () {
 	lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
-	aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	appinstall_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	archfuncs_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.appinstall.sh"
 	deepin_sound_path=/usr/share/sounds/deepin/stereo/
 	kernel_ver=$(uname -r |cut -d "." -f 1,2 |tr -d ".s")
 	refind_path=$(sudo find /boot -path *refind)
@@ -400,26 +401,50 @@ Source_And_Validation () {
 		Exit_Status
     fi
 
-    source ./.aurhelper.sh 2>> $errorpath >> $outputpath
+    source ./.appinstall.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
 		printf "$line\n"
-		printf "Downloading .aurhelper.sh...\n"
+		printf "Downloading .appinstall.sh...\n"
 		printf "$line\n\n"
 
-		output_text=".aurhelper.sh download"
-		error_txt="while downloading .aurhelper.sh"
+		output_text=".appinstall.sh download"
+		error_txt="while downloading .appinstall.sh"
 
-		wget $aurhelper_script 2>> $errorpath >> $outputpath &
+		wget $appinstall_script 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		output_text=".aurhelper.sh source"
-		error_txt="while sourcing .aurhelper.sh"
+		output_text=".appinstall.sh source"
+		error_txt="while sourcing .appinstall.sh"
 
-		source ./.aurhelper.sh 2>> $errorpath >> $outputpath
+		source ./.appinstall.sh 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+    fi
+
+	source ./.archfuncs.sh 2>> $errorpath >> $outputpath
+    if ! [[ $? -eq 0 ]]; then
+		printf "$line\n"
+		printf "Downloading .archfuncs.sh...\n"
+		printf "$line\n\n"
+
+		output_text=".archfuncs.sh download"
+		error_txt="while downloading .archfuncs.sh"
+
+		wget $archfuncs_script 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		output_text=".archfuncs.sh source"
+		error_txt="while sourcing .archfuncs.sh"
+
+		source ./.archfuncs.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
@@ -443,7 +468,7 @@ Source_And_Validation
 ## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
-	scripts=("Post install","Aurhelper **Run as Non-Root**","Clean Logs","Exit")
+	scripts=("Post install","AppInstall **Run as Non-Root**","Clean Logs","Exit")
 	PS3="Please choose what would you like to do: "
 	select opt in ${scripts[*]} ; do
 	    case $opt in
@@ -491,7 +516,7 @@ Main_Menu () {
 					sleep 2.5
 					Boot_Manager_Config
 
-				elif [[ $Distro_Val == "debian" ]]; then
+				elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 					Alias_and_Wallpaper
 					sleep 2.5
 					Theme_Config
@@ -506,7 +531,7 @@ Main_Menu () {
 				exit 0
 				;;
 
-	        "Aurhelper **Run as Non-Root**")
+	        "AppInstall **Run as Non-Root**")
 				Non_Root_Check
 				if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 					if [[ $aur_helper == "yay" || -z $aur_helper ]]; then
@@ -518,17 +543,23 @@ Main_Menu () {
 
 					elif [[ $aur_helper == "aurman" ]]; then
 						aur_helper="aurman"
-						Main_Menu
 						Aurman_Install
 						sleep 1
 						Aurman_Applications
 						sleep 1
 						Vbox_Installation
 					fi
+
+				elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+					Apt_Applications
+					sleep 1
+					Deb_Packages
+					sleep 1
+					Vbox_Installation
 				fi
 
 				printf "$line\n"
-				printf "Aurhelper completed successfully\n"
+				printf "AppInstall completed successfully\n"
 				printf "$line\n\n"
 				exit 0
 				;;
