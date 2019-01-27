@@ -544,7 +544,10 @@ Theme_Config () {
 
 		output_text="Installing dirmngr"
 		error_txt="while installing dirmngr"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
+		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
 		status=$?
 		Exit_Status
 

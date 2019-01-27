@@ -259,7 +259,10 @@ Deb_Packages () {
 	output_text="Adding Bintray.com's GPG key"
 	error_txt="while adding Bintray.com's GPG key"
 
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 2>> $errorpath >> $outputpath
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 2>> $errorpath >> $outputpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
 	status=$?
 	Exit_Status
 
