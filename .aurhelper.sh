@@ -222,7 +222,18 @@ Apt_Applications () {
 
 }
 
-dpkg_applications=(discord steam firefox teamviewer atom etcher)
+## Applications that needs to be installed from .deb files
+Deb_Packages () {
+
+	dpkg_applications=(discord steam firefox teamviewer atom etcher)
+
+
+
+
+
+}
+
+
 
 ## Virtualbox installation
 Vbox_Installation () {

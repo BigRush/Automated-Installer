@@ -12,18 +12,8 @@
 # Version :  1.0.0
 ################################################################################
 
-## Checks if the script runs as root
-Root_Check () {
 
-	if ! [[ $EUID -eq 0 ]]; then
-		printf "$line\n"
-		printf "This option must run with root privileges\n"
-		printf "$line\n"
-		exit 1
-	fi
-}
-
-## Make sure the script doesn't run as root
+## Check if the script doesn't run as root
 Non_Root_Check () {
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
@@ -127,12 +117,21 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+
+	## Check the original user that executed the script
 	if [[ -z $SUDO_USER ]]; then
 		orig_user=$(whoami)
 	else
 		orig_user=$SUDO_USER
 	fi
-	user_path=/home/$orig_user
+
+	## Check if the user has a home folder in '/home'
+	if [[ -n $(ls /home |egrep ^$orig_user$)]]; then
+		user_path=/home/$orig_user
+	elif [[ $orig_user == 'root' ]]; then
+		user_path=/root
+	fi
+
 	errorpath=$user_path/Automated-Installer-Log/error.log
 	outputpath=$user_path/Automated-Installer-Log/output.log
 	lightconf=/etc/lightdm/lightdm.conf
@@ -143,15 +142,6 @@ Log_And_Variables () {
 	kernel_ver=$(uname -r |cut -d "." -f 1,2 |tr -d ".s")
 	refind_path=$(sudo find /boot -path *refind)
 	####  Varibale	####
-
-	## Validate that the original user that logged in isn't root
-	if [[ $orig_user == "root" ]]; then
-		printf "$line\n"
-		printf "The script can't run when the user that originally logged in is root\n"
-		printf "Please log in as non-root and try again..\n"
-		printf "$line\n\n"
-		exit 1
-	fi
 
 	## Check if log folder exits, if not, create it
 	if ! [[ -d $user_path/Automated-Installer-Log ]]; then
