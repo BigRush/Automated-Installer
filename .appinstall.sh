@@ -20,9 +20,9 @@
 ## Applications I want to install with aurman
 Aurman_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
-			sudo echo
 			aur_apps=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
 			for i in ${aur_apps[*]}; do
+				sudo echo
 				sudo echo
 				printf "$line\n"
 				printf "Installing $i\n"
@@ -52,9 +52,9 @@ Aurman_Applications () {
 ## Applications I want to install with yay
 Yay_Applications () {
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
-			sudo echo
 			yay_apps=(discord steam firefox ncdu guake plank teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
 			for i in ${yay_apps[*]}; do
+				sudo echo
 				printf "$line\n"
 				printf "Installing $i\n"
 				printf "$line\n\n"
@@ -72,15 +72,15 @@ Yay_Applications () {
 
 ## Applications I want to install with apt for Debian and Ubuntu based distributions
 Apt_Applications () {
-	sudo echo
 	apt_apps=(vim ncdu guake plank vlc screenfetch speedtest-cli)
 	for i in ${apt_apps[*]}; do
+		sudo echo
 		printf "$line\n"
 		printf "Installing $i\n"
 		printf "$line\n\n"
 		output_text="$i installation"
 		error_txt="while installing $i"
-		apt install $i -y 2>> $errorpath >> $outputpath &
+		sudo apt install $i -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
