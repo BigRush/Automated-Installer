@@ -106,7 +106,7 @@ Deb_Packages () {
 	output_text="Downloading Discord's .deb package"
 	error_txt="while downloading Discord's .deb package"
 
-	curl -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
+	curl -s -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -137,7 +137,7 @@ Deb_Packages () {
 	output_text="Downloading Steam's .deb package"
 	error_txt="while downloading Steam's .deb package"
 
-	curl -L -o $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath >> $outputpath &
+	curl -s -L -o $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -188,7 +188,7 @@ Deb_Packages () {
 	output_text="Downloading TeamViewer's .deb package"
 	error_txt="while downloading TeamViewer's .deb package"
 
-	curl -L -o $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath >> $outputpath &
+	curl -s -L -o $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -219,7 +219,7 @@ Deb_Packages () {
 	output_text="Downloading Atom's .deb package"
 	error_txt="while downloading Atom's .deb package"
 
-	curl -L -o $user_path/Downloads/atom.deb 	https://atom.io/download/deb 2>> $errorpath >> $outputpath &
+	curl -s -L -o $user_path/Downloads/atom.deb 	https://atom.io/download/deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
