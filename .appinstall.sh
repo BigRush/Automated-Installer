@@ -127,7 +127,6 @@ Deb_Packages () {
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
-
 	status=$?
 	Exit_Status
 
@@ -175,7 +174,7 @@ Deb_Packages () {
 
 	sudo echo
 
-	sudo apt install $user_path/Downloads/steam.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $user_path/Downloads/steam.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -206,7 +205,7 @@ Deb_Packages () {
 	output_text="Installing TeamViewer from .deb package"
 	error_txt="while installing TeamViewer"
 
-	sudo apt install $user_path/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $user_path/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -237,7 +236,7 @@ Deb_Packages () {
 	output_text="Installing Atom from .deb package"
 	error_txt="while installing Atom"
 
-	sudo apt install $user_path/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $user_path/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -286,7 +285,7 @@ Deb_Packages () {
 
 	sudo echo
 
-	sudo apt install balena-etcher-electron -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install balena-etcher-electron -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
