@@ -123,10 +123,11 @@ Deb_Packages () {
 	output_text="Installing Discord from .deb package"
 	error_txt="while installing Discord"
 
-	sudo apt install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
+
 	status=$?
 	Exit_Status
 
@@ -259,7 +260,7 @@ Deb_Packages () {
 	output_text="Adding Bintray.com's GPG key"
 	error_txt="while adding Bintray.com's GPG key"
 
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath & 
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
