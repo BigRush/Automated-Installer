@@ -219,7 +219,7 @@ Deb_Packages () {
 	output_text="Downloading Atom's .deb package"
 	error_txt="while downloading Atom's .deb package"
 
-	curl -s -L -o $user_path/Downloads/atom.deb 	https://atom.io/download/deb 2>> $errorpath >> $outputpath &
+	curl -s -L -o $user_path/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -259,7 +259,7 @@ Deb_Packages () {
 	output_text="Adding Bintray.com's GPG key"
 	error_txt="while adding Bintray.com's GPG key"
 
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 2>> $errorpath >> $outputpath &
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath & 
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
