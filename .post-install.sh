@@ -878,11 +878,8 @@ Theme_Config () {
 		status=$?
 		Exit_Status
 
-		printf "$line\n"
-		printf "Making Adapta theme...\n"
-		printf "$line\n\n"
 
-		output_text="Making Adapta theme"
+		output_text="Making Adapta theme, this may take a while, now"
 		error_txt="while making Adapta theme"
 
 		make 2>> $errorpath >> $outputpath &
