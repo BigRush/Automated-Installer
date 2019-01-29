@@ -542,9 +542,9 @@ Theme_Config () {
 		printf "Adding the certificate...\n"
 		printf "$line\n\n"
 
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath &
+		output_text="Adding the certificate"
+		error_txt="while adding the certificate"
+		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F |tee -a $outputpath 2>> $errorpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
