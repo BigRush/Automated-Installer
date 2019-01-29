@@ -123,12 +123,12 @@ Deb_Packages () {
 	output_text="Installing Discord from .deb package"
 	error_txt="while installing Discord"
 
-	sudo apt-get install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+	sudo apt-get install $user_path/Downloads/discord.deb -y #2>> $errorpath >> $outputpath &
+	#BPID=$!
+	#Progress_Spinner
+	#wait $BPID
+	#status=$?
+	#Exit_Status
 
 	## Steam installation ##
 
