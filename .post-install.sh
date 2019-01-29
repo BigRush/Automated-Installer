@@ -714,9 +714,6 @@ Theme_Config () {
 
 			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
 			for i in ${arc_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing Arc theme dependency: $i...\n"
-				printf "$line\n\n"
 
 				output_text="Installing Arc theme dependency: $i"
 				error_txt="while installing Arc theme dependency: $i"
