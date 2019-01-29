@@ -544,7 +544,7 @@ Theme_Config () {
 
 		output_text="Adding the certificate"
 		error_txt="while adding the certificate"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F |tee -a $outputpath 2>> $errorpath &
+		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
