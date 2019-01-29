@@ -351,7 +351,7 @@ Dependencies_Installation () {
 
 		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
-			sudp apt-get install git -y 2>> $errorpath >> $outputpath &
+			sudo apt-get install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
