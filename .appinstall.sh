@@ -106,12 +106,13 @@ Deb_Packages () {
 	output_text="Downloading Discord's .deb package"
 	error_txt="while downloading Discord's .deb package"
 
-	curl -s -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+	curl -s -L -o $user_path/Downloads/discord.deb https://discordapp.com/api/download?platform=linux&format=deb #2>> $errorpath >> $outputpath &
+	#BPID=$!
+	#Progress_Spinner
+	#wait $BPID
+	#status=$?
+	#Exit_Status
+	file $user_path/Downloads/discord.deb
 
 	## Installing Discord from .deb package
 	printf "$line\n"
@@ -129,7 +130,7 @@ Deb_Packages () {
 	#wait $BPID
 	#status=$?
 	#Exit_Status
-
+	sleep 10
 	## Steam installation ##
 
 	## Download Steam's .deb package from their website
