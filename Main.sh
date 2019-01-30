@@ -95,7 +95,7 @@ Exit_Status () {
 Progress_Spinner () {
 
 	## Loop until the PID of the last background process is not found
-	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$BPID") ]];do
+	until [[ -z $(ps aux |awk '{print $2}' |egrep -o "$BPID") ]];do
 		## Print text with a spinner
 		printf "\r$output_text in progress...  [|]"
 		sleep 0.75
