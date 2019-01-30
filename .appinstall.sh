@@ -107,7 +107,7 @@ Deb_Packages () {
 	error_txt="while downloading Discord's .deb package"
 
 	#wget -b -a $errorpath https://discordapp.com/api/download?platform=linux&format=deb
-	wget -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb && sudo apt-get install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
+	wget -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
