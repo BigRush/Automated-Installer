@@ -113,7 +113,7 @@ Deb_Packages () {
 	wait $BPID
 	status=$?
 	Exit_Status
-sleep 20
+
 
 	## Installing Discord from .deb package
 	printf "$line\n"
