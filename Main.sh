@@ -125,13 +125,7 @@ Log_And_Variables () {
 		orig_user=$SUDO_USER
 	fi
 
-	## Check if the user has a home folder in '/home'
-	if [[ -n $(ls /home |egrep ^$orig_user$) ]]; then
-		user_path=/home/$orig_user
-	elif [[ $orig_user == 'root' ]]; then
-		user_path=/root
-	fi
-
+	user_path=$HOME
 	errorpath=$user_path/Automated-Installer-Log/error.log
 	outputpath=$user_path/Automated-Installer-Log/output.log
 	lightconf=/etc/lightdm/lightdm.conf
@@ -207,7 +201,7 @@ System_Update () {
 
 	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 
-		apt-get update 2>> $errorpath >> $outputpath &
+		sudo apt-get update 2>> $errorpath >> $outputpath &
 		status=$?
 		Progress_Spinner
 		Exit_Status
