@@ -133,7 +133,7 @@ sleep 20
 	wait $BPID
 	status=$?
 	Exit_Status
-	sleep 10
+	exit 0
 	## Steam installation ##
 
 	## Download Steam's .deb package from their website
@@ -264,6 +264,17 @@ sleep 20
 	error_txt="while adding Bintray.com's GPG key"
 
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath &
+	BPID=$!
+	Progress_Spinner
+	wait $BPID
+	status=$?
+	Exit_Status
+
+	## Download dependency
+	output_text="Downloading dependency: apt-transport-https"
+	error_txt="while downloading dependency"
+
+	sudo apt-get install apt-transport-https 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
