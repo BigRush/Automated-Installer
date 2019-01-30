@@ -202,8 +202,10 @@ System_Update () {
 	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 
 		sudo apt-get update 2>> $errorpath >> $outputpath &
-		status=$?
+		BPID=$!
 		Progress_Spinner
+		wait $BPID
+		status=$?
 		Exit_Status
 
 	elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
