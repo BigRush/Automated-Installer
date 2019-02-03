@@ -113,7 +113,7 @@ Deb_Packages () {
 	BPID=$(ps aux |grep "wget -b -a" |head -1 |awk '{print $2}')
 	sleep 5
 	Progress_Spinner
-	wait $BPID
+	#wait $BPID
 	status=$?
 	rm {wget.log,"$user_path/Downloads/discord.deb"}
 	Exit_Status
