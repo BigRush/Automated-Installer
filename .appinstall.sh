@@ -105,7 +105,7 @@ Deb_Packages () {
 
 	output_text="Downloading Discord's .deb package"
 	error_txt="while downloading Discord's .deb package"
-
+<<EOF
 	#wget -b -a $errorpath https://discordapp.com/api/download?platform=linux&format=deb
 	wget -b -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb > $HOME/wget.log 2>> $errorpath
 	sleep 1
@@ -117,7 +117,9 @@ Deb_Packages () {
 	status=$?
 	rm {wget.log,"$user_path/Downloads/discord.deb"}
 	Exit_Status
+EOF
 
+	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb || exit 1
 
 	## Installing Discord from .deb package
 	printf "$line\n"
