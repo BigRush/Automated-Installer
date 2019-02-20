@@ -117,7 +117,6 @@ Deb_Packages () {
 	wait $BPID
 	status=$?
 	Exit_Status
-	exit 0
 	## Steam installation ##
 
 	## Download Steam's .deb package from their website
