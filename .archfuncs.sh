@@ -101,7 +101,7 @@ Yay_Install () {
 	cd $tmpdir/yay_install_tmp
 
 	## Check if "yay" exists, if not, install "yay" from AUR
-	if ! [[ -n "$(pacman -Qs yay)" ]]; then
+	if [[ -z "$(pacman -Qs yay)" ]]; then
 		output_text="getting yay with curl from AUR"
 		error_text="while getting yay with curl from AUR"
 
@@ -119,9 +119,6 @@ Yay_Install () {
 
 		output_text="yay building"
 		error_text="while building yay"
-
-		## Add gpg key
-		# gpg --recv-keys 465022E743D71E39 2>> $errorpath >> $outputpath
 
 		## Compile
 		makepkg -si PKGBUILD --noconfirm --needed 2>> $errorpath >> $outputpath &
@@ -198,13 +195,6 @@ Arch_Config () {
 
 	sudo echo
 
-	## Wait for 0.5 seconds for preventing unwanted errors
-	# sleep 0.5
-
-	printf "$line\n"
-	printf "Installing Xorg...\n"
-	printf "$line\n\n"
-
 	output_text="Xorg installation"
 	error_text=" while installing Xorg"
 	sudo pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -213,8 +203,6 @@ Arch_Config () {
 	wait $BPID
 	status=$?
 	Exit_Status
-
-	# sleep 0.5
 
 	## Make sure there is an Intel video card and install its drivers.
 	## If no Intel video card detected,
@@ -225,7 +213,7 @@ Arch_Config () {
 		printf "Installing video drivers...\n"
 		printf "$line\n\n"
 
-		output_text="Video card drivers installationl"
+		output_text="Video card drivers installation"
 		error_text="while installing video card's drivers"
 
 		sudo echo

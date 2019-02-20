@@ -197,10 +197,6 @@ KDE_Installation () {
 	## Add the option to start the deepin desktop environment with xinit
 	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $user_path/.xinitrc"
 
-	printf "$line\n"
-	printf "Installing Plasma desktop environment...\n"
-	printf "$line\n\n"
-
 	output_text="Plasma desktop installation"
 	error_text="while installing plasma desktop"
 
@@ -230,6 +226,9 @@ Theme_Config () {
 
 	## Check if megatools is available, if not download it
 	if [[ -z $(command -v megadl) ]]; then
+		output_text="Megatools installation"
+		error_text="while installing Megatools"
+
 		if [[ $Distro_Val == arch ]]; then
 			if [[ $aur_helper == "aurman" ]]; then
 				sudo echo
@@ -238,13 +237,6 @@ Theme_Config () {
 				if [[ -z $(command -v aurman) ]]; then
 					Aurman_Install
 				fi
-
-				printf "$line\n"
-				printf "Installing Megatools...\n"
-				printf "$line\n\n"
-
-				output_text="Megatools installation"
-				error_text="while installing Megatools"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -261,13 +253,6 @@ Theme_Config () {
 				if [[ -z $(command -v yay) ]]; then
 					Yay_Install
 				fi
-
-				printf "$line\n"
-				printf "Installing Megatools...\n"
-				printf "$line\n\n"
-
-				output_text="Megatools installation"
-				error_text="while installing Megatools"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -306,14 +291,15 @@ Theme_Config () {
 
 	if ! [[ -d $user_path/Documents/Themes ]]; then
 		mkdir -p $user_path/Documents/Themes
+
+		printf "$line\n"
+		printf "Installing themes form Mega cloud...\n"
+		printf "$line\n\n"
+
+		output_text="Getting themes form Mega cloud"
+		error_text="while getting themes form Mega cloud"
+
 		if [[ $de_env == "kde" ]]; then
-			printf "$line\n"
-			printf "Installing themes form Mega cloud...\n"
-			printf "$line\n\n"
-
-			output_text="Getting themes form Mega cloud"
-			error_text="while getting themes form Mega cloud"
-
 			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
 			BPID=$!
@@ -323,13 +309,6 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $de_env == "gtk" ]]; then
-			printf "$line\n"
-			printf "Installing themes form Mega cloud...\n"
-			printf "$line\n\n"
-
-			output_text="Getting themes form Mega cloud"
-			error_text="while getting themes form Mega cloud"
-
 			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
 
 			BPID=$!
@@ -398,10 +377,6 @@ Theme_Config () {
 					Aurman_Install
 				fi
 
-				printf "$line\n"
-				printf "Installing Shadow icons...\n"
-				printf "$line\n\n"
-
 				output_text="Shadow icons installation"
 				error_text="while installing Shadow icons"
 
@@ -421,10 +396,6 @@ Theme_Config () {
 					Yay_Install
 				fi
 
-				printf "$line\n"
-				printf "Installing Shadow icons...\n"
-				printf "$line\n\n"
-
 				output_text="Shadow icons installation"
 				error_text="while installing Shadow icons"
 
@@ -440,21 +411,37 @@ Theme_Config () {
 
 		elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
 			## Add PPA
-			printf "$line\n"
-			printf "Adding repository for Shadow icons...\n"
-			printf "$line\n\n"
-
 			output_text="Adding the repository"
 			error_text="while adding the repository"
+
+			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
 			status=$?
 			Exit_Status
 
-			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
+			## Update the package lists
+
+			output_text="Updating the package lists"
+			error_text="while updating the package lists"
+
 			sudo apt-get update 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			output_text="Installing Shadow icons"
+			error_text="while installing shadow icons"
+
 			sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
 		else
 			if [[ -e $user_path/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
@@ -493,10 +480,6 @@ Theme_Config () {
 	sudo echo
 
 	if [[ $Distro_Val == arch ]]; then
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
 		error_text="while installing Papirus icons"
 
@@ -523,10 +506,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Install dirmngr to manage and download OpenPGP and X.509 certificates
-		printf "$line\n"
-		printf "Installing dirmngr for certificate management...\n"
-		printf "$line\n\n"
-
 		output_text="Installing dirmngr"
 		error_text="while installing dirmngr"
 
@@ -538,10 +517,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Add certificate
-		printf "$line\n"
-		printf "Adding the certificate...\n"
-		printf "$line\n\n"
-
 		output_text="Adding the certificate"
 		error_text="while adding the certificate"
 		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
@@ -552,10 +527,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
 		output_text="Updating the package lists"
 		error_text="while updating the package lists"
 
@@ -567,10 +538,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
 		error_text="while installing Papirus icons"
 
@@ -596,10 +563,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
 		output_text="Updating the package lists"
 		error_text="while updating the package lists"
 
@@ -611,10 +574,6 @@ Theme_Config () {
 		Exit_Status
 
 		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
 		error_text="while installing Papirus icons"
 
@@ -629,10 +588,6 @@ Theme_Config () {
 	## Arc theme
 	if [[ $de_env == "kde" ]]; then
 		if [[ $Distro_Val == arch ]]; then
-			printf "$line\n"
-			printf "Installing Arc theme...\n"
-			printf "$line\n\n"
-
 			output_text="Installing Arc theme"
 			error_text="while installing Arc theme"
 
@@ -645,10 +600,6 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $Distro_Val == "debian" ]]; then
-			printf "$line\n"
-			printf "Installing Arc theme\n"
-			printf "$line\n\n"
-
 			output_text="Installing Arc theme"
 			error_text="while installing Arc theme"
 			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
@@ -678,10 +629,6 @@ Theme_Config () {
 
 	elif [[ $de_env == "gtk" ]]; then
 		if [[ $Distro_Val == arch ]]; then
-			printf "$line\n"
-			printf "Installing Arc theme...\n"
-			printf "$line\n\n"
-
 			output_text="Installing Arc theme"
 			error_text="while installing Arc theme"
 
@@ -694,10 +641,6 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
-			printf "$line\n"
-			printf "Cloning Arc theme from GitHub...\n"
-			printf "$line\n\n"
-
 			output_text="Cloning Arc theme"
 			error_text="while Cloning Arc theme"
 
@@ -714,7 +657,6 @@ Theme_Config () {
 
 			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
 			for i in ${arc_pkg[*]}; do
-
 				output_text="Installing Arc theme dependency: $i"
 				error_text="while installing Arc theme dependency: $i"
 
@@ -726,10 +668,6 @@ Theme_Config () {
 				Exit_Status
 			done
 
-			printf "$line\n"
-			printf "Building Arc theme...\n"
-			printf "$line\n\n"
-
 			output_text="Building Arc theme"
 			error_text="while building Arc theme"
 
@@ -739,10 +677,6 @@ Theme_Config () {
 			wait $BPID
 			status=$?
 			Exit_Status
-
-			printf "$line\n"
-			printf "Installing Arc theme...\n"
-			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
 			error_text="while installing Arc theme"
@@ -763,10 +697,6 @@ Theme_Config () {
 		if [[ $Distro_Val == arch ]]; then
 			sudo echo
 
-			printf "$line\n"
-			printf "Installing Adapta theme...\n"
-			printf "$line\n\n"
-
 			output_text="Installing Adapta theme"
 			error_text="while installing Adapta theme"
 
@@ -779,9 +709,6 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $Distro_Val == debian ]]; then
-			printf "$line\n"
-			printf "Installing Adapta theme\n"
-			printf "$line\n\n"
 
 			output_text="Installing Adapta theme"
 			error_text="while installing Adapta theme"
@@ -795,9 +722,6 @@ Theme_Config () {
 
 		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
 			## Install Arc-KDE theme
-			printf "$line\n"
-			printf "Installing Arc-KDE theme...\n"
-			printf "$line\n\n"
 
 			output_text="Installing Arc-KDE theme"
 			error_text="while installing Arc-KDE theme"
@@ -811,10 +735,6 @@ Theme_Config () {
 		fi
 
 	elif [[ $de_env == "gtk" ]]; then
-		printf "$line\n"
-		printf "Cloning Arc theme from GitHub...\n"
-		printf "$line\n\n"
-
 		output_text="Cloning Arc theme"
 		error_text="while Cloning Arc theme"
 		pushd . 2>> $errorpath >> $outputpath
@@ -826,17 +746,11 @@ Theme_Config () {
 		status=$?
 		Exit_Status
 
-
-
-		cd adapta-gtk-theme
+		cd $tmpdir/adapta-gtk-theme
 
 		adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
 		if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 			for i in ${adapta_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing Adapta theme dependency: $i...\n"
-				printf "$line\n\n"
-
 				output_text="Installing Adapta theme dependency: $i"
 				error_text="while installing Adapta theme dependency: $i"
 				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
@@ -849,10 +763,6 @@ Theme_Config () {
 
 		elif [[ $Distro_Val == arch ]]; then
 			for i in ${adapta_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing Adapta theme dependency: $i...\n"
-				printf "$line\n\n"
-
 				output_text="Installing Adapta theme dependency: $i"
 				error_text="while installing Adapta theme dependency: $i"
 				sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
@@ -863,10 +773,6 @@ Theme_Config () {
 				Exit_Status
 			done
 		fi
-
-		printf "$line\n"
-		printf "Building Adapta theme...\n"
-		printf "$line\n\n"
 
 		output_text="Building Adapta theme"
 		error_text="while building Adapta theme"
@@ -888,10 +794,6 @@ Theme_Config () {
 		wait $BPID
 		status=$?
 		Exit_Status
-
-		printf "$line\n"
-		printf "Installing Adapta theme...\n"
-		printf "$line\n\n"
 
 		output_text="Installing Adapta theme"
 		error_text="while installing Adapta theme"
@@ -994,10 +896,6 @@ Deepin_Installation () {
 	## Add the option to start the deepin desktop environment with xinit
 	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $user_path/.xinitrc"
 
-	printf "$line\n"
-	printf "Installing Deepin desktop environment...\n"
-	printf "$line\n\n"
-
 	output_text="Deepin desktop installation"
 	error_text="while installing Deepin desktop"
 
@@ -1082,10 +980,6 @@ SDDM_Installation () {
 
 	sudo echo
 
-	printf "$line\n"
-	printf "Installing sddm...\n"
-	printf "$line\n\n"
-
 	output_text="sddm installation"
 	error_text="while installing sddm"
 
@@ -1119,10 +1013,6 @@ SDDM_Installation () {
 LightDM_Installation () {
 
 	sudo echo
-
-	printf "$line\n"
-	printf "Installing Lightdm...\n"
-	printf "$line\n\n"
 
 	output_text="Lightdm installation"
 	error_text="while installing Lightdm"
@@ -1165,10 +1055,6 @@ LightDM_Configuration () {
 			Aurman_Install
 		fi
 
-		printf "$line\n"
-		printf "Installing Lightdm-webkit2-greeter...\n"
-		printf "$line\n\n"
-
 		output_text="Lightdm-webkit2-greeter installation"
 		error_text="while installing Lightdm-webkit2-greeter"
 
@@ -1186,10 +1072,6 @@ LightDM_Configuration () {
 		if [[ -z $(command -v yay) ]]; then
 			Yay_Install
 		fi
-
-		printf "$line\n"
-		printf "Installing Lightdm-webkit2-greeter...\n"
-		printf "$line\n\n"
 
 		output_text="Lightdm-webkit2-greeter installation"
 		error_text="while installing Lightdm-webkit2-greeter"

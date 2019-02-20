@@ -219,10 +219,6 @@ System_Update () {
 	elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 		## Prompet sudo
 		sudo echo
-		## Propmet the user with what the script will now do (with cosmetics :D)
-		printf "$line\n"
-		printf "Updating the system...\n"
-		printf "$line\n\n"
 
 		## Will be used in Exit_Status function to output text for the user
 		output_text="Update"
@@ -256,10 +252,6 @@ Dependencies_Installation () {
 	## Check if wget is installed,
 	## if not then download it
 	if [[ -z $(command -v wget) ]]; then
-		printf "$line\n"
-		printf "Downloading wget...\n"
-		printf "$line\n\n"
-
 		output_text="wget download"
 		error_text="while downloading wget"
 
@@ -296,10 +288,6 @@ Dependencies_Installation () {
 	## Check if curl is installed,
 	## if not then download it
 	if [[ -z $(command -v curl) ]]; then
-		printf "$line\n"
-		printf "Downloading curl...\n"
-		printf "$line\n\n"
-
 		output_text="curl download"
 		error_text="while downloading curl"
 
@@ -336,10 +324,6 @@ Dependencies_Installation () {
 	## Check if git is installed,
 	## if not then download it
 	if [[ -z $(command -v git) ]]; then
-		printf "$line\n"
-		printf "Downloading git...\n"
-		printf "$line\n\n"
-
 		output_text="git download"
 		error_text="while downloading git"
 
@@ -383,10 +367,6 @@ Source_And_Validation () {
     ## if it wasn't, get the missing script from GitHub
     source ./.post-install.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Downloading .post-install.sh...\n"
-		printf "$line\n\n"
-
 		output_text=".post-install.sh download"
 		error_text="while downloading .post-install.sh"
 
@@ -407,10 +387,6 @@ Source_And_Validation () {
 
     source ./.appinstall.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Downloading .appinstall.sh...\n"
-		printf "$line\n\n"
-
 		output_text=".appinstall.sh download"
 		error_text="while downloading .appinstall.sh"
 
@@ -431,10 +407,6 @@ Source_And_Validation () {
 
 	source ./.archfuncs.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Downloading .archfuncs.sh...\n"
-		printf "$line\n\n"
-
 		output_text=".archfuncs.sh download"
 		error_text="while downloading .archfuncs.sh"
 
