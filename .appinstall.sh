@@ -23,10 +23,6 @@ Aurman_Applications () {
 			aur_apps=(discord firefox ncdu guake teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
 			for i in ${aur_apps[*]}; do
 				sudo echo
-				sudo echo
-				printf "$line\n"
-				printf "Installing $i\n"
-				printf "$line\n\n"
 				output_text="$i installation"
 				error_text="while installing $i"
 				aurman -S $i --needed --noconfirm --noedit --pgp_fetch 2>> $errorpath >> $outputpath &
@@ -55,9 +51,6 @@ Yay_Applications () {
 			yay_apps=(discord steam firefox ncdu guake plank teamviewer openssh vlc atom screenfetch etcher speedtest-cli)
 			for i in ${yay_apps[*]}; do
 				sudo echo
-				printf "$line\n"
-				printf "Installing $i\n"
-				printf "$line\n\n"
 				output_text="$i installation"
 				error_text="while installing $i"
 				yay -S $i --needed --noconfirm --sudoloop 2>> $errorpath >> $outputpath &
@@ -75,9 +68,6 @@ Apt_Applications () {
 	apt_apps=(vim ncdu guake plank vlc screenfetch speedtest-cli)
 	for i in ${apt_apps[*]}; do
 		sudo echo
-		#printf "$line\n"
-		#printf "Installing $i\n"
-		#printf "$line\n\n"
 		output_text="$i installation"
 		error_text="while installing $i"
 		sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
@@ -115,7 +105,7 @@ Deb_Packages () {
 	Exit_Status
 
 	## Installing Discord from .deb package
-	sudo echo
+	sudo printf "\n"
 
 	output_text="Installing Discord from .deb package"
 	error_text="while installing Discord"
@@ -131,20 +121,21 @@ Deb_Packages () {
 	## Steam installation ##
 
 	## Download Steam's .deb package from their website
+	printf "$line\n"
+	printf "Downloading Steam's .deb package\n"
+	printf "$line\n\n"
 
 	output_text="Downloading Steam's .deb package"
 	error_text="while downloading Steam's .deb package"
 
-	curl -s -L -o $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
+	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath
+	wait
 	status=$?
 	Exit_Status
 
 	## Adding i386 architecture
 
-	sudo echo
+	sudo printf "\n"
 
 	output_text="Adding i386 architecture"
 	error_text="while adding i386 architecture"
@@ -182,23 +173,20 @@ Deb_Packages () {
 	## Installing TeamViewer ##
 
 	## Download TeamViewer's .deb package from their website
+	printf "$line\n"
+	printf "Downloading TeamViewer's .deb package\n"
+	printf "$line\n\n"
 
 	output_text="Downloading TeamViewer's .deb package"
 	error_text="while downloading TeamViewer's .deb package"
 
-	curl -s -L -o $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
+	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath
+	wait
 	status=$?
 	Exit_Status
 
 	## Installing TeamViewer from .deb package
-	printf "$line\n"
-	printf "Installing TeamViewer\n"
-	printf "$line\n\n"
-
-	sudo echo
+	sudo printf "\n"
 
 	output_text="Installing TeamViewer from .deb package"
 	error_text="while installing TeamViewer"
@@ -213,23 +201,21 @@ Deb_Packages () {
 	## Installing Atom ##
 
 	## Download Atom's .deb package from their website
+	printf "$line\n"
+	printf "Downloading Atom's .deb package\n"
+	printf "$line\n\n"
 
 	output_text="Downloading Atom's .deb package"
 	error_text="while downloading Atom's .deb package"
 
-	curl -s -L -o $user_path/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
+	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath
+	wait
 	status=$?
 	Exit_Status
 
-	## Installing Atom from .deb package
-	printf "$line\n"
-	printf "Installing Atom\n"
-	printf "$line\n\n"
 
-	sudo echo
+	## Installing Atom from .deb package
+	sudo printf "\n"
 
 	output_text="Installing Atom from .deb package"
 	error_text="while installing Atom"
@@ -329,9 +315,7 @@ Vbox_Installation () {
 		## Check which AUR helper is installed
 		if [[ $aur_helper == "aurman" ]]; then
 			for i in ${vbox_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing $i\n"
-				printf "$line\n\n"
+				sudo echo
 				output_text="$i installation"
 				error_text="while installing $i"
 				aurman -S $i --needed --noconfirm --noedit 2>> $errorpath >> $outputpath &
@@ -344,9 +328,7 @@ Vbox_Installation () {
 
 		elif [[ $aur_helper == "yay" ]]; then
 			for i in ${vbox_pkg[*]}; do
-				printf "$line\n"
-				printf "Installing $i\n"
-				printf "$line\n\n"
+				sudo echo
 				output_text="$i installation"
 				error_text="while installing $i"
 				yay -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -364,9 +346,7 @@ Vbox_Installation () {
 
 			vbox_pkg_pac=(virtualbox virtualbox-host-modules-arch linux-headers)
 			for i in ${vbox_pkg_pac[*]}; do
-				printf "$line\n"
-				printf "Installing $i\n"
-				printf "$line\n\n"
+				sudo echo
 				output_text="$i installation"
 				error_text="while installing $i"
 				pacman -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -386,7 +366,6 @@ Vbox_Installation () {
 	elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 
 		## Add the repository key
-
 		output_text="Adding the repository key"
 		error_text="while adding the repository key"
 
