@@ -622,5 +622,5 @@ Vagrant_Installation () {
 		wait $BPID
 		status=$?
 		Exit_Status
-
+	fi
 }
