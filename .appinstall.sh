@@ -485,7 +485,7 @@ Docker_Installation () {
 			Exit_Status
 
 			## Set up the stable repository for Docker if it doesn't exists
-			if [[ -z $(grep -o "https://download.docker.com/linux/debian" /etc/apt/sources.list )]]; then
+			if [[ -z $(grep -o "https://download.docker.com/linux/debian" /etc/apt/sources.list) ]]; then
 				printf "$line\n"
 				printf "Set up the stable repository for Docker\n"
 				printf "$line\n\n"
@@ -508,7 +508,7 @@ Docker_Installation () {
 			Exit_Status
 
 			## Set up the stable repository for Docker if it doesn't exists
-			if [[ -z $(grep -o "https://download.docker.com/linux/ubuntu" /etc/apt/sources.list )]]; then
+			if [[ -z $(grep -o "https://download.docker.com/linux/ubuntu" /etc/apt/sources.list) ]]; then
 				printf "$line\n"
 				printf "Set up the stable repository for Docker\n"
 				printf "$line\n\n"
