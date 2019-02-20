@@ -52,9 +52,9 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepi
 
 * Change GRUB theme to [Vimix](https://www.gnome-look.org/p/1009236)
 
-* Install Refind (optional)
+* Install Refind (For Arch only)
 
-* Change Refind theme to [rEFInd-minimal](https://github.com/EvanPurkhiser/rEFInd-minimal.git)
+* Change Refind theme to [rEFInd-minimal](https://github.com/EvanPurkhiser/rEFInd-minimal.git) (For Arch only)
 
 ## Install Applications:
 
