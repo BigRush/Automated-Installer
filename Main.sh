@@ -422,6 +422,9 @@ Source_And_Validation () {
     fi
 }
 
+## Call Non_Root_Check function
+Non_Root_Check
+
 ## Call Log_And_Variables function
 Log_And_Variables
 
@@ -440,7 +443,7 @@ Source_And_Validation
 ## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
-	scripts=("Post install","AppInstall **Run as Non-Root**","Clean Logs","Exit")
+	scripts=("Post install","AppInstall","Clean Logs","Exit")
 	PS3="Please choose what would you like to do: "
 	select opt in ${scripts[*]} ; do
 	    case $opt in
@@ -503,8 +506,7 @@ Main_Menu () {
 				exit 0
 				;;
 
-	        "AppInstall **Run as Non-Root**")
-				Non_Root_Check
+	        "AppInstall")
 				if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 					if [[ $aur_helper == "yay" || -z $aur_helper ]]; then
 						Yay_Install
