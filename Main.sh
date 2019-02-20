@@ -370,12 +370,11 @@ Source_And_Validation () {
 		output_text=".post-install.sh download"
 		error_text="while downloading .post-install.sh"
 
-		wget $post_script 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+		wget --show-progress --progress=bar -a $outputpath $post_script 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		output_text=".post-install.sh source"
 		error_text="while sourcing .post-install.sh"
@@ -390,12 +389,11 @@ Source_And_Validation () {
 		output_text=".appinstall.sh download"
 		error_text="while downloading .appinstall.sh"
 
-		wget $appinstall_script 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+		wget --show-progress --progress=bar -a $appinstall_script 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		output_text=".appinstall.sh source"
 		error_text="while sourcing .appinstall.sh"
@@ -410,12 +408,11 @@ Source_And_Validation () {
 		output_text=".archfuncs.sh download"
 		error_text="while downloading .archfuncs.sh"
 
-		wget $archfuncs_script 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+		wget --show-progress --progress=bar -a $outputpath $archfuncs_script 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		output_text=".archfuncs.sh source"
 		error_text="while sourcing .archfuncs.sh"

@@ -41,9 +41,11 @@ Alias_and_Wallpaper () {
 
 	## If the background picture doesn't already exists, download it
 	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
-		sudo runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 	fi
 
 	## customize shell, check if the config exists, if not, add it to .bashrc
@@ -1111,7 +1113,6 @@ Manjaro_Sys_Update () {
 
 ## Set desktop theme
 xfce_theme () {
-	#	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
 	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "/home/tom/Pictures/archbk.jpg" 2>> $errorpath >> $outputpath
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/background-alpha' --type int --set 0

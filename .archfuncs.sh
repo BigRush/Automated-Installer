@@ -40,16 +40,15 @@ Aurman_Install () {
 
 	## Check if "aurman" exists, if not, install "aurman" from AUR
 	if [[ -z $(command -v aurman) ]]; then
-		output_text="Getting aurman with curl from AUR"
-		error_text="while getting aurman with curl from AUR"
+		output_text="Getting aurman with wget from AUR"
+		error_text="while getting aurman with wget from AUR"
 
 		## Get the build files for AUR
-    	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/aurman_install_tmp/aurman.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		tar -xf aurman.tar.gz 2>> $errorpath >> $outputpath
 
@@ -102,16 +101,15 @@ Yay_Install () {
 
 	## Check if "yay" exists, if not, install "yay" from AUR
 	if [[ -z "$(pacman -Qs yay)" ]]; then
-		output_text="getting yay with curl from AUR"
-		error_text="while getting yay with curl from AUR"
+		output_text="getting yay with wget from AUR"
+		error_text="while getting yay with wget from AUR"
 
 		## Get the build files for AUR
-    	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/yay_install_tmp/yay.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		tar -xf yay.tar.gz 2>> $errorpath >> $outputpath
 
