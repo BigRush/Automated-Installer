@@ -157,9 +157,11 @@ Log_And_Variables () {
 
 ## Clean tmp directories and file that were created during the script
 Clean_Up () {
-
 	rm -rf $tmpdir
 }
+
+## Make sure there is a clean up by traping the function upon EXIT
+trap Clean_Up EXIT
 
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
 Distro_Check () {
@@ -690,6 +692,3 @@ done
 
 ## Call Main_Menu function
 Main_Menu
-
-## Make sure there is a clean up by using traping the function upon EXIT
-trap Clean_Up EXIT
