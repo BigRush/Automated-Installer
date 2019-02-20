@@ -484,14 +484,16 @@ Docker_Installation () {
 			status=$?
 			Exit_Status
 
-			## Set up the stable repository for Docker
-			printf "$line\n"
-			printf "Set up the stable repository for Docker\n"
-			printf "$line\n\n"
+			## Set up the stable repository for Docker if it doesn't exists
+			if [[ -z $(grep -o "https://download.docker.com/linux/debian" /etc/apt/sources.list )]]; then
+				printf "$line\n"
+				printf "Set up the stable repository for Docker\n"
+				printf "$line\n\n"
 
-			sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $debian_cname stable" 2>> $errorpath >> $outputpath
-			status=$?
-			Exit_Status
+				sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $debian_cname stable" 2>> $errorpath >> $outputpath
+				status=$?
+				Exit_Status
+			fi
 
 		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
 			## Add Docker’s official GPG key
@@ -505,14 +507,16 @@ Docker_Installation () {
 			status=$?
 			Exit_Status
 
-			## Set up the stable repository for Docker
-			printf "$line\n"
-			printf "Set up the stable repository for Docker\n"
-			printf "$line\n\n"
+			## Set up the stable repository for Docker if it doesn't exists
+			if [[ -z $(grep -o "https://download.docker.com/linux/ubuntu" /etc/apt/sources.list )]]; then
+				printf "$line\n"
+				printf "Set up the stable repository for Docker\n"
+				printf "$line\n\n"
 
-			sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $ubuntu_cname stable" 2>> $errorpath >> $outputpath
-			status=$?
-			Exit_Status
+				sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $ubuntu_cname stable" 2>> $errorpath >> $outputpath
+				status=$?
+				Exit_Status
+			fi
 		fi
 
 		## Update the package lists
