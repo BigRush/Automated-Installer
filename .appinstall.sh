@@ -423,7 +423,7 @@ Vbox_Installation () {
 		output_text="Installing VirtualBox"
 		error_text="while installing VirtualBox"
 
-		sudo apt-get install virtualBox -y 2>> $errorpath >> $outputpath &
+		sudo apt-get install virtualBox-6.0 -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
