@@ -22,7 +22,7 @@ for my needs on Debian, Ubuntu, and Arch distributions
 
 * If Deepin was chosen as desktop environment then only LightDM will be installed
 
-* I disabled some of deepin login and logout sounds because i found them annoying.
+* I disabled some of Deepin login and logout sounds because I find them annoying.
 They can be re-enabled by doing the following commands:
 ```sh
 $ sudo mv /usr/share/sounds/deepin/stereo/disable.login /usr/share/sounds/deepin/stereo/desktop-login.ogg
