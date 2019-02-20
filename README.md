@@ -75,11 +75,17 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepi
 
 * Speedtest-cli
 
+* Megatools
+
 * VirtualBox 
 
 * FireFox (For Arch only)
 
 * Openssh (For Arch only)
+
+### Note
+
+* All other packages the script installs are dependencies
 
 # Installing the script:
 
