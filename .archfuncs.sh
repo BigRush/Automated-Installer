@@ -44,7 +44,7 @@ Aurman_Install () {
 		error_text="while getting aurman with wget from AUR"
 
 		## Get the build files for AUR
-    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/aurman_install_tmp/aurman.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath
+    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/aurman_install_tmp/aurman.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz
 		wait
 		status=$?
 		Exit_Status
@@ -105,7 +105,7 @@ Yay_Install () {
 		error_text="while getting yay with wget from AUR"
 
 		## Get the build files for AUR
-    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/yay_install_tmp/yay.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath
+    	wget --show-progress --progress=bar -a $outputpath -O "$tmpdir/yay_install_tmp/yay.tar.gz" https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz
 		wait
 		status=$?
 		Exit_Status

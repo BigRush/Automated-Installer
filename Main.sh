@@ -369,7 +369,7 @@ Source_And_Validation () {
 		output_text=".post-install.sh download"
 		error_text="while downloading .post-install.sh"
 
-		wget --show-progress --progress=bar -a $outputpath $post_script 2>> $errorpath
+		wget --show-progress --progress=bar -a $outputpath $post_script
 		wait
 		status=$?
 		Exit_Status
@@ -388,7 +388,7 @@ Source_And_Validation () {
 		output_text=".appinstall.sh download"
 		error_text="while downloading .appinstall.sh"
 
-		wget --show-progress --progress=bar -a $appinstall_script 2>> $errorpath
+		wget --show-progress --progress=bar -a $appinstall_script
 		wait
 		status=$?
 		Exit_Status
@@ -407,7 +407,7 @@ Source_And_Validation () {
 		output_text=".archfuncs.sh download"
 		error_text="while downloading .archfuncs.sh"
 
-		wget --show-progress --progress=bar -a $outputpath $archfuncs_script 2>> $errorpath
+		wget --show-progress --progress=bar -a $outputpath $archfuncs_script
 		wait
 		status=$?
 		Exit_Status
