@@ -450,7 +450,7 @@ Source_And_Validation
 ## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
-	scripts=("Post install","AppInstall","Virtualization & Containers","Clean Logs","Exit")
+	scripts=("Post install","AppInstall","Virtualization & Container","Clean Logs","Exit")
 	PS3="Please choose what would you like to do: "
 	select opt in ${scripts[*]} ; do
 	    case $opt in
@@ -543,13 +543,13 @@ Main_Menu () {
 				exit 0
 				;;
 
-			"Virtualization & Containers")
+			"Virtualization & Container")
 				Vbox_Installation
 				Docker_Installation
 				Vagrant_Installation
 
 				printf "$line\n"
-				printf "Virtualization & Containers completed successfully\n"
+				printf "Virtualization & Container completed successfully\n"
 				printf "$line\n\n"
 				exit 0
 				;;
