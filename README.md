@@ -2,7 +2,8 @@
 Configures and installs application and services 
 for my needs on Debian, Ubuntu, and Arch distributions
 
-# The script will do the following:
+# The Script Will Do The Following:
+
 ## Arch Specifically:
 
 * Install Aurman or Yay AUR helper by user's choice (default = yay)
@@ -29,7 +30,7 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.login /usr/share/sounds/deepin
 $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepin/stereo/desktop-logout.ogg
 ```
 
-## Install themes:
+## Install Themes:
 
 * [Chili](https://store.kde.org/p/1214121/) login theme (for Plasma only)
 
@@ -55,7 +56,7 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepi
 
 * Change Refind theme to [rEFInd-minimal](https://github.com/EvanPurkhiser/rEFInd-minimal.git)
 
-## Applications and Software installation:
+## Install Applications:
 
 * Discord
 
@@ -77,17 +78,23 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepi
 
 * Megatools
 
-* VirtualBox 
-
 * FireFox (For Arch only)
 
 * Openssh (For Arch only)
+
+## Install Virtualization & Container Environment:
+
+* VirtualBox 
+
+* Docker
+
+* Vagrant
 
 ### Note
 
 * All other packages the script installs are dependencies
 
-# Installing the script:
+# Installing The Script:
 
 Change to your user's home directory
 so you will clone the project there later (you can choose any other loacation) 
@@ -104,7 +111,7 @@ $ git clone https://github.com/BigRush/Automated-Installer.git
 
 
 
-## Running the script
+## Running The Script
 
 Change to the project's directory:
 
