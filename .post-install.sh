@@ -7,9 +7,12 @@
 # License :	GPLv3
 #
 # Description :	Update the system
-#				Install video card driver for intel
-#				Install Desktop environment and a display manager
-#				Add personal aliases and a nice wallpaper
+#				Add aliases and download a nice wallpaper
+#				Install desktop environment
+#				Download themes and icons
+#				Install display manager
+#				Configure the grub background and fast boot time
+#
 # Version :	1.0.0
 ################################################################################
 
@@ -20,191 +23,6 @@
 
 ####  Functions  ###############################################################
 
-## Configure arch after a clean install with KDE desktop environment
-Arch_Config () {
-
-	## Prompet sudo
-	sudo echo
-	## Propmet the user with what the script will now do (with cosmetics :D)
-	printf "$line\n"
-	printf "Updating the system...\n"
-	printf "$line\n\n"
-
-	## Will be used in Exit_Status function to output text for the user
-	output_text="Update"
-	error_txt="while updating"
-
-	## Update the system, send stdout, sterr to log files
-	## and move the process to the background for the Progress_Spinner function.
-	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
-
-	## Save the background PID to a variable for later use with wait command
-	BPID=$!
-
-	## Call Progress_Spinner function
-	Progress_Spinner
-
-	## Wait until the process is done to get its exit status.
-	wait $BPID
-
-	## Save the exxit status of last command to a Varibale
-	status=$?
-
-	## Call Exit_Status function
-	Exit_Status
-
-
-	## Understanding the logic behind the code
-	############################################################################
-	## If I don't use this method of:
-	## 1. Sending the process to the backgroud.
-	## 2. Save its PID.
-	## 3. Call Progress_Spinner function
-	## 4. Executing wait command.
-	## 5. Save the process exit status.
-	## 6. Make sure the exit status is 0.
-	##
-	## I will not be able to:
-	## 1. Run the Progress_Spinner function because it
-	##    depends on the backgroung PID of the last executed command.
-	##
-	## 2. Make sure the command executed successfully or not, because when you
-	##    you compare the exit status of the process that has been sent to the
-	##    the background, you will be getting the exit status of a different
-	##    command, in this case I got the exit status of the declaration of
-	##    "error_txt" variable (before implementing this method of wait command,
-	##    it can be seen on early commits).
-	##
-	## So now by waiting until the process is done, I can safely check the exit
-	## status, because the wait command will return an exit status according to
-	## the success of the process its given.
-	############################################################################
-
-	sudo echo
-
-	## Wait for 0.5 seconds for preventing unwanted errors
-	# sleep 0.5
-
-	printf "$line\n"
-	printf "Installing Xorg...\n"
-	printf "$line\n\n"
-
-	output_text="Xorg installation"
-	error_txt=" while installing Xorg"
-	sudo pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
-
-	# sleep 0.5
-
-	## Make sure there is an Intel video card and install its drivers.
-	## If no Intel video card detected,
-	## tell the user and continue the script
-	lspci |grep VGA |grep Intel &> /dev/null
-	if [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Installing video drivers...\n"
-		printf "$line\n\n"
-
-		output_text="Video card drivers installationl"
-		error_txt="while installing video card's drivers"
-
-		sudo echo
-
-		sudo pacman -S xf86-video-intel --needed --noconfirm 2>> $errorpath >> $outputpath &
-		Progress_Spinner
-		BPID=$!
-		wait $BPID
-		status=$?
-		Exit_Status
-		# sleep 0.5
-	else
-		printf "$line\n"
-		printf "Did not detect Intel video card,\n"
-		printf "please install video card drivers by yourself later.\n"
-		printf "Continuing with the script...\n"
-		printf "$line\n\n"
-		# sleep 2
-	fi
-}
-
-## Enable multilib repo
-Pacman_Multilib () {
-
-	## Validate the multilib section is in the place that we are going to replace
-
-	## Set conf file under a variable
-	pac_path=/etc/pacman.conf
-	## If you can't find '#[multilib]'
-	if ! [[ -z $(cat $pac_path |egrep "^\#\[multilib\]$") ]]; then
-		## Set line counter to 1
-		i=1
-		## On each loop increase i value by 1 until 100
-		for ((i; i<=100; i++)); do
-			## Set the output of line "i" unser a variable
-			pac_line=$(sed -n "$i"p $pac_path)
-			## Check if "#[multilib]" is in that line,
-			## then check if it's line 93 (because i know that the specific
-			## "#[multilib]" should be in line 93 for the time i wrote this),
-			## If it's on line 93 remove the first characters in lines 93 & 94
-			## (which will be '#') to apply multilib repo, then break the loop,
-			## If it's not on line 93 tell the user that file probably changed
-			## and he should do it manually,
-			## If it didn't find it at all then tell the user: multib failed
-			if [[ "#[multilib]" == "$pac_line" ]]; then
-				if [[ $i -eq 93 ]]; then
-					sudo sed -ie "93,94s/.//" $pac_path
-					break
-
-				else
-					printf "$line\n"
-					printf "the pacman.conf file has changed its format\nplease enable multilib for pacman so the script will run correctly\nnot applying any chnages\n"
-					printf "$line\n\n"
-					break
-				fi
-			elif [[ $i -eq 100 && ! "#[multilib]" == "$pac_line" ]];then
-				printf "$line\n"
-				printf "Adding multilib repo failed...\n"
-				printf "$line\n\n"
-
-				read -p "Would you like to continue anyway?[y/N]: " answer
-				printf "\n"
-				if [[ -z $answer ]]; then
-					exit 1
-				elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-					:
-				elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-					printf "$line\n"
-					printf "Exiting...\n"
-					printf "$line\n\n"
-					exit 1
-				else
-					printf "$line\n"
-					printf "Invalid answer - exiting\n"
-					printf "$line\n\n"
-					exit 1
-				fi
-			fi
-		done
-
-		printf "$line\n"
-		printf "Syncing multilib...\n"
-		printf "$line\n\n"
-
-		output_text="Multilib sync"
-		error_txt="while syncing multilib"
-
-		sudo pacman -Sy 2>> $errorpath >> $outputpath &
-		Progress_Spinner
-		BPID=$!
-		wait $BPID
-		status=$?
-		Exit_Status
-	fi
-}
 
 ## Add aliases and download a nice wallpaper
 Alias_and_Wallpaper () {
@@ -214,18 +32,20 @@ Alias_and_Wallpaper () {
 	printf "$line\n\n"
 
 	output_text="Background picture download"
-	error_txt="while downloading background picture"
+	error_text="while downloading background picture"
 
 	## If the directory doesn't exits, create it
-	if ! [[ -d $user_path/Pictures ]]; then
-		sudo runuser -l $orig_user -c "mkdir $user_path/Pictures"
+	if ! [[ -d $HOME/Pictures ]]; then
+		sudo runuser -l $orig_user -c "mkdir $HOME/Pictures"
 	fi
 
 	## If the background picture doesn't already exists, download it
-	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
-		sudo runuser -l $orig_user -c "wget -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath >> $outputpath
+	if ! [[ -e $HOME/Pictures/archbk.jpg ]]; then
+		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 	fi
 
 	## customize shell, check if the config exists, if not, add it to .bashrc
@@ -339,7 +159,7 @@ DE_Menu () {
 				sleep 0.5
 				KDE_Font_Config
 				sleep 0.5
-				KDE_Theme_Config
+				Theme_Config
 				break
 				;;
 			Deepin)
@@ -377,14 +197,10 @@ KDE_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $user_path/.xinitrc"
-
-	printf "$line\n"
-	printf "Installing Plasma desktop environment...\n"
-	printf "$line\n\n"
+	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $HOME/.xinitrc"
 
 	output_text="Plasma desktop installation"
-	error_txt="while installing plasma desktop"
+	error_text="while installing plasma desktop"
 
 	##	Install plasma desktop environment
 	sudo pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -398,64 +214,23 @@ KDE_Installation () {
 	de_env="kde"
 }
 
-## Configure ugly arch kde fonts
-KDE_Font_Config () {
+## Download themes and icons
+Theme_Config () {
 
-	sudo echo
-
-	output_text="Font installation"
-	error_txt="while installting fonts"
-
-	## Install some nice fonts
-	sudo pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
-
-	## Enable font presets by creating symbolic links
-	## It will disable embedded bitmap for all fonts
-	## Enable sub-pixel RGB rendering
-	## Enable the LCD filter which is designed to reduce colour fringing when subpixel rendering is used.
-	sudo ln -sf /etc/fonts/conf.avail/70-no-bitmaps.conf /etc/fonts/conf.d
-	sudo ln -sf /etc/fonts/conf.avail/10-sub-pixel-rgb.conf /etc/fonts/conf.d
-	sudo ln -sf /etc/fonts/conf.avail/11-lcdfilter-default.conf /etc/fonts/conf.d
-
-	sudo sed -ie "s/\#export.*/export FREETYPE_PROPERTIES=\"truetype:interpreter-version=40\"/" /etc/profile.d/freetype2.sh
-
-	CWD=$(pwd)
-	printf '
-	<?xml version="1.0"?>
-	<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
-	<fontconfig>
-	    <match>
-	        <edit mode="prepend" name="family"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Serif</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>sans-serif</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Sans</string></edit>
-	    </match>
-	    <match target="pattern">
-	        <test qual="any" name="family"><string>monospace</string></test>
-	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
-	    </match>
-	</fontconfig>
-	' > $CWD/tmp_font
-
-	sudo runuser -l "root" -c "cat $CWD/tmp_font > /etc/fonts/local.conf"
-	rm tmp_font
-}
-
-## Download themes and icons for KDE
-KDE_Theme_Config () {
+	## Check Desktop environment
+	if [[ -z $de_env ]]; then
+		if [[ $DESKTOP_SESSION == "plasma" ]]; then
+			de_env=kde
+		else
+			de_env=gtk
+		fi
+	fi
 
 	## Check if megatools is available, if not download it
 	if [[ -z $(command -v megadl) ]]; then
+		output_text="Megatools installation"
+		error_text="while installing Megatools"
+
 		if [[ $Distro_Val == arch ]]; then
 			if [[ $aur_helper == "aurman" ]]; then
 				sudo echo
@@ -464,13 +239,6 @@ KDE_Theme_Config () {
 				if [[ -z $(command -v aurman) ]]; then
 					Aurman_Install
 				fi
-
-				printf "$line\n"
-				printf "Installing Megatools...\n"
-				printf "$line\n\n"
-
-				output_text="Megatools installation"
-				error_txt="while installing Megatools"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -488,13 +256,6 @@ KDE_Theme_Config () {
 					Yay_Install
 				fi
 
-				printf "$line\n"
-				printf "Installing Megatools...\n"
-				printf "$line\n\n"
-
-				output_text="Megatools installation"
-				error_txt="while installing Megatools"
-
 				## Install megatools to get theme files from mega cloud
 				sudo echo
 				yay -S megatools --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -505,7 +266,7 @@ KDE_Theme_Config () {
 				Exit_Status
 			fi
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 
 			## Install megatools to get theme files from mega cloud
 			sudo echo
@@ -530,62 +291,199 @@ KDE_Theme_Config () {
 	fi
 
 
-	if ! [[ -d $user_path/Documents/Themes ]]; then
-		mkdir -p $user_path/Documents/Themes
+	if ! [[ -d $HOME/Documents/Themes ]]; then
+		mkdir -p $HOME/Documents/Themes
 
 		printf "$line\n"
 		printf "Installing themes form Mega cloud...\n"
 		printf "$line\n\n"
 
 		output_text="Getting themes form Mega cloud"
-		error_txt="while getting themes form Mega cloud"
+		error_text="while getting themes form Mega cloud"
 
-		megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
+		if [[ $de_env == "kde" ]]; then
+			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $de_env == "gtk" ]]; then
+			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
 	fi
 
 
 	## Chili theme
-	if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
-		printf "$line\n"
-		printf "Chili theme doesn't exists...\n"
-		printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if ! [[ -e $HOME/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
+			printf "$line\n"
+			printf "Chili theme doesn't exists...\n"
+			printf "$line\n\n"
 
-		output_text="Getting Chili theme with megatools"
-		error_txt="while getting Chili with megatools"
+			output_text="Getting Chili theme with megatools"
+			error_text="while getting Chili with megatools"
 
-		status=1
-		Exit_Status
+			status=1
+			Exit_Status
+		fi
 	fi
 
 	## Shadow icons
-	if ! [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
-		printf "$line\n"
-		printf "Shadow icons doesn't exists...\n"
-		printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
+			if ! [[ -e $HOME/.icons ]]; then
+				mkdir $HOME/.icons
+			fi
 
-		output_text="Getting shadow icons with megatools"
-		error_txt="while getting shadow icons megatools"
+			printf "$line\n"
+			printf "Extracting Shadow icons...\n"
+			printf "$line\n\n"
 
-		status=1
-		Exit_Status
+			output_text="Extraction"
+			error_text="while extracting Shadow icons"
+
+			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $HOME/.icons 2>> $errorpath >> $outputpath
+
+			status=$?
+			Exit_Status
+
+		else
+			printf "$line\n"
+			printf "Shadow icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting shadow icons with megatools"
+			error_text="while getting shadow icons megatools"
+
+			status=1
+			Exit_Status
+
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			if [[ $aur_helper == "aurman" ]]; then
+				sudo echo
+
+				## Check if "aurman" exists, if not, call the function that installs it
+				if [[ -z $(command -v aurman) ]]; then
+					Aurman_Install
+				fi
+
+				output_text="Shadow icons installation"
+				error_text="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				aurman -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $aur_helper == "yay" ]]; then
+
+				## Check if "yay" exists, if not, call the function that installs it
+				if [[ -z $(command -v yay) ]]; then
+					Yay_Install
+				fi
+
+				output_text="Shadow icons installation"
+				error_text="while installing Shadow icons"
+
+				## Install megatools to get theme files from mega cloud
+				sudo echo
+				yay -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+
+		elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
+			## Add PPA
+			output_text="Adding the repository"
+			error_text="while adding the repository"
+
+			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Update the package lists
+
+			output_text="Updating the package lists"
+			error_text="while updating the package lists"
+
+			sudo apt-get update 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			output_text="Installing Shadow icons"
+			error_text="while installing shadow icons"
+
+			sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		else
+			if [[ -e $HOME/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+				if ! [[ -e $HOME/.icons ]]; then
+					mkdir $HOME/.icons
+				fi
+
+				printf "$line\n"
+				printf "Extracting Shadow icons...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_text="while extracting Shadow icons"
+
+				sudo tar -xvf $HOME/Documents/Themes/shadow-4.8.3.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
+				printf "$line\n"
+				printf "Shadow icons doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting shadow icons with megatools"
+				error_text="while getting shadow icons megatools"
+
+				status=1
+				Exit_Status
+
+			fi
+		fi
 	fi
 
 	## Papirus icons
 	sudo echo
 
 	if [[ $Distro_Val == arch ]]; then
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -603,19 +501,15 @@ KDE_Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		error_text="while adding the repository"
 
 		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
 		status=$?
 		Exit_Status
 
 		## Install dirmngr to manage and download OpenPGP and X.509 certificates
-		printf "$line\n"
-		printf "Installing dirmngr for certificate management...\n"
-		printf "$line\n\n"
-
 		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
+		error_text="while installing dirmngr"
 
 		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -625,23 +519,18 @@ KDE_Theme_Config () {
 		Exit_Status
 
 		## Add certificate
-		printf "$line\n"
-		printf "Adding the certificate...\n"
-		printf "$line\n\n"
-
-		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F 2>> $errorpath >> $outputpath
+		output_text="Adding the certificate"
+		error_text="while adding the certificate"
+		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
 		status=$?
 		Exit_Status
 
 		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
 		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -651,12 +540,8 @@ KDE_Theme_Config () {
 		Exit_Status
 
 		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -673,19 +558,15 @@ KDE_Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		error_text="while adding the repository"
 
 		sudo add-apt-repository ppa:papirus/papirus
 		status=$?
 		Exit_Status
 
 		## Update the package list after adding the new repository
-		printf "$line\n"
-		printf "Updating the package lists...\n"
-		printf "$line\n\n"
-
 		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -695,12 +576,8 @@ KDE_Theme_Config () {
 		Exit_Status
 
 		## Install Papirus icons
-		printf "$line\n"
-		printf "Installing Papirus icons...\n"
-		printf "$line\n\n"
-
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -711,39 +588,228 @@ KDE_Theme_Config () {
 	fi
 
 	## Arc theme
-	printf "$line\n"
-	printf "Installing Arc theme...\n"
-	printf "$line\n\n"
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			output_text="Installing Arc theme"
+			error_text="while installing Arc theme"
 
-	output_text="Installing Arc theme"
-	error_txt="while installing Arc theme curl"
+			sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-	sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+		elif [[ $Distro_Val == "debian" ]]; then
+			output_text="Installing Arc theme"
+			error_text="while installing Arc theme"
+			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+
+			## Install Arc-KDE theme
+			printf "$line\n"
+			printf "Installing Arc-KDE theme...\n"
+			printf "$line\n\n"
+
+			output_text="Installing Arc-KDE theme"
+			error_text="while installing Arc-KDE theme"
+
+			sudo apt-get install --install-recommends arc-kde -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			output_text="Installing Arc theme"
+			error_text="while installing Arc theme"
+
+			sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			output_text="Cloning Arc theme"
+			error_text="while Cloning Arc theme"
+
+			pushd . 2>> $errorpath >> $outputpath
+
+			git clone https://github.com/horst3180/arc-theme.git $tmpdir/arc-theme 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			cd $tmpdir/arc-theme
+
+			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
+			for i in ${arc_pkg[*]}; do
+				output_text="Installing Arc theme dependency: $i"
+				error_text="while installing Arc theme dependency: $i"
+
+				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+
+			output_text="Building Arc theme"
+			error_text="while building Arc theme"
+
+			./autogen.sh --prefix=/usr 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			output_text="Installing Arc theme"
+			error_text="while installing Arc theme"
+
+			sudo make install 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			popd 2>> $errorpath >> $outputpath
+		fi
+	fi
 
 	## Install Adapta theme
+	if [[ $de_env == "kde" ]]; then
+		if [[ $Distro_Val == arch ]]; then
+			sudo echo
 
-	sudo echo
+			output_text="Installing Adapta theme"
+			error_text="while installing Adapta theme"
 
-	printf "$line\n"
-	printf "Installing Adapta theme...\n"
-	printf "$line\n\n"
+			sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-	output_text="Installing Adapta theme"
-	error_txt="while installing Adapta theme"
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-	sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+		elif [[ $Distro_Val == debian ]]; then
 
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
+			output_text="Installing Adapta theme"
+			error_text="while installing Adapta theme"
+
+			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/adapta-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+			## Install Arc-KDE theme
+
+			output_text="Installing Arc-KDE theme"
+			error_text="while installing Arc-KDE theme"
+
+			sudo apt-get install --install-recommends adapta-kde -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		fi
+
+	elif [[ $de_env == "gtk" ]]; then
+		output_text="Cloning Arc theme"
+		error_text="while Cloning Arc theme"
+		pushd . 2>> $errorpath >> $outputpath
+
+		git clone https://github.com/adapta-project/adapta-gtk-theme.git $tmpdir/adapta-gtk-theme 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		cd $tmpdir/adapta-gtk-theme
+
+		adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
+		if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			for i in ${adapta_pkg[*]}; do
+				output_text="Installing Adapta theme dependency: $i"
+				error_text="while installing Adapta theme dependency: $i"
+				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+
+		elif [[ $Distro_Val == arch ]]; then
+			for i in ${adapta_pkg[*]}; do
+				output_text="Installing Adapta theme dependency: $i"
+				error_text="while installing Adapta theme dependency: $i"
+				sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			done
+		fi
+
+		output_text="Building Adapta theme"
+		error_text="while building Adapta theme"
+
+		./autogen.sh --prefix=/usr --enable-plank 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+
+		output_text="Making Adapta theme, this may take a while, now"
+		error_text="while making Adapta theme"
+
+		make 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		output_text="Installing Adapta theme"
+		error_text="while installing Adapta theme"
+
+		sudo make install 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		popd 2>> $errorpath >> $outputpath
+
+	fi
 
 	## Install Foggy theme for plank
 	if ! [[ -d /usr/share/plank/themes/Foggy ]]; then
@@ -751,8 +817,8 @@ KDE_Theme_Config () {
 	fi
 
 	if ! [[ -e /usr/share/plank/themes/Foggy/dock.theme ]]; then
-		if [[ -e $user_path/Documents/Themes/dock.theme ]]; then
-			sudo cp $user_path/Documents/Themes/dock.theme /usr/share/plank/themes/Foggy
+		if [[ -e $HOME/Documents/Themes/dock.theme ]]; then
+			sudo cp $HOME/Documents/Themes/dock.theme /usr/share/plank/themes/Foggy
 
 		else
 			printf "$line\n"
@@ -760,7 +826,7 @@ KDE_Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Foggy theme with megatools"
-			error_txt="while getting Foggy theme megatools"
+			error_text="while getting Foggy theme megatools"
 
 			status=1
 			Exit_Status
@@ -769,15 +835,15 @@ KDE_Theme_Config () {
 
 	## Install Transparent theme for plank
 	if ! [[ -e /usr/share/plank/themes/Transparent ]]; then
-		if [[ -e $user_path/Documents/Themes/Transparent.tar.gz ]]; then
+		if [[ -e $HOME/Documents/Themes/Transparent.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting Transparent theme...\n"
 			printf "$line\n\n"
 
 			output_text="Extraction"
-			error_txt="while extracting Transparent.tar.gz theme"
+			error_text="while extracting Transparent.tar.gz theme"
 
-			sudo tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf $HOME/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -788,7 +854,7 @@ KDE_Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Transparent theme with megatools"
-			error_txt="while getting Transparent theme megatools"
+			error_text="while getting Transparent theme megatools"
 
 			status=1
 			Exit_Status
@@ -797,15 +863,15 @@ KDE_Theme_Config () {
 
 	## Install Zero theme for plank
 	if ! [[ -e /usr/share/plank/themes/zero ]]; then
-		if [[ -e $user_path/Documents/Themes/zero.tar.gz ]]; then
+		if [[ -e $HOME/Documents/Themes/zero.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting theme...\n"
 			printf "$line\n\n"
 
 			output_text="Extraction"
-			error_txt="while extracting zero.tar.gz theme"
+			error_text="while extracting zero.tar.gz theme"
 
-			sudo tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf /$HOME/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -816,7 +882,7 @@ KDE_Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Zero theme with megatools"
-			error_txt="while getting Zero theme megatools"
+			error_text="while getting Zero theme megatools"
 
 			status=1
 			Exit_Status
@@ -830,14 +896,10 @@ Deepin_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $user_path/.xinitrc"
-
-	printf "$line\n"
-	printf "Installing Deepin desktop environment...\n"
-	printf "$line\n\n"
+	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $HOME/.xinitrc"
 
 	output_text="Deepin desktop installation"
-	error_txt="while installing Deepin desktop"
+	error_text="while installing Deepin desktop"
 
 	##	Install deepin desktop environment
 	sudo pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
@@ -860,7 +922,7 @@ Deepin_Installation () {
 
 	## Copy the wallpaper to deepin's wallpaper folder
 	if ! [[ -e /usr/share/wallpapers/deepin/archbk.jpg ]]; then
-		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
+		sudo cp $HOME/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
 	fi
 }
 
@@ -920,12 +982,8 @@ SDDM_Installation () {
 
 	sudo echo
 
-	printf "$line\n"
-	printf "Installing sddm...\n"
-	printf "$line\n\n"
-
 	output_text="sddm installation"
-	error_txt="while installing sddm"
+	error_text="while installing sddm"
 
 	## Install sddm
 	sudo pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -946,7 +1004,7 @@ SDDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="Enable sddm service"
-	error_txt="while enabling sddm service"
+	error_text="while enabling sddm service"
 
 	systemctl enable sddm 2>> $errorpath >> $outputpath
 	status=$?
@@ -958,12 +1016,8 @@ LightDM_Installation () {
 
 	sudo echo
 
-	printf "$line\n"
-	printf "Installing Lightdm...\n"
-	printf "$line\n\n"
-
 	output_text="Lightdm installation"
-	error_txt="while installing Lightdm"
+	error_text="while installing Lightdm"
 
 	## Install lightdm and configure it to work with webkit2-greeter
 	sudo pacman -S lightdm --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -984,7 +1038,7 @@ LightDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="Enable Lightdm service"
-	error_txt="while enabling Lightdm service"
+	error_text="while enabling Lightdm service"
 
 	sudo systemctl enable lightdm 2>> $errorpath >> $outputpath
 	status=$?
@@ -1003,12 +1057,8 @@ LightDM_Configuration () {
 			Aurman_Install
 		fi
 
-		printf "$line\n"
-		printf "Installing Lightdm-webkit2-greeter...\n"
-		printf "$line\n\n"
-
 		output_text="Lightdm-webkit2-greeter installation"
-		error_txt="while installing Lightdm-webkit2-greeter"
+		error_text="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
 		aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1025,12 +1075,8 @@ LightDM_Configuration () {
 			Yay_Install
 		fi
 
-		printf "$line\n"
-		printf "Installing Lightdm-webkit2-greeter...\n"
-		printf "$line\n\n"
-
 		output_text="Lightdm-webkit2-greeter installation"
-		error_txt="while installing Lightdm-webkit2-greeter"
+		error_text="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
 		yay -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1048,41 +1094,25 @@ LightDM_Configuration () {
 
 ## Full system update for manjaro
 Manjaro_Sys_Update () {
-
 	sudo echo
 
-	## Propmet the user with what the script will now do (with cosmetics :D)
 	printf "$line\n"
 	printf "Updating the system...\n"
 	printf "$line\n\n"
 
-	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
-	error_txt="while updating"
+	error_text="while updating"
 
-	## Update the system, send stdout, sterr to log files
-	## and move the process to the background for the Progress_Spinner function.
 	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
-
-	## Save the background PID to a variable for later use with wait command
-	BPID=$!
-
-	## Call Progress_Spinner function
+	BPID=$
 	Progress_Spinner
-
-	## Wait until the process is done to get its exit status.
 	wait $BPID
-
-	## Save the exxit status of last command to a Varibale
 	status=$?
-
-	## Call Exit_Status function
 	Exit_Status
 }
 
 ## Set desktop theme
 xfce_theme () {
-	#	wget -O /home/tom/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg 2>> $errorpath >> $outputpath
 	xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/workspace0/last-image -s "/home/tom/Pictures/archbk.jpg" 2>> $errorpath >> $outputpath
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/size' --type int --set 49
 	xfconf-query --channel "xfce4-panel" --property '/panels/panel-1/background-alpha' --type int --set 0
@@ -1123,16 +1153,16 @@ Boot_Manager_Config () {
 		fi
 
 		if ! [[ -e /boot/grub/themes/Vimix ]]; then
-			if [[ -e $user_path/Documents/Themes/grub-theme-vimix.tar.xz ]]; then
+			if [[ -e $HOME/Documents/Themes/grub-theme-vimix.tar.xz ]]; then
 
 				printf "$line\n"
 				printf "Extracting theme...\n"
 				printf "$line\n\n"
 
 				output_text="Extraction"
-				error_txt="while extracting Vimix theme"
+				error_text="while extracting Vimix theme"
 
-				sudo tar -xvf $user_path/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status
@@ -1142,7 +1172,7 @@ Boot_Manager_Config () {
 				printf "$line\n\n"
 
 				output_text="Getting Vimix GRUB theme with megatools"
-				error_txt="while getting Vimix GRUB theme megatools"
+				error_text="while getting Vimix GRUB theme megatools"
 
 				status=1
 				Exit_Status
@@ -1171,7 +1201,7 @@ Boot_Manager_Config () {
 			printf "$line\n\n"
 
 			output_text="Roolling back to backup GRUB file"
-			error_txt="while rolling back to backup GRUB file"
+			error_text="while rolling back to backup GRUB file"
 
 			sudo grub-mkconfig -o /boot/grub/grub.cfg 2>> $errorpath >> $outputpath
 			status=$?
@@ -1179,99 +1209,101 @@ Boot_Manager_Config () {
 
 		else
 			output_text="GRUB changes"
-			error_txt="while applying changes to GRUB"
+			error_text="while applying changes to GRUB"
 			status=0
 			Exit_Status
 		fi
 
 	else
-		error_txt=", could not find GRUB's configuraion file"
+		error_text=", could not find GRUB's configuraion file"
 		status=1
 		Exit_Status
 	fi
 
 	## Ask the user if he wants to install refined boot manager
-	read -p "Would you like to install refined boot manager?[y/N]: " answer
-	printf "\n"
-	if [[ -z $answer ]]; then
+	if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+		read -p "Would you like to install refined boot manager?[y/N]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			printf "$line\n"
+			printf "Post-Install completed successfully\n"
+			printf "$line\n\n"
+			exit 0
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Post-Install completed successfully\n"
+			printf "$line\n\n"
+			exit 0
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+			exit 1
+		fi
+
+		## Install refind boot manager and configure it
 		printf "$line\n"
-		printf "Post-Install completed successfully\n"
-		printf "$line\n\n"
-		exit 0
-	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-		:
-	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-		printf "$line\n"
-		printf "Post-Install completed successfully\n"
-		printf "$line\n\n"
-		exit 0
-	else
-		printf "$line\n"
-		printf "Invalid answer - exiting\n"
-		printf "$line\n\n"
-		exit 1
-	fi
-
-	## install refinds boot manager and configure it
-	printf "$line\n"
-	printf "Downloading refind boot manager...\n"
-	printf "$line\n\n"
-
-	output_text="Refind boot manager download"
-	error_txt="while downloading refind boot manager"
-
-	sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
-	BPID=$!
-	Progress_Spinner
-	wait $BPID
-	status=$?
-	Exit_Status
-
-	printf "$line\n"
-	printf "Configuring refind with 'refind-install'...\n"
-	printf "$line\n\n"
-
-	output_text="'refind-install'"
-	error_txt="while configuring refind with 'refind-install'"
-
-	sudo refind-install 2>> $errorpath >> $outputpath
-	status=$?
-	Exit_Status
-
-	printf "$line\n"
-	printf "Configuring refind to be the default boot manager...\n"
-	printf "$line\n\n"
-
-	output_text="Setting refind to be the default boot manager"
-	error_txt="while setting refind to be the default boot manager"
-
-	sudo refind-mkdefault 2>> $errorpath >> $outputpath
-	status=$?
-	Exit_Status
-
-	## Check if "themes" directory exits in refind, if not, create one
-	if ! [[ -d $refind_path/themes ]]; then
-		sudo mkdir $refind_path/themes
-	fi
-
-	## Check if the theme exits, if not, clone from git and add it to refind.conf
-	if ! [[ -d $refind_path/themes/rEFInd-minimal ]]; then
-		sudo mkdir $refind_path/themes/rEFInd-minimal
-		printf "$line\n"
-		printf "Cloning refind's theme from git...\n"
+		printf "Downloading refind boot manager...\n"
 		printf "$line\n\n"
 
-		output_text="Cloning theme from git"
-		error_txt="while cloning from git"
+		output_text="Refind boot manager download"
+		error_text="while downloading refind boot manager"
 
-		## Get the build files for AUR
-		sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+		sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
+		printf "$line\n"
+		printf "Configuring refind with 'refind-install'...\n"
+		printf "$line\n\n"
+
+		output_text="'refind-install'"
+		error_text="while configuring refind with 'refind-install'"
+
+		sudo refind-install 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+
+		printf "$line\n"
+		printf "Configuring refind to be the default boot manager...\n"
+		printf "$line\n\n"
+
+		output_text="Setting refind to be the default boot manager"
+		error_text="while setting refind to be the default boot manager"
+
+		sudo refind-mkdefault 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+
+		## Check if "themes" directory exits in refind, if not, create one
+		if ! [[ -d $refind_path/themes ]]; then
+			sudo mkdir $refind_path/themes
+		fi
+
+		## Check if the theme exits, if not, clone from git and add it to refind.conf
+		if ! [[ -d $refind_path/themes/rEFInd-minimal ]]; then
+			sudo mkdir $refind_path/themes/rEFInd-minimal
+			printf "$line\n"
+			printf "Cloning refind's theme from git...\n"
+			printf "$line\n\n"
+
+			output_text="Cloning theme from git"
+			error_text="while cloning from git"
+
+			## Get the build files for AUR
+			sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			sudo runuser -l "root" -c "printf \"include themes/rEFInd-minimal/theme.conf\" >> $refind_path/refind.conf"
+		fi
 	fi
 }

@@ -12,18 +12,8 @@
 # Version :  1.0.0
 ################################################################################
 
-## Checks if the script runs as root
-Root_Check () {
 
-	if ! [[ $EUID -eq 0 ]]; then
-		printf "$line\n"
-		printf "This option must run with root privileges\n"
-		printf "$line\n"
-		exit 1
-	fi
-}
-
-## Make sure the script doesn't run as root
+## Check if the script doesn't run as root
 Non_Root_Check () {
 	if [[ $EUID -eq 0 ]]; then
 		printf "$line\n"
@@ -41,7 +31,7 @@ Exit_Status () {
 		printf "$line\n\n"
 	else
 		printf "$line\n"
-		printf "Something went wrong $error_txt, please check log under:\n$errorpath\n"
+		printf "Something went wrong $error_text, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
         ## Prompt the user if he want to continue with the script
@@ -105,16 +95,17 @@ Exit_Status () {
 Progress_Spinner () {
 
 	## Loop until the PID of the last background process is not found
-	until [[ -z $(ps aux |awk '{print $2}' |egrep -Eo "$BPID") ]];do
+	until [[ -z $(ps aux |awk '{print $2}' |egrep -o "$BPID") ]];do
 		## Print text with a spinner
 		printf "\r$output_text in progress...  [|]"
-		sleep 0.75
+		sleep 0.1
 		printf "\r$output_text in progress...  [/]"
-		sleep 0.75
+		sleep 0.1
 		printf "\r$output_text in progress...  [-]"
-		sleep 0.75
+		sleep 0.1
 		printf "\r$output_text in progress...  [\\]"
-		sleep 0.70
+		sleep 0.1
+		printf "\r$output_text in progress...  [|]"
 	done
 
 	## Print a new line outside the loop so it will not interrupt with the it
@@ -127,35 +118,30 @@ Log_And_Variables () {
 
 	####  Varibale	####
     line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+
+	## Check the original user that executed the script
 	if [[ -z $SUDO_USER ]]; then
 		orig_user=$(whoami)
 	else
 		orig_user=$SUDO_USER
 	fi
-	user_path=/home/$orig_user
-	errorpath=$user_path/Automated-Installer-Log/error.log
-	outputpath=$user_path/Automated-Installer-Log/output.log
+
+	tmpdir=$(mktemp -d -p $HOME)
+	errorpath=$HOME/.Automated-Installer-Log/error.log
+	outputpath=$HOME/.Automated-Installer-Log/output.log
 	lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
-	aurhelper_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	appinstall_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
+	archfuncs_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.appinstall.sh"
 	deepin_sound_path=/usr/share/sounds/deepin/stereo/
 	kernel_ver=$(uname -r |cut -d "." -f 1,2 |tr -d ".s")
 	refind_path=$(sudo find /boot -path *refind)
 	####  Varibale	####
 
-	## Validate that the original user that logged in isn't root
-	if [[ $orig_user == "root" ]]; then
-		printf "$line\n"
-		printf "The script can't run when the user that originally logged in is root\n"
-		printf "Please log in as non-root and try again..\n"
-		printf "$line\n\n"
-		exit 1
-	fi
-
 	## Check if log folder exits, if not, create it
-	if ! [[ -d $user_path/Automated-Installer-Log ]]; then
-		sudo runuser -l $orig_user -c "mkdir $user_path/Automated-Installer-Log"
+	if ! [[ -d $HOME/.Automated-Installer-Log ]]; then
+		sudo runuser -l $orig_user -c "mkdir $HOME/.Automated-Installer-Log"
 	fi
 
 	## Check if error log exits, if not, create it
@@ -167,6 +153,12 @@ Log_And_Variables () {
 	if ! [[ -e $outputpath ]]; then
 		sudo runuser -l $orig_user -c "touch $outputpath"
 	fi
+}
+
+## Clean tmp directories and file that were created during the script
+Clean_Up () {
+
+	rm -rf $tmpdir
 }
 
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
@@ -192,11 +184,64 @@ Distro_Check () {
 
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
+		## Save the exxit status of last command to a Varibale
         printf "Sorry, but the script did not find your distribution,\n"
         printf "Exiting...\n"
         printf "$line\n\n"
         exit 1
     fi
+
+	if [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		printf "$line\n"
+		printf "This script doesn't support $Distro_Val at the moment\n"
+		printf "$line\n"
+
+		exit 1
+	fi
+}
+
+## Update the system
+System_Update () {
+
+	output_text="Updating the package lists"
+	error_text="Updating the package lists"
+
+	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+
+		sudo apt-get update 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
+		## Prompet sudo
+		sudo echo
+
+		## Will be used in Exit_Status function to output text for the user
+		output_text="Update"
+		error_text="while updating"
+
+		## Update the system, send stdout, sterr to log files
+		## and move the process to the background for the Progress_Spinner function.
+		sudo pacman -Sy --noconfirm 2>> $errorpath >> $outputpath &
+
+		## Save the background PID to a variable for later use with wait command
+		BPID=$!
+
+		## Call Progress_Spinner function
+		Progress_Spinner
+
+		## Wait until the process is done to get its exit status.
+		wait $BPID
+
+		## Save the exxit status of last command to a Varibale
+		status=$?
+
+		## Call Exit_Status function
+		Exit_Status
+	fi
 }
 
 
@@ -206,12 +251,8 @@ Dependencies_Installation () {
 	## Check if wget is installed,
 	## if not then download it
 	if [[ -z $(command -v wget) ]]; then
-		printf "$line\n"
-		printf "Downloading wget...\n"
-		printf "$line\n\n"
-
 		output_text="wget download"
-		error_txt="while downloading wget"
+		error_text="while downloading wget"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -223,7 +264,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
 			sudo apt-get install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -246,12 +287,8 @@ Dependencies_Installation () {
 	## Check if curl is installed,
 	## if not then download it
 	if [[ -z $(command -v curl) ]]; then
-		printf "$line\n"
-		printf "Downloading curl...\n"
-		printf "$line\n\n"
-
 		output_text="curl download"
-		error_txt="while downloading curl"
+		error_text="while downloading curl"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -263,7 +300,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
 			sudo apt-get install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -286,12 +323,8 @@ Dependencies_Installation () {
 	## Check if git is installed,
 	## if not then download it
 	if [[ -z $(command -v git) ]]; then
-		printf "$line\n"
-		printf "Downloading git...\n"
-		printf "$line\n\n"
-
 		output_text="git download"
-		error_txt="while downloading git"
+		error_text="while downloading git"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -303,9 +336,9 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"debian\" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
 			sudo echo
-			sudp apt-get install git -y 2>> $errorpath >> $outputpath &
+			sudo apt-get install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -333,48 +366,57 @@ Source_And_Validation () {
     ## if it wasn't, get the missing script from GitHub
     source ./.post-install.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Downloading .post-install.sh...\n"
-		printf "$line\n\n"
-
 		output_text=".post-install.sh download"
-		error_txt="while downloading .post-install.sh"
+		error_text="while downloading .post-install.sh"
 
-		wget $post_script 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+		wget --show-progress --progress=bar -a $outputpath $post_script 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
 		output_text=".post-install.sh source"
-		error_txt="while sourcing .post-install.sh"
+		error_text="while sourcing .post-install.sh"
 
 		source ./.post-install.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
 
-    source ./.aurhelper.sh 2>> $errorpath >> $outputpath
+    source ./.appinstall.sh 2>> $errorpath >> $outputpath
     if ! [[ $? -eq 0 ]]; then
-		printf "$line\n"
-		printf "Downloading .aurhelper.sh...\n"
-		printf "$line\n\n"
+		output_text=".appinstall.sh download"
+		error_text="while downloading .appinstall.sh"
 
-		output_text=".aurhelper.sh download"
-		error_txt="while downloading .aurhelper.sh"
-
-		wget $aurhelper_script 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
+		wget --show-progress --progress=bar -a $appinstall_script 2>> $errorpath
+		wait
 		status=$?
 		Exit_Status
+		sudo printf "\n"
 
-		output_text=".aurhelper.sh source"
-		error_txt="while sourcing .aurhelper.sh"
+		output_text=".appinstall.sh source"
+		error_text="while sourcing .appinstall.sh"
 
-		source ./.aurhelper.sh 2>> $errorpath >> $outputpath
+		source ./.appinstall.sh 2>> $errorpath >> $outputpath
+		status=$?
+		Exit_Status
+    fi
+
+	source ./.archfuncs.sh 2>> $errorpath >> $outputpath
+    if ! [[ $? -eq 0 ]]; then
+		output_text=".archfuncs.sh download"
+		error_text="while downloading .archfuncs.sh"
+
+		wget --show-progress --progress=bar -a $outputpath $archfuncs_script 2>> $errorpath
+		wait
+		status=$?
+		Exit_Status
+		sudo printf "\n"
+
+		output_text=".archfuncs.sh source"
+		error_text="while sourcing .archfuncs.sh"
+
+		source ./.archfuncs.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
@@ -386,6 +428,9 @@ Log_And_Variables
 ## Call Distro_Check function
 Distro_Check
 
+## Call System_Update function
+System_Update
+
 ## Call Dependencies_Installation function
 Dependencies_Installation
 
@@ -395,7 +440,7 @@ Source_And_Validation
 ## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
-	scripts=("Post install","Aurhelper **Run as Non-Root**","Clean Logs","Exit")
+	scripts=("Post install","AppInstall **Run as Non-Root**","Clean Logs","Exit")
 	PS3="Please choose what would you like to do: "
 	select opt in ${scripts[*]} ; do
 	    case $opt in
@@ -412,7 +457,7 @@ Main_Menu () {
 						sleep 0.5
 						KDE_Font_Config
 						sleep 0.5
-						KDE_Theme_Config
+						Theme_Config
 					elif [[ "$desktop_env" == "deepin" ]]; then
 						Deepin_Installation
 					else
@@ -437,12 +482,20 @@ Main_Menu () {
 					Pacman_Multilib
 					sleep 2.5
 					if ! [[ -z $(echo $DESKTOP_SESSION | grep plasma) ]]; then
-						KDE_Theme_Config
+						Theme_Config
 					fi
 					DM_Menu
 					sleep 2.5
 					Boot_Manager_Config
+
+				elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+					Alias_and_Wallpaper
+					sleep 2.5
+					Theme_Config
+					sleep 2.5
+					Boot_Manager_Config
 				fi
+
 
 				printf "$line\n"
 				printf "Post-Install completed successfully\n"
@@ -450,7 +503,7 @@ Main_Menu () {
 				exit 0
 				;;
 
-	        "Aurhelper **Run as Non-Root**")
+	        "AppInstall **Run as Non-Root**")
 				Non_Root_Check
 				if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 					if [[ $aur_helper == "yay" || -z $aur_helper ]]; then
@@ -462,17 +515,23 @@ Main_Menu () {
 
 					elif [[ $aur_helper == "aurman" ]]; then
 						aur_helper="aurman"
-						Main_Menu
 						Aurman_Install
 						sleep 1
 						Aurman_Applications
 						sleep 1
 						Vbox_Installation
 					fi
+
+				elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+					Apt_Applications
+					sleep 1
+					Deb_Packages
+					sleep 1
+					Vbox_Installation
 				fi
 
 				printf "$line\n"
-				printf "Aurhelper completed successfully\n"
+				printf "AppInstall completed successfully\n"
 				printf "$line\n\n"
 				exit 0
 				;;
@@ -486,12 +545,10 @@ Main_Menu () {
 
 			"Clean Logs")
 				output_text="Cleaning log files"
-				error_txt="while cleaning log files"
+				error_text="while cleaning log files"
 
-				sudo rm -rf $user_path/Automated-Installer-Log
-				status=$?
-				Exit_Status
-				Log_And_Variables
+				echo > $errorpath
+				echo > $outputpath
 				;;
 
 			*)
@@ -590,3 +647,6 @@ done
 
 ## Call Main_Menu function
 Main_Menu
+
+## Make sure there is a clean up by using traping the function upon EXIT
+trap Clean_Up EXIT
