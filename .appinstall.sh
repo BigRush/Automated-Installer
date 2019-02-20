@@ -87,8 +87,8 @@ Deb_Packages () {
 	##  Discord installation ##
 
 	## Check if Downloads folder exists and if not, create it
-	if ! [[ -d $user_path/Downloads ]]; then
-		mkdir $user_path/Downloads
+	if ! [[ -d $HOME/Downloads ]]; then
+		mkdir $HOME/Downloads
 	fi
 
 	## Download Discord's .deb package from their website
@@ -99,7 +99,7 @@ Deb_Packages () {
 	output_text="Downloading Discord's .deb package"
 	error_text="while downloading Discord's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
 	wait
 	status=$?
 	Exit_Status
@@ -111,7 +111,7 @@ Deb_Packages () {
 	error_text="while installing Discord"
 
 
-	sudo apt-get install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $HOME/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -128,7 +128,7 @@ Deb_Packages () {
 	output_text="Downloading Steam's .deb package"
 	error_text="while downloading Steam's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O $HOME/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath
 	wait
 	status=$?
 	Exit_Status
@@ -163,7 +163,7 @@ Deb_Packages () {
 
 	sudo echo
 
-	sudo apt-get install $user_path/Downloads/steam.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $HOME/Downloads/steam.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -180,7 +180,7 @@ Deb_Packages () {
 	output_text="Downloading TeamViewer's .deb package"
 	error_text="while downloading TeamViewer's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O $HOME/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath
 	wait
 	status=$?
 	Exit_Status
@@ -191,7 +191,7 @@ Deb_Packages () {
 	output_text="Installing TeamViewer from .deb package"
 	error_text="while installing TeamViewer"
 
-	sudo apt-get install $user_path/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $HOME/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
@@ -208,7 +208,7 @@ Deb_Packages () {
 	output_text="Downloading Atom's .deb package"
 	error_text="while downloading Atom's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O $user_path/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O $HOME/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath
 	wait
 	status=$?
 	Exit_Status
@@ -220,7 +220,7 @@ Deb_Packages () {
 	output_text="Installing Atom from .deb package"
 	error_text="while installing Atom"
 
-	sudo apt-get install $user_path/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
+	sudo apt-get install $HOME/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID

@@ -35,13 +35,13 @@ Alias_and_Wallpaper () {
 	error_text="while downloading background picture"
 
 	## If the directory doesn't exits, create it
-	if ! [[ -d $user_path/Pictures ]]; then
-		sudo runuser -l $orig_user -c "mkdir $user_path/Pictures"
+	if ! [[ -d $HOME/Pictures ]]; then
+		sudo runuser -l $orig_user -c "mkdir $HOME/Pictures"
 	fi
 
 	## If the background picture doesn't already exists, download it
-	if ! [[ -e $user_path/Pictures/archbk.jpg ]]; then
-		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $user_path/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath
+	if ! [[ -e $HOME/Pictures/archbk.jpg ]]; then
+		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath
 		wait
 		status=$?
 		Exit_Status
@@ -197,7 +197,7 @@ KDE_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $user_path/.xinitrc"
+	sudo runuser -l "root" -c "printf \"exec startkde\n\" > $HOME/.xinitrc"
 
 	output_text="Plasma desktop installation"
 	error_text="while installing plasma desktop"
@@ -291,8 +291,8 @@ Theme_Config () {
 	fi
 
 
-	if ! [[ -d $user_path/Documents/Themes ]]; then
-		mkdir -p $user_path/Documents/Themes
+	if ! [[ -d $HOME/Documents/Themes ]]; then
+		mkdir -p $HOME/Documents/Themes
 
 		printf "$line\n"
 		printf "Installing themes form Mega cloud...\n"
@@ -302,7 +302,7 @@ Theme_Config () {
 		error_text="while getting themes form Mega cloud"
 
 		if [[ $de_env == "kde" ]]; then
-			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
+			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
 			BPID=$!
 			Progress_Spinner
@@ -311,7 +311,7 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $de_env == "gtk" ]]; then
-			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
+			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
 
 			BPID=$!
 			Progress_Spinner
@@ -324,7 +324,7 @@ Theme_Config () {
 
 	## Chili theme
 	if [[ $de_env == "kde" ]]; then
-		if ! [[ -e $user_path/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
+		if ! [[ -e $HOME/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
 			printf "$line\n"
 			printf "Chili theme doesn't exists...\n"
 			printf "$line\n\n"
@@ -339,9 +339,9 @@ Theme_Config () {
 
 	## Shadow icons
 	if [[ $de_env == "kde" ]]; then
-		if [[ -e $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
-			if ! [[ -e $user_path/.icons ]]; then
-				mkdir $user_path/.icons
+		if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
+			if ! [[ -e $HOME/.icons ]]; then
+				mkdir $HOME/.icons
 			fi
 
 			printf "$line\n"
@@ -351,7 +351,7 @@ Theme_Config () {
 			output_text="Extraction"
 			error_text="while extracting Shadow icons"
 
-			sudo tar -xvf $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $user_path/.icons 2>> $errorpath >> $outputpath
+			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $HOME/.icons 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -446,9 +446,9 @@ Theme_Config () {
 			Exit_Status
 
 		else
-			if [[ -e $user_path/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
-				if ! [[ -e $user_path/.icons ]]; then
-					mkdir $user_path/.icons
+			if [[ -e $HOME/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+				if ! [[ -e $HOME/.icons ]]; then
+					mkdir $HOME/.icons
 				fi
 
 				printf "$line\n"
@@ -458,7 +458,7 @@ Theme_Config () {
 				output_text="Extraction"
 				error_text="while extracting Shadow icons"
 
-				sudo tar -xvf $user_path/Documents/Themes/shadow-4.8.3.tar.xz -C $user_path/.icons 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/shadow-4.8.3.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status
@@ -817,8 +817,8 @@ Theme_Config () {
 	fi
 
 	if ! [[ -e /usr/share/plank/themes/Foggy/dock.theme ]]; then
-		if [[ -e $user_path/Documents/Themes/dock.theme ]]; then
-			sudo cp $user_path/Documents/Themes/dock.theme /usr/share/plank/themes/Foggy
+		if [[ -e $HOME/Documents/Themes/dock.theme ]]; then
+			sudo cp $HOME/Documents/Themes/dock.theme /usr/share/plank/themes/Foggy
 
 		else
 			printf "$line\n"
@@ -835,7 +835,7 @@ Theme_Config () {
 
 	## Install Transparent theme for plank
 	if ! [[ -e /usr/share/plank/themes/Transparent ]]; then
-		if [[ -e $user_path/Documents/Themes/Transparent.tar.gz ]]; then
+		if [[ -e $HOME/Documents/Themes/Transparent.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting Transparent theme...\n"
 			printf "$line\n\n"
@@ -843,7 +843,7 @@ Theme_Config () {
 			output_text="Extraction"
 			error_text="while extracting Transparent.tar.gz theme"
 
-			sudo tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf $HOME/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -863,7 +863,7 @@ Theme_Config () {
 
 	## Install Zero theme for plank
 	if ! [[ -e /usr/share/plank/themes/zero ]]; then
-		if [[ -e $user_path/Documents/Themes/zero.tar.gz ]]; then
+		if [[ -e $HOME/Documents/Themes/zero.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting theme...\n"
 			printf "$line\n\n"
@@ -871,7 +871,7 @@ Theme_Config () {
 			output_text="Extraction"
 			error_text="while extracting zero.tar.gz theme"
 
-			sudo tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
+			sudo tar -xvf /$HOME/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -896,7 +896,7 @@ Deepin_Installation () {
 	sudo echo
 
 	## Add the option to start the deepin desktop environment with xinit
-	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $user_path/.xinitrc"
+	sudo runuser -l "root" -c "printf \"exec startdde\n\" > $HOME/.xinitrc"
 
 	output_text="Deepin desktop installation"
 	error_text="while installing Deepin desktop"
@@ -922,7 +922,7 @@ Deepin_Installation () {
 
 	## Copy the wallpaper to deepin's wallpaper folder
 	if ! [[ -e /usr/share/wallpapers/deepin/archbk.jpg ]]; then
-		sudo cp $user_path/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
+		sudo cp $HOME/Pictures/archbk.jpg /usr/share/wallpapers/deepin/
 	fi
 }
 
@@ -1153,7 +1153,7 @@ Boot_Manager_Config () {
 		fi
 
 		if ! [[ -e /boot/grub/themes/Vimix ]]; then
-			if [[ -e $user_path/Documents/Themes/grub-theme-vimix.tar.xz ]]; then
+			if [[ -e $HOME/Documents/Themes/grub-theme-vimix.tar.xz ]]; then
 
 				printf "$line\n"
 				printf "Extracting theme...\n"
@@ -1162,7 +1162,7 @@ Boot_Manager_Config () {
 				output_text="Extraction"
 				error_text="while extracting Vimix theme"
 
-				sudo tar -xvf $user_path/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status

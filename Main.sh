@@ -126,10 +126,9 @@ Log_And_Variables () {
 		orig_user=$SUDO_USER
 	fi
 
-	user_path=$HOME
 	tmpdir=$(mktemp -d -p $HOME)
-	errorpath=$user_path/.Automated-Installer-Log/error.log
-	outputpath=$user_path/.Automated-Installer-Log/output.log
+	errorpath=$HOME/.Automated-Installer-Log/error.log
+	outputpath=$HOME/.Automated-Installer-Log/output.log
 	lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
@@ -141,8 +140,8 @@ Log_And_Variables () {
 	####  Varibale	####
 
 	## Check if log folder exits, if not, create it
-	if ! [[ -d $user_path/.Automated-Installer-Log ]]; then
-		sudo runuser -l $orig_user -c "mkdir $user_path/.Automated-Installer-Log"
+	if ! [[ -d $HOME/.Automated-Installer-Log ]]; then
+		sudo runuser -l $orig_user -c "mkdir $HOME/.Automated-Installer-Log"
 	fi
 
 	## Check if error log exits, if not, create it
