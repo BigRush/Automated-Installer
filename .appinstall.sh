@@ -102,23 +102,19 @@ Deb_Packages () {
 	fi
 
 	## Download Discord's .deb package from their website
+	printf "$line\n"
+	printf "Downloading Discord's .deb package\n"
+	printf "$line\n\n"
 
 	output_text="Downloading Discord's .deb package"
 	error_text="while downloading Discord's .deb package"
 
-	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
-	wait &
-	BPID=$!
-	Progress_Spinner
+	wget --show-progress --progress=bar -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
+	wait
 	status=$?
 	Exit_Status
 
-
 	## Installing Discord from .deb package
-	printf "$line\n"
-	printf "Installing Discord\n"
-	printf "$line\n\n"
-
 	sudo echo
 
 	output_text="Installing Discord from .deb package"
