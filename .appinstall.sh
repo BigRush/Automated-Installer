@@ -107,8 +107,9 @@ Deb_Packages () {
 	error_text="while downloading Discord's .deb package"
 
 	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
+	wait &
+	BPID=$!
 	Progress_Spinner
-	wait
 	status=$?
 	Exit_Status
 
