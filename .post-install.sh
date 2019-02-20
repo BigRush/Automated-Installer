@@ -701,16 +701,16 @@ Theme_Config () {
 			output_text="Cloning Arc theme"
 			error_text="while Cloning Arc theme"
 
-			git clone https://github.com/horst3180/arc-theme.git 2>> $errorpath >> $outputpath &
+			pushd . 2>> $errorpath >> $outputpath
+
+			git clone https://github.com/horst3180/arc-theme.git $tmpdir/arc-theme 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
 			status=$?
 			Exit_Status
 
-			pushd . 2>> $errorpath >> $outputpath
-
-			cd arc-theme
+			cd $tmpdir/arc-theme
 
 			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
 			for i in ${arc_pkg[*]}; do
@@ -755,7 +755,6 @@ Theme_Config () {
 			Exit_Status
 
 			popd 2>> $errorpath >> $outputpath
-			rm -rf arc-theme
 		fi
 	fi
 
@@ -818,15 +817,16 @@ Theme_Config () {
 
 		output_text="Cloning Arc theme"
 		error_text="while Cloning Arc theme"
+		pushd . 2>> $errorpath >> $outputpath
 
-		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
+		git clone https://github.com/adapta-project/adapta-gtk-theme.git $tmpdir/adapta-gtk-theme 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
 		status=$?
 		Exit_Status
 
-		pushd .
+
 
 		cd adapta-gtk-theme
 
@@ -903,9 +903,8 @@ Theme_Config () {
 		status=$?
 		Exit_Status
 
-		popd
+		popd 2>> $errorpath >> $outputpath
 
-		rm -rf adapta-gtk-theme
 	fi
 
 	## Install Foggy theme for plank

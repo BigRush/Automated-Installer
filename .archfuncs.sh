@@ -31,12 +31,12 @@ Aurman_Install () {
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_path/Automated-Installer-Log/aurman_install_tmp ]]; then
-		mkdir -p $user_path/Automated-Installer-Log/aurman_install_tmp
+	if ! [[ -d $tmpdir/aurman_install_tmp ]]; then
+		mkdir -p $tmpdir/aurman_install_tmp
 	fi
 
 	pushd . 2>> $errorpath >> $outputpath
-	cd $user_path/Automated-Installer-Log/aurman_install_tmp
+	cd $tmpdir/aurman_install_tmp
 
 	## Check if "aurman" exists, if not, install "aurman" from AUR
 	if [[ -z $(command -v aurman) ]]; then
@@ -72,7 +72,6 @@ Aurman_Install () {
 
 	## Clean up on aisle four
 	popd 2>> $errorpath >> $outputpath
-	rm -rf $user_path/aurman_install_tmp
 }
 
 ## Install yay manually
@@ -94,12 +93,12 @@ Yay_Install () {
 	Exit_Status
 
 	## Create a tmp-working-dir if it does't exits and navigate into it
-	if ! [[ -e $user_path/Automated-Installer-Log/yay_install_tmp ]]; then
-		mkdir -p $user_path/Automated-Installer-Log/yay_install_tmp
+	if ! [[ -d $tmpdir/yay_install_tmp ]]; then
+		mkdir -p $tmpdir/yay_install_tmp
 	fi
 
 	pushd . 2>> $errorpath >> $outputpath
-	cd $user_path/Automated-Installer-Log/yay_install_tmp
+	cd $tmpdir/yay_install_tmp
 
 	## Check if "yay" exists, if not, install "yay" from AUR
 	if ! [[ -n "$(pacman -Qs yay)" ]]; then
@@ -135,7 +134,6 @@ Yay_Install () {
 
 	## Clean up on aisle four
 	popd 2>> $errorpath >> $outputpath
-	rm -rf $user_path/yay_install_tmp
 }
 
 ## Configure arch after a clean install with KDE desktop environment
@@ -371,8 +369,7 @@ KDE_Font_Config () {
 	        <edit name="family" mode="assign" binding="same"><string>Noto Mono</string></edit>
 	    </match>
 	</fontconfig>
-	' > $(pwd)/tmp_font
+	' > $tmpdir/tmp_font
 
-	sudo runuser -l "root" -c "cat $(pwd)/tmp_font > /etc/fonts/local.conf"
-	rm tmp_font
+	sudo runuser -l "root" -c "cat $tmpdir/tmp_font > /etc/fonts/local.conf"
 }

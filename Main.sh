@@ -127,6 +127,7 @@ Log_And_Variables () {
 	fi
 
 	user_path=$HOME
+	tmpdir=$(mktemp -d -p $HOME)
 	errorpath=$user_path/Automated-Installer-Log/error.log
 	outputpath=$user_path/Automated-Installer-Log/output.log
 	lightconf=/etc/lightdm/lightdm.conf
@@ -153,6 +154,12 @@ Log_And_Variables () {
 	if ! [[ -e $outputpath ]]; then
 		sudo runuser -l $orig_user -c "touch $outputpath"
 	fi
+}
+
+## Clean tmp directories and file that were created during the script
+Clean_Up () {
+
+	rm -rf $tmpdir
 }
 
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
@@ -572,10 +579,8 @@ Main_Menu () {
 				output_text="Cleaning log files"
 				error_text="while cleaning log files"
 
-				sudo rm -rf $user_path/Automated-Installer-Log
-				status=$?
-				Exit_Status
-				Log_And_Variables
+				echo > $errorpath
+				echo > $outputpath
 				;;
 
 			*)
@@ -674,3 +679,6 @@ done
 
 ## Call Main_Menu function
 Main_Menu
+
+## Make sure there is a clean up by using traping the function upon EXIT
+trap Clean_Up EXIT

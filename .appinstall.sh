@@ -132,7 +132,6 @@ EOF
 	error_text="while installing Discord"
 
 
-#	sudo apt-get install $(pwd)/download?platform=linux -y 2>> $errorpath >> $outputpath &
 	sudo apt-get install $user_path/Downloads/discord.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
