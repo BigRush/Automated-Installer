@@ -22,7 +22,7 @@ Aurman_Install () {
 
 	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
-	error_txt="while updating"
+	error_text="while updating"
 
 	## Update the system, send stdout and sterr to log files
 	sudo pacman -Syu 2>> $errorpath >> $outputpath &
@@ -41,7 +41,7 @@ Aurman_Install () {
 	## Check if "aurman" exists, if not, install "aurman" from AUR
 	if [[ -z $(command -v aurman) ]]; then
 		output_text="Getting aurman with curl from AUR"
-		error_txt="while getting aurman with curl from AUR"
+		error_text="while getting aurman with curl from AUR"
 
 		## Get the build files for AUR
     	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/aurman.tar.gz 2>> $errorpath >> $outputpath &
@@ -56,7 +56,7 @@ Aurman_Install () {
 		cd aurman
 
 		output_text="Aurman building"
-		error_txt="while building aurman"
+		error_text="while building aurman"
 
 		## Add gpg key
 		gpg --recv-keys 465022E743D71E39 2>> $errorpath >> $outputpath
@@ -85,7 +85,7 @@ Yay_Install () {
 
 	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
-	error_txt="while updating"
+	error_text="while updating"
 
 	## Update the system, send stdout and sterr to log files
 	sudo pacman -Syu 2>> $errorpath >> $outputpath &
@@ -104,7 +104,7 @@ Yay_Install () {
 	## Check if "yay" exists, if not, install "yay" from AUR
 	if ! [[ -n "$(pacman -Qs yay)" ]]; then
 		output_text="getting yay with curl from AUR"
-		error_txt="while getting yay with curl from AUR"
+		error_text="while getting yay with curl from AUR"
 
 		## Get the build files for AUR
     	curl -s -L -O https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz 2>> $errorpath >> $outputpath &
@@ -119,7 +119,7 @@ Yay_Install () {
 		cd yay
 
 		output_text="yay building"
-		error_txt="while building yay"
+		error_text="while building yay"
 
 		## Add gpg key
 		# gpg --recv-keys 465022E743D71E39 2>> $errorpath >> $outputpath
@@ -150,7 +150,7 @@ Arch_Config () {
 
 	## Will be used in Exit_Status function to output text for the user
 	output_text="Update"
-	error_txt="while updating"
+	error_text="while updating"
 
 	## Update the system, send stdout, sterr to log files
 	## and move the process to the background for the Progress_Spinner function.
@@ -190,7 +190,7 @@ Arch_Config () {
 	##    you compare the exit status of the process that has been sent to the
 	##    the background, you will be getting the exit status of a different
 	##    command, in this case I got the exit status of the declaration of
-	##    "error_txt" variable (before implementing this method of wait command,
+	##    "error_text" variable (before implementing this method of wait command,
 	##    it can be seen on early commits).
 	##
 	## So now by waiting until the process is done, I can safely check the exit
@@ -208,7 +208,7 @@ Arch_Config () {
 	printf "$line\n\n"
 
 	output_text="Xorg installation"
-	error_txt=" while installing Xorg"
+	error_text=" while installing Xorg"
 	sudo pacman -S xorg xorg-xinit --needed --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$!
 	Progress_Spinner
@@ -228,7 +228,7 @@ Arch_Config () {
 		printf "$line\n\n"
 
 		output_text="Video card drivers installationl"
-		error_txt="while installing video card's drivers"
+		error_text="while installing video card's drivers"
 
 		sudo echo
 
@@ -313,7 +313,7 @@ Pacman_Multilib () {
 		printf "$line\n\n"
 
 		output_text="Multilib sync"
-		error_txt="while syncing multilib"
+		error_text="while syncing multilib"
 
 		sudo pacman -Sy 2>> $errorpath >> $outputpath &
 		Progress_Spinner
@@ -331,7 +331,7 @@ KDE_Font_Config () {
 	sudo echo
 
 	output_text="Font installation"
-	error_txt="while installting fonts"
+	error_text="while installting fonts"
 
 	## Install some nice fonts
 	sudo pacman -S ttf-dejavu ttf-liberation noto-fonts --needed --noconfirm 2>> $errorpath >> $outputpath &

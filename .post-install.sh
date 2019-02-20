@@ -32,7 +32,7 @@ Alias_and_Wallpaper () {
 	printf "$line\n\n"
 
 	output_text="Background picture download"
-	error_txt="while downloading background picture"
+	error_text="while downloading background picture"
 
 	## If the directory doesn't exits, create it
 	if ! [[ -d $user_path/Pictures ]]; then
@@ -202,7 +202,7 @@ KDE_Installation () {
 	printf "$line\n\n"
 
 	output_text="Plasma desktop installation"
-	error_txt="while installing plasma desktop"
+	error_text="while installing plasma desktop"
 
 	##	Install plasma desktop environment
 	sudo pacman -S plasma --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -244,7 +244,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Megatools installation"
-				error_txt="while installing Megatools"
+				error_text="while installing Megatools"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -267,7 +267,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Megatools installation"
-				error_txt="while installing Megatools"
+				error_text="while installing Megatools"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -312,7 +312,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting themes form Mega cloud"
-			error_txt="while getting themes form Mega cloud"
+			error_text="while getting themes form Mega cloud"
 
 			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
 
@@ -328,7 +328,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting themes form Mega cloud"
-			error_txt="while getting themes form Mega cloud"
+			error_text="while getting themes form Mega cloud"
 
 			megadl --no-progress --path=$user_path/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
 
@@ -349,7 +349,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Chili theme with megatools"
-			error_txt="while getting Chili with megatools"
+			error_text="while getting Chili with megatools"
 
 			status=1
 			Exit_Status
@@ -368,7 +368,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Extraction"
-			error_txt="while extracting Shadow icons"
+			error_text="while extracting Shadow icons"
 
 			sudo tar -xvf $user_path/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $user_path/.icons 2>> $errorpath >> $outputpath
 
@@ -381,7 +381,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting shadow icons with megatools"
-			error_txt="while getting shadow icons megatools"
+			error_text="while getting shadow icons megatools"
 
 			status=1
 			Exit_Status
@@ -403,7 +403,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Shadow icons installation"
-				error_txt="while installing Shadow icons"
+				error_text="while installing Shadow icons"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -426,7 +426,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Shadow icons installation"
-				error_txt="while installing Shadow icons"
+				error_text="while installing Shadow icons"
 
 				## Install megatools to get theme files from mega cloud
 				sudo echo
@@ -445,7 +445,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Adding the repository"
-			error_txt="while adding the repository"
+			error_text="while adding the repository"
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -467,7 +467,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Extraction"
-				error_txt="while extracting Shadow icons"
+				error_text="while extracting Shadow icons"
 
 				sudo tar -xvf $user_path/Documents/Themes/shadow-4.8.3.tar.xz -C $user_path/.icons 2>> $errorpath >> $outputpath
 
@@ -480,7 +480,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Getting shadow icons with megatools"
-				error_txt="while getting shadow icons megatools"
+				error_text="while getting shadow icons megatools"
 
 				status=1
 				Exit_Status
@@ -498,7 +498,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -516,7 +516,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		error_text="while adding the repository"
 
 		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
 		status=$?
@@ -528,7 +528,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Installing dirmngr"
-		error_txt="while installing dirmngr"
+		error_text="while installing dirmngr"
 
 		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -543,7 +543,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Adding the certificate"
-		error_txt="while adding the certificate"
+		error_text="while adding the certificate"
 		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
 		BPID=$!
 		Progress_Spinner
@@ -557,7 +557,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -572,7 +572,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -589,7 +589,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Adding the repository"
-		error_txt="while adding the repository"
+		error_text="while adding the repository"
 
 		sudo add-apt-repository ppa:papirus/papirus
 		status=$?
@@ -601,7 +601,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Updating the package lists"
-		error_txt="while updating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -616,7 +616,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Installing Papirus icons"
-		error_txt="while installing Papirus icons"
+		error_text="while installing Papirus icons"
 
 		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -634,7 +634,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme"
+			error_text="while installing Arc theme"
 
 			sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -650,7 +650,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme"
+			error_text="while installing Arc theme"
 			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
@@ -666,7 +666,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc-KDE theme"
-			error_txt="while installing Arc-KDE theme"
+			error_text="while installing Arc-KDE theme"
 
 			sudo apt-get install --install-recommends arc-kde -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -683,7 +683,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme"
+			error_text="while installing Arc theme"
 
 			sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -699,7 +699,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Cloning Arc theme"
-			error_txt="while Cloning Arc theme"
+			error_text="while Cloning Arc theme"
 
 			git clone https://github.com/horst3180/arc-theme.git 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -716,7 +716,7 @@ Theme_Config () {
 			for i in ${arc_pkg[*]}; do
 
 				output_text="Installing Arc theme dependency: $i"
-				error_txt="while installing Arc theme dependency: $i"
+				error_text="while installing Arc theme dependency: $i"
 
 				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
 				BPID=$!
@@ -731,7 +731,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Building Arc theme"
-			error_txt="while building Arc theme"
+			error_text="while building Arc theme"
 
 			./autogen.sh --prefix=/usr 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -745,7 +745,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc theme"
-			error_txt="while installing Arc theme"
+			error_text="while installing Arc theme"
 
 			sudo make install 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -769,7 +769,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Adapta theme"
-			error_txt="while installing Adapta theme"
+			error_text="while installing Adapta theme"
 
 			sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
@@ -785,7 +785,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Adapta theme"
-			error_txt="while installing Adapta theme"
+			error_text="while installing Adapta theme"
 
 			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/adapta-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -801,7 +801,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Installing Arc-KDE theme"
-			error_txt="while installing Arc-KDE theme"
+			error_text="while installing Arc-KDE theme"
 
 			sudo apt-get install --install-recommends adapta-kde -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -817,7 +817,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Cloning Arc theme"
-		error_txt="while Cloning Arc theme"
+		error_text="while Cloning Arc theme"
 
 		git clone https://github.com/adapta-project/adapta-gtk-theme.git 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -838,7 +838,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Installing Adapta theme dependency: $i"
-				error_txt="while installing Adapta theme dependency: $i"
+				error_text="while installing Adapta theme dependency: $i"
 				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -854,7 +854,7 @@ Theme_Config () {
 				printf "$line\n\n"
 
 				output_text="Installing Adapta theme dependency: $i"
-				error_txt="while installing Adapta theme dependency: $i"
+				error_text="while installing Adapta theme dependency: $i"
 				sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -869,7 +869,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Building Adapta theme"
-		error_txt="while building Adapta theme"
+		error_text="while building Adapta theme"
 
 		./autogen.sh --prefix=/usr --enable-plank 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -880,7 +880,7 @@ Theme_Config () {
 
 
 		output_text="Making Adapta theme, this may take a while, now"
-		error_txt="while making Adapta theme"
+		error_text="while making Adapta theme"
 
 		make 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -894,7 +894,7 @@ Theme_Config () {
 		printf "$line\n\n"
 
 		output_text="Installing Adapta theme"
-		error_txt="while installing Adapta theme"
+		error_text="while installing Adapta theme"
 
 		sudo make install 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -923,7 +923,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Foggy theme with megatools"
-			error_txt="while getting Foggy theme megatools"
+			error_text="while getting Foggy theme megatools"
 
 			status=1
 			Exit_Status
@@ -938,7 +938,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Extraction"
-			error_txt="while extracting Transparent.tar.gz theme"
+			error_text="while extracting Transparent.tar.gz theme"
 
 			sudo tar -xvf $user_path/Documents/Themes/Transparent.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
@@ -951,7 +951,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Transparent theme with megatools"
-			error_txt="while getting Transparent theme megatools"
+			error_text="while getting Transparent theme megatools"
 
 			status=1
 			Exit_Status
@@ -966,7 +966,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Extraction"
-			error_txt="while extracting zero.tar.gz theme"
+			error_text="while extracting zero.tar.gz theme"
 
 			sudo tar -xvf /$user_path/Documents/Themes/zero.tar.gz -C /usr/share/plank/themes 2>> $errorpath >> $outputpath
 
@@ -979,7 +979,7 @@ Theme_Config () {
 			printf "$line\n\n"
 
 			output_text="Getting Zero theme with megatools"
-			error_txt="while getting Zero theme megatools"
+			error_text="while getting Zero theme megatools"
 
 			status=1
 			Exit_Status
@@ -1000,7 +1000,7 @@ Deepin_Installation () {
 	printf "$line\n\n"
 
 	output_text="Deepin desktop installation"
-	error_txt="while installing Deepin desktop"
+	error_text="while installing Deepin desktop"
 
 	##	Install deepin desktop environment
 	sudo pacman -S deepin --needed --noconfirm 2>> $errorpath >>$outputpath &
@@ -1088,7 +1088,7 @@ SDDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="sddm installation"
-	error_txt="while installing sddm"
+	error_text="while installing sddm"
 
 	## Install sddm
 	sudo pacman -S sddm --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1109,7 +1109,7 @@ SDDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="Enable sddm service"
-	error_txt="while enabling sddm service"
+	error_text="while enabling sddm service"
 
 	systemctl enable sddm 2>> $errorpath >> $outputpath
 	status=$?
@@ -1126,7 +1126,7 @@ LightDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="Lightdm installation"
-	error_txt="while installing Lightdm"
+	error_text="while installing Lightdm"
 
 	## Install lightdm and configure it to work with webkit2-greeter
 	sudo pacman -S lightdm --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1147,7 +1147,7 @@ LightDM_Installation () {
 	printf "$line\n\n"
 
 	output_text="Enable Lightdm service"
-	error_txt="while enabling Lightdm service"
+	error_text="while enabling Lightdm service"
 
 	sudo systemctl enable lightdm 2>> $errorpath >> $outputpath
 	status=$?
@@ -1171,7 +1171,7 @@ LightDM_Configuration () {
 		printf "$line\n\n"
 
 		output_text="Lightdm-webkit2-greeter installation"
-		error_txt="while installing Lightdm-webkit2-greeter"
+		error_text="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
 		aurman -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1193,7 +1193,7 @@ LightDM_Configuration () {
 		printf "$line\n\n"
 
 		output_text="Lightdm-webkit2-greeter installation"
-		error_txt="while installing Lightdm-webkit2-greeter"
+		error_text="while installing Lightdm-webkit2-greeter"
 
 		## Install webkit greeter for a nice theme
 		yay -S lightdm-webkit2-greeter lightdm-webkit-theme-litarvan --needed --noconfirm 2>> $errorpath >> $outputpath &
@@ -1218,7 +1218,7 @@ Manjaro_Sys_Update () {
 	printf "$line\n\n"
 
 	output_text="Update"
-	error_txt="while updating"
+	error_text="while updating"
 
 	sudo pacman -Syu --noconfirm 2>> $errorpath >> $outputpath &
 	BPID=$
@@ -1278,7 +1278,7 @@ Boot_Manager_Config () {
 				printf "$line\n\n"
 
 				output_text="Extraction"
-				error_txt="while extracting Vimix theme"
+				error_text="while extracting Vimix theme"
 
 				sudo tar -xvf $user_path/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
@@ -1290,7 +1290,7 @@ Boot_Manager_Config () {
 				printf "$line\n\n"
 
 				output_text="Getting Vimix GRUB theme with megatools"
-				error_txt="while getting Vimix GRUB theme megatools"
+				error_text="while getting Vimix GRUB theme megatools"
 
 				status=1
 				Exit_Status
@@ -1319,7 +1319,7 @@ Boot_Manager_Config () {
 			printf "$line\n\n"
 
 			output_text="Roolling back to backup GRUB file"
-			error_txt="while rolling back to backup GRUB file"
+			error_text="while rolling back to backup GRUB file"
 
 			sudo grub-mkconfig -o /boot/grub/grub.cfg 2>> $errorpath >> $outputpath
 			status=$?
@@ -1327,13 +1327,13 @@ Boot_Manager_Config () {
 
 		else
 			output_text="GRUB changes"
-			error_txt="while applying changes to GRUB"
+			error_text="while applying changes to GRUB"
 			status=0
 			Exit_Status
 		fi
 
 	else
-		error_txt=", could not find GRUB's configuraion file"
+		error_text=", could not find GRUB's configuraion file"
 		status=1
 		Exit_Status
 	fi
@@ -1367,7 +1367,7 @@ Boot_Manager_Config () {
 		printf "$line\n\n"
 
 		output_text="Refind boot manager download"
-		error_txt="while downloading refind boot manager"
+		error_text="while downloading refind boot manager"
 
 		sudo pacman -S refind-efi --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -1381,7 +1381,7 @@ Boot_Manager_Config () {
 		printf "$line\n\n"
 
 		output_text="'refind-install'"
-		error_txt="while configuring refind with 'refind-install'"
+		error_text="while configuring refind with 'refind-install'"
 
 		sudo refind-install 2>> $errorpath >> $outputpath
 		status=$?
@@ -1392,7 +1392,7 @@ Boot_Manager_Config () {
 		printf "$line\n\n"
 
 		output_text="Setting refind to be the default boot manager"
-		error_txt="while setting refind to be the default boot manager"
+		error_text="while setting refind to be the default boot manager"
 
 		sudo refind-mkdefault 2>> $errorpath >> $outputpath
 		status=$?
@@ -1411,7 +1411,7 @@ Boot_Manager_Config () {
 			printf "$line\n\n"
 
 			output_text="Cloning theme from git"
-			error_txt="while cloning from git"
+			error_text="while cloning from git"
 
 			## Get the build files for AUR
 			sudo git clone https://github.com/EvanPurkhiser/rEFInd-minimal.git $refind_path/themes/rEFInd-minimal 2>> $errorpath >> $outputpath &

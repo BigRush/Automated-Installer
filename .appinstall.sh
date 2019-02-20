@@ -28,7 +28,7 @@ Aurman_Applications () {
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
-				error_txt="while installing $i"
+				error_text="while installing $i"
 				aurman -S $i --needed --noconfirm --noedit --pgp_fetch 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -42,7 +42,7 @@ Aurman_Applications () {
 			printf "Installing steam\n"
 			printf "$line\n\n"
 			output_text="steam installation"
-			error_txt="while installing steam"
+			error_text="while installing steam"
 			aurman -S steam --needed
 			status=$?
 			Exit_Status
@@ -59,7 +59,7 @@ Yay_Applications () {
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
-				error_txt="while installing $i"
+				error_text="while installing $i"
 				yay -S $i --needed --noconfirm --sudoloop 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -79,7 +79,7 @@ Apt_Applications () {
 		#printf "Installing $i\n"
 		#printf "$line\n\n"
 		output_text="$i installation"
-		error_txt="while installing $i"
+		error_text="while installing $i"
 		sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
@@ -104,9 +104,8 @@ Deb_Packages () {
 	## Download Discord's .deb package from their website
 
 	output_text="Downloading Discord's .deb package"
-	error_txt="while downloading Discord's .deb package"
+	error_text="while downloading Discord's .deb package"
 <<EOF
-	#wget -b -a $errorpath https://discordapp.com/api/download?platform=linux&format=deb
 	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb > /dev/null 2>> $errorpath
 	sleep 1
 	#awk -F "pid" '{print $2}' "$HOME/wget.log" |tr -d "[:blank:][:punct:]"
@@ -120,7 +119,7 @@ Deb_Packages () {
 EOF
 
 	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb || exit 1
-	wait 
+	wait
 
 	## Installing Discord from .deb package
 	printf "$line\n"
@@ -130,7 +129,7 @@ EOF
 	sudo echo
 
 	output_text="Installing Discord from .deb package"
-	error_txt="while installing Discord"
+	error_text="while installing Discord"
 
 
 #	sudo apt-get install $(pwd)/download?platform=linux -y 2>> $errorpath >> $outputpath &
@@ -146,7 +145,7 @@ EOF
 	## Download Steam's .deb package from their website
 
 	output_text="Downloading Steam's .deb package"
-	error_txt="while downloading Steam's .deb package"
+	error_text="while downloading Steam's .deb package"
 
 	curl -s -L -o $user_path/Downloads/steam.deb https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -160,7 +159,7 @@ EOF
 	sudo echo
 
 	output_text="Adding i386 architecture"
-	error_txt="while adding i386 architecture"
+	error_text="while adding i386 architecture"
 
 	sudo dpkg --add-architecture i386 2>> $errorpath >> $outputpath
 	status=$?
@@ -169,7 +168,7 @@ EOF
 	## Update the package lists
 
 	output_text="Updating the package lists"
-	error_txt="while updating the package lists"
+	error_text="while updating the package lists"
 
 	sudo apt-get update 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -181,7 +180,7 @@ EOF
 	## Installing Steam from .deb package
 
 	output_text="Installing Steam from .deb package"
-	error_txt="while installing Steam"
+	error_text="while installing Steam"
 
 	sudo echo
 
@@ -197,7 +196,7 @@ EOF
 	## Download TeamViewer's .deb package from their website
 
 	output_text="Downloading TeamViewer's .deb package"
-	error_txt="while downloading TeamViewer's .deb package"
+	error_text="while downloading TeamViewer's .deb package"
 
 	curl -s -L -o $user_path/Downloads/teamviewer.deb https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -214,7 +213,7 @@ EOF
 	sudo echo
 
 	output_text="Installing TeamViewer from .deb package"
-	error_txt="while installing TeamViewer"
+	error_text="while installing TeamViewer"
 
 	sudo apt-get install $user_path/Downloads/teamviewer.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -228,7 +227,7 @@ EOF
 	## Download Atom's .deb package from their website
 
 	output_text="Downloading Atom's .deb package"
-	error_txt="while downloading Atom's .deb package"
+	error_text="while downloading Atom's .deb package"
 
 	curl -s -L -o $user_path/Downloads/atom.deb https://atom.io/download/deb 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -245,7 +244,7 @@ EOF
 	sudo echo
 
 	output_text="Installing Atom from .deb package"
-	error_txt="while installing Atom"
+	error_text="while installing Atom"
 
 	sudo apt-get install $user_path/Downloads/atom.deb -y 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -259,7 +258,7 @@ EOF
 	## Add Etcher's debian repository
 
 	output_text="Adding Etcher's debian repository"
-	error_txt="while adding Etcher's debian repository"
+	error_text="while adding Etcher's debian repository"
 
 	echo "deb https://deb.etcher.io stable etcher" | sudo tee /etc/apt/sources.list.d/balena-etcher.list 2>> $errorpath >> $outputpath
 	status=$?
@@ -268,7 +267,7 @@ EOF
 
 	## Add Bintray.com's GPG key
 	output_text="Adding Bintray.com's GPG key"
-	error_txt="while adding Bintray.com's GPG key"
+	error_text="while adding Bintray.com's GPG key"
 
 	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath &
 	BPID=$!
@@ -279,7 +278,7 @@ EOF
 
 	## Download dependency
 	output_text="Downloading dependency: apt-transport-https"
-	error_txt="while downloading dependency"
+	error_text="while downloading dependency"
 
 	sudo apt-get install apt-transport-https 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -291,7 +290,7 @@ EOF
 	## Update the package lists
 
 	output_text="Updating the package lists"
-	error_txt="while updating the package lists"
+	error_text="while updating the package lists"
 
 	sudo apt-get update 2>> $errorpath >> $outputpath &
 	BPID=$!
@@ -303,7 +302,7 @@ EOF
 	## Installing Etcher
 
 	output_text="Installing Etcher"
-	error_txt="while installing Etcher"
+	error_text="while installing Etcher"
 
 	sudo echo
 
@@ -346,7 +345,7 @@ Vbox_Installation () {
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
-				error_txt="while installing $i"
+				error_text="while installing $i"
 				aurman -S $i --needed --noconfirm --noedit 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -361,7 +360,7 @@ Vbox_Installation () {
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
-				error_txt="while installing $i"
+				error_text="while installing $i"
 				yay -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -381,7 +380,7 @@ Vbox_Installation () {
 				printf "Installing $i\n"
 				printf "$line\n\n"
 				output_text="$i installation"
-				error_txt="while installing $i"
+				error_text="while installing $i"
 				pacman -S $i --needed --noconfirm 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
@@ -401,7 +400,7 @@ Vbox_Installation () {
 		## Add the repository key
 
 		output_text="Adding the repository key"
-		error_txt="while adding the repository key"
+		error_text="while adding the repository key"
 
 		wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add - 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -411,7 +410,7 @@ Vbox_Installation () {
 		Exit_Status
 
 		output_text="Adding the second repository key"
-		error_txt="while adding the second repository key"
+		error_text="while adding the second repository key"
 
 		wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add - 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -423,7 +422,7 @@ Vbox_Installation () {
 		## Add the VirtualBox repository
 
 		output_text="Adding the VirtualBox repository"
-		error_txt="while adding the VirtualBox repository"
+		error_text="while adding the VirtualBox repository"
 
 		echo "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian $(lsb_release -sc) contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list 2>> $errorpath >> $outputpath
 		status=$?
@@ -432,7 +431,7 @@ Vbox_Installation () {
 		## Update the package lists
 
 		output_text="Updating the package lists"
-		error_txt="while ufpdating the package lists"
+		error_text="while ufpdating the package lists"
 
 		sudo apt-get update 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -444,7 +443,7 @@ Vbox_Installation () {
 		## Installing headers
 
 		output_text="Installing linux-headers"
-		error_txt="while installing linux-headers"
+		error_text="while installing linux-headers"
 
 		sudo apt-get install linux-headers-$(uname -r) dkms -y 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -456,7 +455,7 @@ Vbox_Installation () {
 		## Installing VirtualBox
 
 		output_text="Installing VirtualBox"
-		error_txt="while installing VirtualBox"
+		error_text="while installing VirtualBox"
 
 		sudo apt-get install VirtualBox -y 2>> $errorpath >> $outputpath &
 		BPID=$!

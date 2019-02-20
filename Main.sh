@@ -31,7 +31,7 @@ Exit_Status () {
 		printf "$line\n\n"
 	else
 		printf "$line\n"
-		printf "Something went wrong $error_txt, please check log under:\n$errorpath\n"
+		printf "Something went wrong $error_text, please check log under:\n$errorpath\n"
 		printf "$line\n\n"
 
         ## Prompt the user if he want to continue with the script
@@ -197,7 +197,7 @@ Distro_Check () {
 System_Update () {
 
 	output_text="Updating the package lists"
-	error_txt="Updating the package lists"
+	error_text="Updating the package lists"
 
 	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 
@@ -218,7 +218,7 @@ System_Update () {
 
 		## Will be used in Exit_Status function to output text for the user
 		output_text="Update"
-		error_txt="while updating"
+		error_text="while updating"
 
 		## Update the system, send stdout, sterr to log files
 		## and move the process to the background for the Progress_Spinner function.
@@ -253,7 +253,7 @@ Dependencies_Installation () {
 		printf "$line\n\n"
 
 		output_text="wget download"
-		error_txt="while downloading wget"
+		error_text="while downloading wget"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -293,7 +293,7 @@ Dependencies_Installation () {
 		printf "$line\n\n"
 
 		output_text="curl download"
-		error_txt="while downloading curl"
+		error_text="while downloading curl"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -333,7 +333,7 @@ Dependencies_Installation () {
 		printf "$line\n\n"
 
 		output_text="git download"
-		error_txt="while downloading git"
+		error_text="while downloading git"
 
 		## Download wget
 		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
@@ -380,7 +380,7 @@ Source_And_Validation () {
 		printf "$line\n\n"
 
 		output_text=".post-install.sh download"
-		error_txt="while downloading .post-install.sh"
+		error_text="while downloading .post-install.sh"
 
 		wget $post_script 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -390,7 +390,7 @@ Source_And_Validation () {
 		Exit_Status
 
 		output_text=".post-install.sh source"
-		error_txt="while sourcing .post-install.sh"
+		error_text="while sourcing .post-install.sh"
 
 		source ./.post-install.sh 2>> $errorpath >> $outputpath
 		status=$?
@@ -404,7 +404,7 @@ Source_And_Validation () {
 		printf "$line\n\n"
 
 		output_text=".appinstall.sh download"
-		error_txt="while downloading .appinstall.sh"
+		error_text="while downloading .appinstall.sh"
 
 		wget $appinstall_script 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -414,7 +414,7 @@ Source_And_Validation () {
 		Exit_Status
 
 		output_text=".appinstall.sh source"
-		error_txt="while sourcing .appinstall.sh"
+		error_text="while sourcing .appinstall.sh"
 
 		source ./.appinstall.sh 2>> $errorpath >> $outputpath
 		status=$?
@@ -428,7 +428,7 @@ Source_And_Validation () {
 		printf "$line\n\n"
 
 		output_text=".archfuncs.sh download"
-		error_txt="while downloading .archfuncs.sh"
+		error_text="while downloading .archfuncs.sh"
 
 		wget $archfuncs_script 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -438,7 +438,7 @@ Source_And_Validation () {
 		Exit_Status
 
 		output_text=".archfuncs.sh source"
-		error_txt="while sourcing .archfuncs.sh"
+		error_text="while sourcing .archfuncs.sh"
 
 		source ./.archfuncs.sh 2>> $errorpath >> $outputpath
 		status=$?
@@ -569,7 +569,7 @@ Main_Menu () {
 
 			"Clean Logs")
 				output_text="Cleaning log files"
-				error_txt="while cleaning log files"
+				error_text="while cleaning log files"
 
 				sudo rm -rf $user_path/Automated-Installer-Log
 				status=$?
