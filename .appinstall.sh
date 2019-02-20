@@ -290,7 +290,7 @@ Deb_Packages () {
 ## Virtualbox installation
 Vbox_Installation () {
 	if ! [[ $vbox_inst == "yes" ]]; then
-		read -p "Would you like to install virtualbox?[Y/n]: " answer
+		read -p "Would you like to install Virtualbox?[Y/n]: " answer
 		printf "\n"
 		if [[ -z $answer ]]; then
 			:
@@ -298,14 +298,15 @@ Vbox_Installation () {
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting..."
+			printf "Exiting Virtualbox installation...\n"
 			printf "\n"
 			printf "$line\n\n"
-			exit 1
+			return 0
 		else
 			printf "$line\n"
-			printf "Invalid answer - exiting\n"
+			printf "Invalid answer - exiting Virtualbox installation\n"
 			printf "$line\n\n"
+			return 1
 		fi
 	fi
 
@@ -437,7 +438,7 @@ Vbox_Installation () {
 ## Docker installation
 Docker_Installation () {
 	if ! [[ $docker_inst == "yes" ]]; then
-		read -p "Would you like to install docker?[Y/n]: " answer
+		read -p "Would you like to install Docker?[Y/n]: " answer
 		printf "\n"
 		if [[ -z $answer ]]; then
 			:
@@ -445,14 +446,15 @@ Docker_Installation () {
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting..."
+			printf "Exiting Docker installation...\n"
 			printf "\n"
 			printf "$line\n\n"
-			exit 1
+			return 0
 		else
 			printf "$line\n"
-			printf "Invalid answer - exiting\n"
+			printf "Invalid answer - exiting Docker installation\n"
 			printf "$line\n\n"
+			return 1
 		fi
 	fi
 
@@ -563,7 +565,7 @@ Docker_Installation () {
 Vagrant_Installation () {
 
 	if ! [[ $vagrant_inst == "yes" ]]; then
-		read -p "Would you like to install docker?[Y/n]: " answer
+		read -p "Would you like to install Vagrant?[Y/n]: " answer
 		printf "\n"
 		if [[ -z $answer ]]; then
 			:
@@ -571,14 +573,15 @@ Vagrant_Installation () {
 			:
 		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
 			printf "$line\n"
-			printf "Exiting..."
+			printf "Exiting Vagrant installation...\n"
 			printf "\n"
 			printf "$line\n\n"
-			exit 1
+			return 0
 		else
 			printf "$line\n"
-			printf "Invalid answer - exiting\n"
+			printf "Invalid answer - exiting Vagrant installation\n"
 			printf "$line\n\n"
+			return 1
 		fi
 	fi
 
