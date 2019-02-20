@@ -120,6 +120,7 @@ Deb_Packages () {
 EOF
 
 	wget -a $outputpath -O "$user_path/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb || exit 1
+	wait 
 
 	## Installing Discord from .deb package
 	printf "$line\n"

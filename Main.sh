@@ -98,13 +98,13 @@ Progress_Spinner () {
 	until [[ -z $(ps aux |awk '{print $2}' |egrep -o "$BPID") ]];do
 		## Print text with a spinner
 		printf "\r$output_text in progress...  [|]"
-		sleep 0.75
+		sleep 0.40
 		printf "\r$output_text in progress...  [/]"
-		sleep 0.75
+		sleep 0.40
 		printf "\r$output_text in progress...  [-]"
-		sleep 0.75
+		sleep 0.40
 		printf "\r$output_text in progress...  [\\]"
-		sleep 0.70
+		sleep 0.40
 	done
 
 	## Print a new line outside the loop so it will not interrupt with the it
