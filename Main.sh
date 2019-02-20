@@ -126,6 +126,13 @@ Log_And_Variables () {
 		orig_user=$SUDO_USER
 	fi
 
+	if [[ $Distro_Val == "debian" ]]; then
+		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
+
+	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep \(.*\) |awk '{print $2}' |tr -d [:punct:])"
+	fi
+
 	tmpdir=$(mktemp -d -p $HOME)
 	errorpath=$HOME/.Automated-Installer-Log/error.log
 	outputpath=$HOME/.Automated-Installer-Log/output.log
@@ -170,7 +177,7 @@ Distro_Check () {
 	status=1
 	## Go other each element of the array and check if that element (in this
 	## case the element will be a distro) exists in the distro check file
-	## (/etc/*-release), if it does set the Distro_Val to the current element
+	## (/etc/*-release), if it does, set the Distro_Val to the current element
 	## ($i) and set the status to 0 (success), if it doesn't find any element
 	## of the array that matches the file, then status will remain 1 (failed)
 	## and prompt the user that the script did not find his distribution
@@ -184,7 +191,6 @@ Distro_Check () {
 
     if [[ $status -eq 1 ]]; then
         printf "$line\n"
-		## Save the exxit status of last command to a Varibale
         printf "Sorry, but the script did not find your distribution,\n"
         printf "Exiting...\n"
         printf "$line\n\n"
@@ -236,7 +242,7 @@ System_Update () {
 		## Wait until the process is done to get its exit status.
 		wait $BPID
 
-		## Save the exxit status of last command to a Varibale
+		## Save the exit status of last command to a Varibale
 		status=$?
 
 		## Call Exit_Status function
@@ -443,7 +449,7 @@ Source_And_Validation
 ## prompt the user with a menu to start the script
 Main_Menu () {
 	IFS=","
-	scripts=("Post install","AppInstall","Clean Logs","Exit")
+	scripts=("Post install","AppInstall","Virtualization & Containers","Clean Logs","Exit")
 	PS3="Please choose what would you like to do: "
 	select opt in ${scripts[*]} ; do
 	    case $opt in
@@ -513,7 +519,6 @@ Main_Menu () {
 						sleep 2.5
 						Yay_Applications
 						sleep 2.5
-						Vbox_Installation
 
 					elif [[ $aur_helper == "aurman" ]]; then
 						aur_helper="aurman"
@@ -529,7 +534,6 @@ Main_Menu () {
 					sleep 1
 					Deb_Packages
 					sleep 1
-					Vbox_Installation
 				fi
 
 				printf "$line\n"
@@ -537,6 +541,18 @@ Main_Menu () {
 				printf "$line\n\n"
 				exit 0
 				;;
+
+			"Virtualization & Containers")
+				Vbox_Installation
+				Docker_Installation
+				Vagrant_Installation
+
+				printf "$line\n"
+				printf "Virtualization & Containers completed successfully\n"
+				printf "$line\n\n"
+				exit 0
+				;;
+
 
 			Exit)
 				printf "$line\n"
@@ -562,7 +578,7 @@ Main_Menu () {
 
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay
-while getopts :a:e:d:h flag; do
+while getopts :a:e:d:hODH flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
@@ -603,36 +619,59 @@ while getopts :a:e:d:h flag; do
 			fi
 			;;
 
+		O)
+			vbox_inst="yes"
+			;;
+
+		D)
+			docker_inst="yes"
+			;;
+
+		H)
+			vagrant_inst="yes"
+
 		h)
 			printf "$line\n"
-			printf " Usage: -a <argument> -e <argument> -d <argument>\n"
+			printf " Usage: -a <argument> -e <argument> -d <argument> -O\n"
 			printf " -a <argument>"
 			printf "\t\tchoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
 			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
 			printf " -e <argument>"
 			printf "\t\tchoose which desktop environment\n"
-			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n\n"
+			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
 			printf " -d <argument>"
 			printf "\t\tchoose which display manager\n"
-			printf "      \t\t\tyou would tlike to use [ 'sddm' or 'lightdm' ]\n"
+			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n"
+			printf " -O <argument>"
+			printf "\t\tinstall VirtualBox\n"
+			printf " -D <argument>"
+			printf "\t\tinstall Docker\n"
+			printf " -H <argument>"
+			printf "\t\tinstall Vagrant\n"
 			printf "$line\n\n"
 			exit 0
 			;;
 
 		:)
 			printf "$line\n"
-			printf " Usage: -a <argument> -d <argument>\n"
+			printf " Usage: -a <argument> -e <argument> -d <argument> -O\n"
 			printf " -a <argument>"
 			printf "\t\tchoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
 			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
 			printf " -e <argument>"
 			printf "\t\tchoose which desktop environment\n"
-			printf "      \t\t\tyou would tlike to use [ 'plasma' or 'deepin' ]\n\n"
+			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
 			printf " -d <argument>"
 			printf "\t\tchoose which display manager\n"
-			printf "      \t\t\tyou would tlike to use [ 'sddm' or 'lightdm' ]\n"
+			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n"
+			printf " -O <argument>"
+			printf "\t\tinstall VirtualBox\n"
+			printf " -D <argument>"
+			printf "\t\tinstall Docker\n"
+			printf " -H <argument>"
+			printf "\t\tinstall Vagrant\n"
 			printf "$line\n\n"
 			exit 0
 			;;

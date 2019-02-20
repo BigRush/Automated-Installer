@@ -289,22 +289,24 @@ Deb_Packages () {
 
 ## Virtualbox installation
 Vbox_Installation () {
-	read -p "Would you like to install virtualbox?[Y/n]: " answer
-	printf "\n"
-	if [[ -z $answer ]]; then
-		:
-	elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-		:
-	elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-		printf "$line\n"
-		printf "Exiting..."
+	if ! [[ $vbox_inst == "yes" ]]; then
+		read -p "Would you like to install virtualbox?[Y/n]: " answer
 		printf "\n"
-		printf "$line\n\n"
-		exit 1
-	else
-		printf "$line\n"
-		printf "Invalid answer - exiting\n"
-		printf "$line\n\n"
+		if [[ -z $answer ]]; then
+			:
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Exiting..."
+			printf "\n"
+			printf "$line\n\n"
+			exit 1
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+		fi
 	fi
 
 
@@ -382,7 +384,7 @@ Vbox_Installation () {
 		BPID=$!
 		Progress_Spinner
 		wait $BPID
-		status=$?		BPID=$!
+		status=$?
 		Exit_Status
 
 		## Add the VirtualBox repository
@@ -430,4 +432,195 @@ Vbox_Installation () {
 		status=$?
 		Exit_Status
 	fi
+}
+
+## Docker installation
+Docker_Installation () {
+	if ! [[ $docker_inst == "yes" ]]; then
+		read -p "Would you like to install docker?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			:
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Exiting..."
+			printf "\n"
+			printf "$line\n\n"
+			exit 1
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+		fi
+	fi
+
+	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+		## Install packages to allow apt to use a repository over HTTPS
+		docker_dep=(apt-transport-https ca-certificates gnupg2 software-properties-common)
+		for i in ${docker_dep[*]}; do
+			sudo echo
+			output_text="$i installation"
+			error_text="while installing $i"
+			sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		done
+
+		if [[ $Distro_Val == debian ]]; then
+
+			## Add Docker’s official GPG key
+			output_text="Adding Docker’s official GPG key"
+			error_text="while adding Docker’s official GPG key"
+
+			wget -q https://download.docker.com/linux/debian/gpg -O- | sudo apt-key add - 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Set up the stable repository for Docker
+			printf "$line\n"
+			printf "Set up the stable repository for Docker\n"
+			printf "$line\n\n"
+
+			sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $debian_cname stable" 2>> $errorpath >> $outputpath
+			status=$?
+			Exit_Status
+
+		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+			## Add Docker’s official GPG key
+			output_text="Adding Docker’s official GPG key"
+			error_text="while adding Docker’s official GPG key"
+
+			wget -q https://download.docker.com/linux/ubuntu/gpg -O- | sudo apt-key add - 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Set up the stable repository for Docker
+			printf "$line\n"
+			printf "Set up the stable repository for Docker\n"
+			printf "$line\n\n"
+
+			sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $ubuntu_cname stable" 2>> $errorpath >> $outputpath
+			status=$?
+			Exit_Status
+		fi
+
+		## Update the package lists
+
+		output_text="Updating the package lists"
+		error_text="while ufpdating the package lists"
+
+		sudo apt-get update 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+		## Install Docker
+		docker_pkg=(docker-ce docker-ce-cli containerd.io)
+		for i in ${docker_pkg[*]}; do
+			sudo echo
+			output_text="$i installation"
+			error_text="while installing $i"
+			sudo apt-get install $i -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+		done
+
+	elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
+		output_text="Installing Docker"
+		error_text="while installing Docker"
+
+		sudo pacman -S docker  --needed --noconfirm 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+	fi
+
+}
+
+# Vagrant installation
+Vagrant_Installation () {
+
+	if ! [[ $vagrant_inst == "yes" ]]; then
+		read -p "Would you like to install docker?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			:
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			:
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			printf "$line\n"
+			printf "Exiting..."
+			printf "\n"
+			printf "$line\n\n"
+			exit 1
+		else
+			printf "$line\n"
+			printf "Invalid answer - exiting\n"
+			printf "$line\n\n"
+		fi
+	fi
+
+	if [[ $Distro_Val == arch || $Distro_Val == manjaro ]] ;then
+		output_text="Installing Vagrant"
+		error_text="while installing Vagrant"
+
+		sudo pacman -S vagrant  --needed --noconfirm 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+
+		## Check if Downloads folder exists and if not, create it
+		if ! [[ -d $HOME/Downloads ]]; then
+			mkdir $HOME/Downloads
+		fi
+
+		## Download Vagrant's .deb package from their website
+		printf "$line\n"
+		printf "Downloading Vagrant's .deb package\n"
+		printf "$line\n\n"
+
+		output_text="Downloading Vagrant's .deb package"
+		error_text="while downloading Vagrant's .deb package"
+
+		wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/vagrant.deb" https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb
+		wait
+		status=$?
+		Exit_Status
+
+		## Installing Vagrant from .deb package
+		sudo printf "\n"
+
+		output_text="Installing Vagrant from .deb package"
+		error_text="while installing Vagrant"
+
+
+		sudo apt-get install $HOME/Downloads/vagrant.deb -y 2>> $errorpath >> $outputpath &
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
 }
