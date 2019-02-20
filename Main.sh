@@ -126,13 +126,6 @@ Log_And_Variables () {
 		orig_user=$SUDO_USER
 	fi
 
-	if [[ $Distro_Val == "debian" ]]; then
-		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
-
-	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep \(.*\) |awk '{print $2}' |tr -d [:punct:])"
-	fi
-
 	tmpdir=$(mktemp -d -p $HOME)
 	errorpath=$HOME/.Automated-Installer-Log/error.log
 	outputpath=$HOME/.Automated-Installer-Log/output.log
@@ -196,6 +189,14 @@ Distro_Check () {
         printf "$line\n\n"
         exit 1
     fi
+
+
+	if [[ $Distro_Val == debian ]]; then
+		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
+
+	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep \(.*\) |awk '{print $2}' |tr -d [:punct:])"
+	fi
 
 	if [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
 		printf "$line\n"
