@@ -629,6 +629,7 @@ while getopts :a:e:d:hODH flag; do
 
 		H)
 			vagrant_inst="yes"
+			;;
 
 		h)
 			printf "$line\n"
