@@ -41,7 +41,7 @@ Alias_and_Wallpaper () {
 
 	## If the background picture doesn't already exists, download it
 	if ! [[ -e $HOME/Pictures/archbk.jpg ]]; then
-		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg" 2>> $errorpath
+		sudo runuser -l $orig_user -c "wget --show-progress --progress=bar -a $outputpath -O $HOME/Pictures/archbk.jpg http://getwallpapers.com/wallpaper/full/f/2/a/1056675-download-free-arch-linux-wallpaper-1920x1080.jpg"
 		wait
 		status=$?
 		Exit_Status

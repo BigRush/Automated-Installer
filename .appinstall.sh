@@ -99,7 +99,7 @@ Deb_Packages () {
 	output_text="Downloading Discord's .deb package"
 	error_text="while downloading Discord's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/discord.deb" https://discordapp.com/api/download?platform=linux&format=deb
 	wait
 	status=$?
 	Exit_Status
@@ -127,7 +127,7 @@ Deb_Packages () {
 	output_text="Downloading Steam's .deb package"
 	error_text="while downloading Steam's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/steam.deb" https://steamcdn-a.akamaihd.net/client/installer/steam.deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/steam.deb" https://steamcdn-a.akamaihd.net/client/installer/steam.deb
 	wait
 	status=$?
 	Exit_Status
@@ -179,7 +179,7 @@ Deb_Packages () {
 	output_text="Downloading TeamViewer's .deb package"
 	error_text="while downloading TeamViewer's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/teamviewer.deb" https://download.teamviewer.com/download/linux/teamviewer_amd64.deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/teamviewer.deb" https://download.teamviewer.com/download/linux/teamviewer_amd64.deb
 	wait
 	status=$?
 	Exit_Status
@@ -207,7 +207,7 @@ Deb_Packages () {
 	output_text="Downloading Atom's .deb package"
 	error_text="while downloading Atom's .deb package"
 
-	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/atom.deb" https://atom.io/download/deb 2>> $errorpath
+	wget --show-progress --progress=bar -a $outputpath -O "$HOME/Downloads/atom.deb" https://atom.io/download/deb
 	wait
 	status=$?
 	Exit_Status
@@ -242,7 +242,7 @@ Deb_Packages () {
 	output_text="Adding Bintray.com's GPG key"
 	error_text="while adding Bintray.com's GPG key"
 
-	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 |tee -a $outputpath 2>> $errorpath |grep -q &
+	sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 379CE192D401AB61 >> $outputpath 2>> $errorpath &
 	BPID=$!
 	Progress_Spinner
 	wait $BPID
