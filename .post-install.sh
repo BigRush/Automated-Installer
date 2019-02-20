@@ -1243,7 +1243,7 @@ Boot_Manager_Config () {
 			exit 1
 		fi
 
-		## install refinds boot manager and configure it
+		## Install refind boot manager and configure it
 		printf "$line\n"
 		printf "Downloading refind boot manager...\n"
 		printf "$line\n\n"
