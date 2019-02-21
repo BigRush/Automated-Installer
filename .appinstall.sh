@@ -10,7 +10,7 @@
 #				Install VirtualBox
 #
 #
-# Version :	1.0.0
+# Version :	2.0.0
 ################################################################################
 
 ## ToDo	####################################
@@ -551,7 +551,7 @@ Docker_Installation () {
 		output_text="Installing Docker"
 		error_text="while installing Docker"
 
-		sudo pacman -S docker  --needed --noconfirm 2>> $errorpath >> $outputpath &
+		sudo pacman -S docker --needed --noconfirm 2>> $errorpath >> $outputpath &
 		BPID=$!
 		Progress_Spinner
 		wait $BPID

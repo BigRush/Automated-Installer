@@ -690,5 +690,18 @@ while getopts :a:e:d:hODH flag; do
 done
 
 
-## Call Main_Menu function
-Main_Menu
+if [[ $vbox_inst == "yes" ]]; then
+	Vbox_Installation
+fi
+
+if [[ $vagrant_inst == "yes" ]]; then
+	Vagrant_Installation
+fi
+
+if [[ $docker_inst == "yes" ]]; then
+	Docker_Installation
+fi
+
+if [[ -z $vbox_inst && -z $vagrant_inst && -z $docker_inst ]]; then
+	Main_Menu
+fi
