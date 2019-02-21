@@ -117,7 +117,6 @@ Progress_Spinner () {
 Log_And_Variables () {
 
 	####  Varibale	####
-    line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 
 	## Check the original user that executed the script
 	if [[ -z $SUDO_USER ]]; then
@@ -160,8 +159,6 @@ Clean_Up () {
 	rm -rf $tmpdir
 }
 
-## Make sure there is a clean up by traping the function upon EXIT
-trap Clean_Up EXIT
 
 ## Checking the environment the user is currenttly running on to determine which settings should be applied
 Distro_Check () {
@@ -431,23 +428,6 @@ Source_And_Validation () {
     fi
 }
 
-## Call Non_Root_Check function
-Non_Root_Check
-
-## Call Log_And_Variables function
-Log_And_Variables
-
-## Call Distro_Check function
-Distro_Check
-
-## Call System_Update function
-System_Update
-
-## Call Dependencies_Installation function
-Dependencies_Installation
-
-## Call Source_And_Validation function
-Source_And_Validation
 
 ## prompt the user with a menu to start the script
 Main_Menu () {
@@ -578,9 +558,14 @@ Main_Menu () {
 		esac
 	done
 }
+## Cosmetic for the script and getopts must be
+## declared here so it could be used by getopts
+line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
+
 
 ## Use getopts so I'll have the option to
-## choose between aurman and yay
+## choose between aurman and yay, desktop environment,
+## display manager, and auto install Vagrant, Docker or VirtualBox
 while getopts :a:e:d:hODH flag; do
 	case $flag in
 		a)
@@ -636,46 +621,46 @@ while getopts :a:e:d:hODH flag; do
 
 		h)
 			printf "$line\n"
-			printf " Usage: -a <argument> -e <argument> -d <argument> -O\n"
+			printf " Usage: -a <argument> -e <argument> -d <argument> -O -D -H\n"
 			printf " -a <argument>"
-			printf "\t\tchoose which AUR helper you would\n"
+			printf "\t\tChoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
 			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
 			printf " -e <argument>"
-			printf "\t\tchoose which desktop environment\n"
+			printf "\t\tChoose which desktop environment\n"
 			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
 			printf " -d <argument>"
-			printf "\t\tchoose which display manager\n"
-			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n"
-			printf " -O <argument>"
-			printf "\t\tinstall VirtualBox\n"
-			printf " -D <argument>"
-			printf "\t\tinstall Docker\n"
-			printf " -H <argument>"
-			printf "\t\tinstall Vagrant\n"
+			printf "\t\tChoose which display manager\n"
+			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n\n"
+			printf " -O"
+			printf "\t\t\tInstall VirtualBox\n\n"
+			printf " -D"
+			printf "\t\t\tInstall Docker\n\n"
+			printf " -H"
+			printf "\t\t\tInstall Vagrant\n\n"
 			printf "$line\n\n"
 			exit 0
 			;;
 
 		:)
 			printf "$line\n"
-			printf " Usage: -a <argument> -e <argument> -d <argument> -O\n"
+			printf " Usage: -a <argument> -e <argument> -d <argument> -O -D -H\n"
 			printf " -a <argument>"
-			printf "\t\tchoose which AUR helper you would\n"
+			printf "\t\tChoose which AUR helper you would\n"
 			printf "      \t\t\tlike to use [ 'aurman' or 'yay' ]\n"
 			printf "      \t\t\t('yay' is the default option if '-a' is not triggered)\n\n"
 			printf " -e <argument>"
-			printf "\t\tchoose which desktop environment\n"
+			printf "\t\tChoose which desktop environment\n"
 			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
 			printf " -d <argument>"
-			printf "\t\tchoose which display manager\n"
-			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n"
-			printf " -O <argument>"
-			printf "\t\tinstall VirtualBox\n"
-			printf " -D <argument>"
-			printf "\t\tinstall Docker\n"
-			printf " -H <argument>"
-			printf "\t\tinstall Vagrant\n"
+			printf "\t\tChoose which display manager\n"
+			printf "      \t\t\tyou would tlike to use [ 'SDDM' or 'LightDM' ]\n\n"
+			printf " -O"
+			printf "\t\t\tInstall VirtualBox\n\n"
+			printf " -D"
+			printf "\t\t\tInstall Docker\n\n"
+			printf " -H"
+			printf "\t\t\tInstall Vagrant\n\n"
 			printf "$line\n\n"
 			exit 0
 			;;
@@ -688,6 +673,27 @@ while getopts :a:e:d:hODH flag; do
 			;;
 	esac
 done
+
+## Call Non_Root_Check function
+Non_Root_Check
+
+## Make sure there is a clean up by traping the function upon EXIT
+trap Clean_Up EXIT
+
+## Call Log_And_Variables function
+Log_And_Variables
+
+## Call Distro_Check function
+Distro_Check
+
+## Call System_Update function
+System_Update
+
+## Call Dependencies_Installation function
+Dependencies_Installation
+
+## Call Source_And_Validation function
+Source_And_Validation
 
 
 if [[ $vbox_inst == "yes" ]]; then
