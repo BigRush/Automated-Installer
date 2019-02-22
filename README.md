@@ -111,7 +111,7 @@ $ git clone https://github.com/BigRush/Automated-Installer.git
 
 
 
-## Running The Script
+# Running The Script
 
 Change to the project's directory:
 
@@ -125,9 +125,32 @@ Run the script:
 ```sh
 $ bash Main.sh
 ```
+# Usage
+
+ ### Flags with arguments:
+
+ -a <argument>          Choose which AUR helper you would
+                        like to use [ 'aurman' or 'yay' ]
+                        ('yay' is the default option if '-a' is not triggered)
+
+ -d <argument>          Choose which display manager
+                        you would tlike to use [ 'SDDM' or 'LightDM' ]
+
+ -e <argument>          Choose which desktop environment
+                        you would tlike to use [ 'Plasma' or 'Deepin' ]
+
+ ### Flags without arguments:
+
+ -D                     Install Docker
+
+ -h                     Show help
+
+ -H                     Install Vagrant
+
+ -O                     Install VirtualBox
 
 
-## Logs
+# Logs
 All log files are under hidden directory: `$HOME/.Automated-Installer-Log` in the user's home directory : 
  * error.log - All **stderr** from the commands of the script will be there
  
