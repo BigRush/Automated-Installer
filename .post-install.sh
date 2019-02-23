@@ -1132,14 +1132,14 @@ Boot_Manager_Config () {
 		if [[ -n $(egrep "^GRUB_TIMEOUT=.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
 		else
-			sudo runuser -l "root" -c "printf \"GRUB_TIMEOUT=0\" >> /etc/default/grub"
+			sudo runuser -l "root" -c "printf \"GRUB_TIMEOUT=0\n\" >> /etc/default/grub"
 		fi
 
 		if [[ -n $(egrep "^GRUB_HIDDEN_TIMEOUT=s.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 
 		else
-			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT=1\" >> /etc/default/grub"
+			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT=1\n\" >> /etc/default/grub"
 		fi
 
 
@@ -1147,7 +1147,7 @@ Boot_Manager_Config () {
 			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
 		else
-			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT_QUIET=true\" >> /etc/default/grub"
+			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT_QUIET=true\n\" >> /etc/default/grub"
 		fi
 
 		if ! [[ -d /boot/grub/themes ]]; then
