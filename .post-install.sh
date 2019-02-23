@@ -1129,19 +1129,21 @@ Boot_Manager_Config () {
 	if [[ -e /etc/default/grub ]]; then
 		sudo cp /etc/default/grub /etc/default/grub.bck
 
-		if [[ -z $(egrep "^GRUB_TIMEOUT=.*" /etc/default/grub) ]]; then
+		if [[ -n $(egrep "^GRUB_TIMEOUT=.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/' /etc/default/grub
+		else
+			sudo runuser -l "root" -c "printf \"GRUB_TIMEOUT=0\" >> /etc/default/grub"
 		fi
 
-		if [[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT=.*" /etc/default/grub) ]]; then
-			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=0/' /etc/default/grub
+		if [[ -n $(egrep "^GRUB_HIDDEN_TIMEOUT=s.*" /etc/default/grub) ]]; then
+			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 
 		else
 			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT=1\" >> /etc/default/grub"
 		fi
 
 
-		if [[ -z $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=.*" /etc/default/grub) ]]; then
+		if [[ -n $(egrep "^GRUB_HIDDEN_TIMEOUT_QUIET=.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT_QUIET=.*/GRUB_HIDDEN_TIMEOUT_QUIET=true/' /etc/default/grub
 
 		else
@@ -1180,9 +1182,9 @@ Boot_Manager_Config () {
 		fi
 
 		if [[ -z $(sudo egrep "^GRUB_THEME=.*" /etc/default/grub) ]]; then
-			sudo runuser -l "root" -c 'printf "GRUB_THEME=\"boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub'
+			sudo runuser -l "root" -c 'printf "GRUB_THEME=\"\/boot/grub/themes/grub-theme-vimix/Vimix/theme.txt\"" >> /etc/default/grub'
 		else
-			sudo sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
+			sudo sed -ie "s/GRUB_THEME=.*/GRUB_THEME=\"\/boot\/grub\/themes\/grub-theme-vimix\/Vimix\/theme.txt\"/" /etc/default/grub
 		fi
 
 		## Apply changes to grub
