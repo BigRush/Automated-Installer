@@ -352,7 +352,7 @@ Theme_Config () {
 			output_text="Extraction"
 			error_text="while extracting Shadow icons"
 
-			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $HOME/.icons 2>> $errorpath >> $outputpath
+			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -1165,7 +1165,7 @@ Boot_Manager_Config () {
 				output_text="Extraction"
 				error_text="while extracting Vimix theme"
 
-				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz --no-same-owner -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status
