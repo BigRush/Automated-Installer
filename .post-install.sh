@@ -454,6 +454,37 @@ Theme_Config () {
 		fi
 	fi
 
+	## Bibata cursor pack
+	Bibata_Cursor_Pack.tar.gz
+	if [[ $bibata_cursor == "yes" ]]; then
+		if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz ]]; then
+			if ! [[ -e /usr/share/icons/Bibata_Amber && -e /usr/share/icons/Bibata_Ice && -e /usr/share/icons/Bibata_Oil ]]; then
+				printf "$line\n"
+				printf "Extracting Bibata cursor pack...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_text="while extracting Bibata cursor pack"
+
+				sudo tar -xvf $HOME/Documents/Themes/ibata_Cursor_Pack.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
+				printf "$line\n"
+				printf "Bibata cursor pack doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting Bibata cursor pack with megatools"
+				error_text="while getting Bibata cursor pack megatools"
+
+				status=1
+				Exit_Status
+			fi
+		fi
+	fi
+
 	## La-Capitaine icons
 	if [[ $capitaine_icons == "yes" ]]; then
 		if [[ -e $HOME/Documents/Themes/la-capitaine-icon-theme-0.6.1-20190217.tar.gz ]]; then
