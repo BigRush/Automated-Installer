@@ -235,6 +235,24 @@ Theme_Prompt () {
 			fi
 		fi
 
+		## Bibata prompt
+		if ! [[ $bibata_cursor == "yes" ]]; then
+			read -p "Would you like to install Bibata cursor pack?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				bibata_cursor="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				bibata_cursor="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				bibata_cursor="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - Bibata cursor pack will NOT be installed\n"
+				printf "$line\n\n"
+				bibata_cursor="no"
+			fi
+		fi
+
 		## La-Capitaine prompt
 		if ! [[ $capitaine_icons == "yes" ]]; then
 			read -p "Would you like to install La-Capitaine icons?[Y/n]: " answer
