@@ -33,6 +33,13 @@ Aurman_Applications () {
 				Exit_Status
 			done
 
+			## Start screenfetch
+			if [[ -n $(command -v screenfetch) ]]; then
+				if [[ -z $(grep "screenfetch -E" $HOME/.bashrc) ]]; then
+				printf "screenfetch -E\n" >> $HOME/.bashrc
+				fi
+			fi
+
 			## special attention packages that stdout needs to be seen
 			printf "$line\n"
 			printf "Installing steam\n"
@@ -60,6 +67,13 @@ Yay_Applications () {
 				status=$?
 				Exit_Status
 			done
+
+			## Start screenfetch
+			if [[ -n $(command -v screenfetch) ]]; then
+				if [[ -z $(grep "screenfetch -E" $HOME/.bashrc) ]]; then
+				printf "screenfetch -E\n" >> $HOME/.bashrc
+				fi
+			fi
 		fi
 }
 
@@ -78,7 +92,12 @@ Apt_Applications () {
 		Exit_Status
 	done
 
-
+	## Start screenfetch
+	if [[ -n $(command -v screenfetch) ]]; then
+		if [[ -z $(grep "screenfetch -E" $HOME/.bashrc) ]]; then
+		printf "screenfetch -E\n" >> $HOME/.bashrc
+		fi
+	fi
 }
 
 ## Applications that needs to be installed from .deb files
