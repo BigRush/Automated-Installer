@@ -213,6 +213,123 @@ KDE_Installation () {
 	de_env="kde"
 }
 
+## Prompt the user which themes he would like to install
+Theme_Prompt () {
+
+		## Chili prompt
+		if [[ $de_env == "kde" ]]; then
+			if [[ $chili_theme == "yes" ]]; then
+				read -p "Would you like to install Chili theme?[Y/n]: " answer
+				printf "\n"
+				if [[ -z $answer ]]; then
+					chili_theme="yes"
+				elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+					chili_theme="yes"
+				elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+					chili_theme="no"
+				else
+					printf "$line\n"
+					printf "Invalid answer - Chili theme will NOT be installed\n"
+					printf "$line\n\n"
+					chili_theme="no"
+			fi
+		fi
+
+		## La-Capitaine prompt
+		if ! [[ $capitaine_icons == "yes" ]]; then
+			read -p "Would you like to install La-Capitaine icons?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				capitaine_icons="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				capitaine_icons="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				capitaine_icons="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - La-Capitaine icons will NOT be installed\n"
+				printf "$line\n\n"
+				capitaine_icons="no"
+			fi
+		fi
+
+		## Shoadw prompt
+		if ! [[ $shadow_icons == "yes" ]]; then
+			read -p "Would you like to install Shadow icons?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				shadow_icons="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				shadow_icons="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				shadow_icons="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - Shadow icons will NOT be installed\n"
+				printf "$line\n\n"
+				shadow_icons="no"
+			fi
+		fi
+
+		## Papirus prompt
+		if ! [[ $papirus_icons == "yes" ]]; then
+			read -p "Would you like to install Papirus icons?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				papirus_icons="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				papirus_icons="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				papirus_icons="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - Papirus icons will NOT be installed\n"
+				printf "$line\n\n"
+				papirus_icons="yes"
+			fi
+		fi
+
+		## Adapta prompt
+		if ! [[ $adapta_theme == "yes" ]]; then
+			read -p "Would you like to install Adapta theme?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				adapta_theme="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				adapta_theme="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				adapta_theme="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - Adapta theme will NOT be installed\n"
+				printf "$line\n\n"
+				adapta_theme="no"
+			fi
+		fi
+
+		## Arc prompt
+		if ! [[ $arc_theme == "yes" ]]; then
+			read -p "Would you like to install Arc theme?[Y/n]: " answer
+			printf "\n"
+			if [[ -z $answer ]]; then
+				arc_theme="yes"
+			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+				arc_theme="yes"
+			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+				arc_theme="no"
+			else
+				printf "$line\n"
+				printf "Invalid answer - Arc theme will NOT be installed\n"
+				printf "$line\n\n"
+				arc_theme="no"
+			fi
+		fi
+
+
+
+
+}
+
 ## Download themes and icons
 Theme_Config () {
 
@@ -320,133 +437,57 @@ Theme_Config () {
 		Exit_Status
 	fi
 
-
-
 	## Chili theme
-	if [[ $de_env == "kde" ]]; then
-		if ! [[ -e $HOME/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
-			printf "$line\n"
-			printf "Chili theme doesn't exists...\n"
-			printf "$line\n\n"
+	if [[ $chili_theme == "yes" ]]; then
+		if [[ $de_env == "kde" ]]; then
+			if ! [[ -e $HOME/Documents/Themes/kde-plasma-chili.tar.gz ]]; then
+				printf "$line\n"
+				printf "Chili theme doesn't exists...\n"
+				printf "$line\n\n"
 
-			output_text="Getting Chili theme with megatools"
-			error_text="while getting Chili with megatools"
+				output_text="Getting Chili theme with megatools"
+				error_text="while getting Chili with megatools"
 
-			status=1
-			Exit_Status
+				status=1
+				Exit_Status
+			fi
+		fi
+	fi
+
+	## La-Capitaine icons
+	if [[ $capitaine_icons == "yes" ]]; then
+		if [[ -e $HOME/Documents/Themes/la-capitaine-icon-theme-0.6.1-20190217.tar.gz ]]; then
+			if ! [[ -e /usr/share/icons/la-capitaine-icon-theme ]]; then
+				printf "$line\n"
+				printf "Extracting La-Capitaine icons...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_text="while extracting La-Capitaine icons"
+
+				sudo tar -xvf $HOME/Documents/Themes/la-capitaine-icon-theme-0.6.1-20190217.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
+				printf "$line\n"
+				printf "La-Capitaine icons doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting La-Capitaine icons with megatools"
+				error_text="while getting La-Capitaine icons megatools"
+
+				status=1
+				Exit_Status
+			fi
 		fi
 	fi
 
 	## Shadow icons
-	if [[ $de_env == "kde" ]]; then
-		if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
-			if ! [[ -e $HOME/.icons ]]; then
-				mkdir $HOME/.icons
-			fi
-
-			printf "$line\n"
-			printf "Extracting Shadow icons...\n"
-			printf "$line\n\n"
-
-			output_text="Extraction"
-			error_text="while extracting Shadow icons"
-
-			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
-
-			status=$?
-			Exit_Status
-
-		else
-			printf "$line\n"
-			printf "Shadow icons doesn't exists...\n"
-			printf "$line\n\n"
-
-			output_text="Getting shadow icons with megatools"
-			error_text="while getting shadow icons megatools"
-
-			status=1
-			Exit_Status
-
-		fi
-
-	elif [[ $de_env == "gtk" ]]; then
-		if [[ $Distro_Val == arch ]]; then
-			if [[ $aur_helper == "aurman" ]]; then
-				sudo echo
-
-				## Check if "aurman" exists, if not, call the function that installs it
-				if [[ -z $(command -v aurman) ]]; then
-					Aurman_Install
-				fi
-
-				output_text="Shadow icons installation"
-				error_text="while installing Shadow icons"
-
-				## Install megatools to get theme files from mega cloud
-				sudo echo
-				aurman -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
-				BPID=$!
-				Progress_Spinner
-				wait $BPID
-				status=$?
-				Exit_Status
-
-			elif [[ $aur_helper == "yay" ]]; then
-
-				## Check if "yay" exists, if not, call the function that installs it
-				if [[ -z $(command -v yay) ]]; then
-					Yay_Install
-				fi
-
-				output_text="Shadow icons installation"
-				error_text="while installing Shadow icons"
-
-				## Install megatools to get theme files from mega cloud
-				sudo echo
-				yay -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
-				BPID=$!
-				Progress_Spinner
-				wait $BPID
-				status=$?
-				Exit_Status
-			fi
-
-		elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
-			## Add PPA
-			output_text="Adding the repository"
-			error_text="while adding the repository"
-
-			sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-			## Update the package lists
-
-			output_text="Updating the package lists"
-			error_text="while updating the package lists"
-
-			sudo apt-get update 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-			output_text="Installing Shadow icons"
-			error_text="while installing shadow icons"
-
-			sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-		else
-			if [[ -e $HOME/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+	if [[ $shadow_icons == "yes" ]]; then
+		if [[ $de_env == "kde" ]]; then
+			if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
 				if ! [[ -e $HOME/.icons ]]; then
 					mkdir $HOME/.icons
 				fi
@@ -458,7 +499,7 @@ Theme_Config () {
 				output_text="Extraction"
 				error_text="while extracting Shadow icons"
 
-				sudo tar -xvf $HOME/Documents/Themes/shadow-4.8.3.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status
@@ -468,241 +509,132 @@ Theme_Config () {
 				printf "Shadow icons doesn't exists...\n"
 				printf "$line\n\n"
 
-				output_text="Getting shadow icons with megatools"
-				error_text="while getting shadow icons megatools"
+				output_text="Getting Shadow icons with megatools"
+				error_text="while getting Shadow icons megatools"
 
 				status=1
 				Exit_Status
 
+			fi
+
+		elif [[ $de_env == "gtk" ]]; then
+			if [[ $Distro_Val == arch ]]; then
+				if [[ $aur_helper == "aurman" ]]; then
+					sudo echo
+
+					## Check if "aurman" exists, if not, call the function that installs it
+					if [[ -z $(command -v aurman) ]]; then
+						Aurman_Install
+					fi
+
+					output_text="Shadow icons installation"
+					error_text="while installing Shadow icons"
+
+					## Install megatools to get theme files from mega cloud
+					sudo echo
+					aurman -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+					BPID=$!
+					Progress_Spinner
+					wait $BPID
+					status=$?
+					Exit_Status
+
+				elif [[ $aur_helper == "yay" ]]; then
+
+					## Check if "yay" exists, if not, call the function that installs it
+					if [[ -z $(command -v yay) ]]; then
+						Yay_Install
+					fi
+
+					output_text="Shadow icons installation"
+					error_text="while installing Shadow icons"
+
+					## Install megatools to get theme files from mega cloud
+					sudo echo
+					yay -S shadow-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+					BPID=$!
+					Progress_Spinner
+					wait $BPID
+					status=$?
+					Exit_Status
+				fi
+
+			elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
+				## Add PPA
+				output_text="Adding the repository"
+				error_text="while adding the repository"
+
+				sudo add-apt-repository ppa:noobslab/icons -y 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+				## Update the package lists
+
+				output_text="Updating the package lists"
+				error_text="while updating the package lists"
+
+				sudo apt-get update 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+				output_text="Installing Shadow icons"
+				error_text="while installing shadow icons"
+
+				sudo apt-get install shadow-icon-theme -y 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			else
+				if [[ -e $HOME/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
+					if ! [[ -e $HOME/.icons ]]; then
+						mkdir $HOME/.icons
+					fi
+
+					printf "$line\n"
+					printf "Extracting Shadow icons...\n"
+					printf "$line\n\n"
+
+					output_text="Extraction"
+					error_text="while extracting Shadow icons"
+
+					sudo tar -xvf $HOME/Documents/Themes/shadow-4.8.3.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
+
+					status=$?
+					Exit_Status
+
+				else
+					printf "$line\n"
+					printf "Shadow icons doesn't exists...\n"
+					printf "$line\n\n"
+
+					output_text="Getting shadow icons with megatools"
+					error_text="while getting shadow icons megatools"
+
+					status=1
+					Exit_Status
+
+				fi
 			fi
 		fi
 	fi
 
 	## Papirus icons
 	sudo echo
-
-	if [[ $Distro_Val == arch ]]; then
-		output_text="Installing Papirus icons"
-		error_text="while installing Papirus icons"
-
-		sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
-
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	elif [[ $Distro_Val == debian ]]; then
-
-		## Add PPA
-		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Adding the repository"
-		error_text="while adding the repository"
-
-		sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
-		status=$?
-		Exit_Status
-
-		## Install dirmngr to manage and download OpenPGP and X.509 certificates
-		output_text="Installing dirmngr"
-		error_text="while installing dirmngr"
-
-		sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Add certificate
-		output_text="Adding the certificate"
-		error_text="while adding the certificate"
-		sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		output_text="Updating the package lists"
-		error_text="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		output_text="Installing Papirus icons"
-		error_text="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-
-		## Add PPA
-		printf "$line\n"
-		printf "Adding repository for Papirus icons...\n"
-		printf "$line\n\n"
-
-		output_text="Adding the repository"
-		error_text="while adding the repository"
-
-		sudo add-apt-repository ppa:papirus/papirus
-		status=$?
-		Exit_Status
-
-		## Update the package list after adding the new repository
-		output_text="Updating the package lists"
-		error_text="while updating the package lists"
-
-		sudo apt-get update -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-
-		## Install Papirus icons
-		output_text="Installing Papirus icons"
-		error_text="while installing Papirus icons"
-
-		sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
-	fi
-
-	## Arc theme
-	if [[ $de_env == "kde" ]]; then
+	if [[ $papirus_icons == "yes" ]]; then
 		if [[ $Distro_Val == arch ]]; then
-			output_text="Installing Arc theme"
-			error_text="while installing Arc theme"
+			output_text="Installing Papirus icons"
+			error_text="while installing Papirus icons"
 
-			sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
-
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-		elif [[ $Distro_Val == "debian" ]]; then
-			output_text="Installing Arc theme"
-			error_text="while installing Arc theme"
-			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-
-			## Install Arc-KDE theme
-			printf "$line\n"
-			printf "Installing Arc-KDE theme...\n"
-			printf "$line\n\n"
-
-			output_text="Installing Arc-KDE theme"
-			error_text="while installing Arc-KDE theme"
-
-			sudo apt-get install --install-recommends arc-kde -y 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-		fi
-
-	elif [[ $de_env == "gtk" ]]; then
-		if [[ $Distro_Val == arch ]]; then
-			output_text="Installing Arc theme"
-			error_text="while installing Arc theme"
-
-			sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
-
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
-			output_text="Cloning Arc theme"
-			error_text="while Cloning Arc theme"
-
-			pushd . 2>> $errorpath >> $outputpath
-
-			git clone https://github.com/horst3180/arc-theme.git $tmpdir/arc-theme 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-			cd $tmpdir/arc-theme
-
-			arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
-			for i in ${arc_pkg[*]}; do
-				output_text="Installing Arc theme dependency: $i"
-				error_text="while installing Arc theme dependency: $i"
-
-				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
-				BPID=$!
-				Progress_Spinner
-				wait $BPID
-				status=$?
-				Exit_Status
-			done
-
-			output_text="Building Arc theme"
-			error_text="while building Arc theme"
-
-			./autogen.sh --prefix=/usr 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-			output_text="Installing Arc theme"
-			error_text="while installing Arc theme"
-
-			sudo make install 2>> $errorpath >> $outputpath &
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-			popd 2>> $errorpath >> $outputpath
-		fi
-	fi
-
-	## Install Adapta theme
-	if [[ $de_env == "kde" ]]; then
-		if [[ $Distro_Val == arch ]]; then
-			sudo echo
-
-			output_text="Installing Adapta theme"
-			error_text="while installing Adapta theme"
-
-			sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+			sudo pacman -S papirus-icon-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
 
 			BPID=$!
 			Progress_Spinner
@@ -712,10 +644,55 @@ Theme_Config () {
 
 		elif [[ $Distro_Val == debian ]]; then
 
-			output_text="Installing Adapta theme"
-			error_text="while installing Adapta theme"
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
 
-			wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/adapta-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+			output_text="Adding the repository"
+			error_text="while adding the repository"
+
+			sudo sh -c "echo 'deb http://ppa.launchpad.net/papirus/papirus/ubuntu bionic main' > /etc/apt/sources.list.d/papirus-ppa.list"
+			status=$?
+			Exit_Status
+
+			## Install dirmngr to manage and download OpenPGP and X.509 certificates
+			output_text="Installing dirmngr"
+			error_text="while installing dirmngr"
+
+			sudo apt-get install dirmngr -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Add certificate
+			output_text="Adding the certificate"
+			error_text="while adding the certificate"
+			sudo apt-key adv --recv-keys --keyserver keyserver.ubuntu.com E58A9D36647CAE7F >> $outputpath 2>> $errorpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			output_text="Updating the package lists"
+			error_text="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			output_text="Installing Papirus icons"
+			error_text="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
@@ -723,92 +700,269 @@ Theme_Config () {
 			Exit_Status
 
 		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
-			## Install Arc-KDE theme
 
-			output_text="Installing Arc-KDE theme"
-			error_text="while installing Arc-KDE theme"
+			## Add PPA
+			printf "$line\n"
+			printf "Adding repository for Papirus icons...\n"
+			printf "$line\n\n"
 
-			sudo apt-get install --install-recommends adapta-kde -y 2>> $errorpath >> $outputpath &
+			output_text="Adding the repository"
+			error_text="while adding the repository"
+
+			sudo add-apt-repository ppa:papirus/papirus
+			status=$?
+			Exit_Status
+
+			## Update the package list after adding the new repository
+			output_text="Updating the package lists"
+			error_text="while updating the package lists"
+
+			sudo apt-get update -y 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			## Install Papirus icons
+			output_text="Installing Papirus icons"
+			error_text="while installing Papirus icons"
+
+			sudo apt-get install papirus-icon-theme -y 2>> $errorpath >> $outputpath &
 			BPID=$!
 			Progress_Spinner
 			wait $BPID
 			status=$?
 			Exit_Status
 		fi
+	fi
 
-	elif [[ $de_env == "gtk" ]]; then
-		output_text="Cloning Arc theme"
-		error_text="while Cloning Arc theme"
-		pushd . 2>> $errorpath >> $outputpath
+	## Arc theme
+	if [[ $arc_theme == "yes" ]]; then
+		if [[ $de_env == "kde" ]]; then
+			if [[ $Distro_Val == arch ]]; then
+				output_text="Installing Arc theme"
+				error_text="while installing Arc theme"
 
-		git clone https://github.com/adapta-project/adapta-gtk-theme.git $tmpdir/adapta-gtk-theme 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+				sudo pacman -S arc-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
 
-		cd $tmpdir/adapta-gtk-theme
-
-		adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
-		if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
-			for i in ${adapta_pkg[*]}; do
-				output_text="Installing Adapta theme dependency: $i"
-				error_text="while installing Adapta theme dependency: $i"
-				sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
 				wait $BPID
 				status=$?
 				Exit_Status
-			done
 
-		elif [[ $Distro_Val == arch ]]; then
-			for i in ${adapta_pkg[*]}; do
-				output_text="Installing Adapta theme dependency: $i"
-				error_text="while installing Adapta theme dependency: $i"
-				sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
+			elif [[ $Distro_Val == "debian" ]]; then
+				output_text="Installing Arc theme"
+				error_text="while installing Arc theme"
+				wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/arc-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
 				BPID=$!
 				Progress_Spinner
 				wait $BPID
 				status=$?
 				Exit_Status
-			done
+
+			elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+
+				## Install Arc-KDE theme
+				printf "$line\n"
+				printf "Installing Arc-KDE theme...\n"
+				printf "$line\n\n"
+
+				output_text="Installing Arc-KDE theme"
+				error_text="while installing Arc-KDE theme"
+
+				sudo apt-get install --install-recommends arc-kde -y 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+
+		elif [[ $de_env == "gtk" ]]; then
+			if [[ $Distro_Val == arch ]]; then
+				output_text="Installing Arc theme"
+				error_text="while installing Arc theme"
+
+				sudo pacman -S arc-gtk-theme --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+				output_text="Cloning Arc theme"
+				error_text="while Cloning Arc theme"
+
+				pushd . 2>> $errorpath >> $outputpath
+
+				git clone https://github.com/horst3180/arc-theme.git $tmpdir/arc-theme 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+				cd $tmpdir/arc-theme
+
+				arc_pkg=("autoconf" "automake" "pkg-config" "libgtk-3-dev" "gnome-themes-standard" "gtk2-engines-murrine")
+				for i in ${arc_pkg[*]}; do
+					output_text="Installing Arc theme dependency: $i"
+					error_text="while installing Arc theme dependency: $i"
+
+					sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+					BPID=$!
+					Progress_Spinner
+					wait $BPID
+					status=$?
+					Exit_Status
+				done
+
+				output_text="Building Arc theme"
+				error_text="while building Arc theme"
+
+				./autogen.sh --prefix=/usr 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+				output_text="Installing Arc theme"
+				error_text="while installing Arc theme"
+
+				sudo make install 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+				popd 2>> $errorpath >> $outputpath
+			fi
 		fi
+	fi
 
-		output_text="Building Adapta theme"
-		error_text="while building Adapta theme"
+	## Install Adapta theme
+	if [[ $adapta_theme == "yes" ]]; then
+		if [[ $de_env == "kde" ]]; then
+			if [[ $Distro_Val == arch ]]; then
+				sudo echo
 
-		./autogen.sh --prefix=/usr --enable-plank 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+				output_text="Installing Adapta theme"
+				error_text="while installing Adapta theme"
+
+				sudo pacman -S adapta-kde --needed --noconfirm 2>> $errorpath >> $outputpath &
+
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $Distro_Val == debian ]]; then
+
+				output_text="Installing Adapta theme"
+				error_text="while installing Adapta theme"
+
+				wget -qO- https://raw.githubusercontent.com/PapirusDevelopmentTeam/adapta-kde/master/install.sh | sh 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+
+			elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+				## Install Arc-KDE theme
+
+				output_text="Installing Arc-KDE theme"
+				error_text="while installing Arc-KDE theme"
+
+				sudo apt-get install --install-recommends adapta-kde -y 2>> $errorpath >> $outputpath &
+				BPID=$!
+				Progress_Spinner
+				wait $BPID
+				status=$?
+				Exit_Status
+			fi
+
+		elif [[ $de_env == "gtk" ]]; then
+			output_text="Cloning Arc theme"
+			error_text="while Cloning Arc theme"
+			pushd . 2>> $errorpath >> $outputpath
+
+			git clone https://github.com/adapta-project/adapta-gtk-theme.git $tmpdir/adapta-gtk-theme 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
+
+			cd $tmpdir/adapta-gtk-theme
+
+			adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
+			if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+				for i in ${adapta_pkg[*]}; do
+					output_text="Installing Adapta theme dependency: $i"
+					error_text="while installing Adapta theme dependency: $i"
+					sudo apt-get install -y $i 2>> $errorpath >> $outputpath &
+					BPID=$!
+					Progress_Spinner
+					wait $BPID
+					status=$?
+					Exit_Status
+				done
+
+			elif [[ $Distro_Val == arch ]]; then
+				for i in ${adapta_pkg[*]}; do
+					output_text="Installing Adapta theme dependency: $i"
+					error_text="while installing Adapta theme dependency: $i"
+					sudo pacman -S --needed --noconfirm $i 2>> $errorpath >> $outputpath &
+					BPID=$!
+					Progress_Spinner
+					wait $BPID
+					status=$?
+					Exit_Status
+				done
+			fi
+
+			output_text="Building Adapta theme"
+			error_text="while building Adapta theme"
+
+			./autogen.sh --prefix=/usr --enable-plank 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
 
-		output_text="Making Adapta theme, this may take a while, now"
-		error_text="while making Adapta theme"
+			output_text="Making Adapta theme, this may take a while, now"
+			error_text="while making Adapta theme"
 
-		make 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			make 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-		output_text="Installing Adapta theme"
-		error_text="while installing Adapta theme"
+			output_text="Installing Adapta theme"
+			error_text="while installing Adapta theme"
 
-		sudo make install 2>> $errorpath >> $outputpath &
-		BPID=$!
-		Progress_Spinner
-		wait $BPID
-		status=$?
-		Exit_Status
+			sudo make install 2>> $errorpath >> $outputpath &
+			BPID=$!
+			Progress_Spinner
+			wait $BPID
+			status=$?
+			Exit_Status
 
-		popd 2>> $errorpath >> $outputpath
+			popd 2>> $errorpath >> $outputpath
 
+		fi
 	fi
 
 	## Install Foggy theme for plank
