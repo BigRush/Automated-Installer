@@ -381,8 +381,6 @@ Vbox_Installation () {
 
 		sudo modprobe vboxdrv 2>> $errorpath >> $outputpath
 		Exit_Status
-		sudo gpasswd -a $orig_user vboxusers 2>> $errorpath >> $outputpath
-		Exit_Status
 
 	elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
 
@@ -452,6 +450,11 @@ Vbox_Installation () {
 		status=$?
 		Exit_Status
 	fi
+
+	output_text="Adding the user \'$origuser\' to group \'vboxusers\'"
+	error_text="while adding the user \'$origuser\' to group \'vboxusers\'"
+	sudo gpasswd -a $orig_user vboxusers 2>> $errorpath >> $outputpath
+	Exit_Status
 }
 
 ## Docker installation
@@ -577,6 +580,11 @@ Docker_Installation () {
 		status=$?
 		Exit_Status
 	fi
+
+	output_text="Adding the user \'$origuser\' to group \'docker\'"
+	error_text="while adding the user \'$origuser\' to group \'docker\'"
+	sudo gpasswd -a $orig_user docker 2>> $errorpath >> $outputpath
+	Exit_Status
 
 }
 
