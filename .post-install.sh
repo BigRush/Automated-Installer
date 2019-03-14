@@ -292,33 +292,34 @@ Theme_Config () {
 
 	if ! [[ -d $HOME/Documents/Themes ]]; then
 		mkdir -p $HOME/Documents/Themes
-
-		printf "$line\n"
-		printf "Installing themes form Mega cloud...\n"
-		printf "$line\n\n"
-
-		output_text="Getting themes form Mega cloud"
-		error_text="while getting themes form Mega cloud"
-
-		if [[ $de_env == "kde" ]]; then
-			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
-
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-
-		elif [[ $de_env == "gtk" ]]; then
-			megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
-
-			BPID=$!
-			Progress_Spinner
-			wait $BPID
-			status=$?
-			Exit_Status
-		fi
 	fi
+
+	printf "$line\n"
+	printf "Installing themes form Mega cloud...\n"
+	printf "$line\n\n"
+
+	output_text="Getting themes form Mega cloud"
+	error_text="while getting themes form Mega cloud"
+
+	if [[ $de_env == "kde" ]]; then
+		megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!TgBkwIjY!YZ1RpgF19Z2vO7X5gg0KLg' 2>> $errorpath >> $outputpath &
+
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+
+	elif [[ $de_env == "gtk" ]]; then
+		megadl --no-progress --path=$HOME/Documents/Themes 'https://mega.nz/#F!38QiXCrS!aa5xSCuP_HLrpLJK9Mx6rg' 2>> $errorpath >> $outputpath &
+
+		BPID=$!
+		Progress_Spinner
+		wait $BPID
+		status=$?
+		Exit_Status
+	fi
+
 
 
 	## Chili theme
@@ -350,7 +351,7 @@ Theme_Config () {
 			output_text="Extraction"
 			error_text="while extracting Shadow icons"
 
-			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  -C $HOME/.icons 2>> $errorpath >> $outputpath
+			sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
 
 			status=$?
 			Exit_Status
@@ -1163,7 +1164,7 @@ Boot_Manager_Config () {
 				output_text="Extraction"
 				error_text="while extracting Vimix theme"
 
-				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz -C /boot/grub/themes 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/grub-theme-vimix.tar.xz --no-same-owner -C /boot/grub/themes 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status

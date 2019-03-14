@@ -694,6 +694,11 @@ Log_And_Variables
 ## Call Distro_Check function
 Distro_Check
 
+## Set aur_helper default value 'yay'
+if [[ -z $aur_helper ]]; then
+	aur_helper="yay"
+fi
+
 ## Call System_Update function
 System_Update
 
