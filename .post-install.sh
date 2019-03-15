@@ -343,9 +343,6 @@ Theme_Prompt () {
 			fi
 		fi
 
-
-
-
 }
 
 ## Download themes and icons
