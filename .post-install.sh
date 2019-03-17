@@ -215,134 +215,133 @@ KDE_Installation () {
 
 ## Prompt the user which themes he would like to install
 Theme_Prompt () {
-
-		## Chili prompt
-		if [[ $de_env == "kde" ]]; then
-			if [[ $chili_theme == "yes" ]]; then
-				read -p "Would you like to install Chili theme?[Y/n]: " answer
-				printf "\n"
-				if [[ -z $answer ]]; then
-					chili_theme="yes"
-				elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-					chili_theme="yes"
-				elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-					chili_theme="no"
-				else
-					printf "$line\n"
-					printf "Invalid answer - Chili theme will NOT be installed\n"
-					printf "$line\n\n"
-					chili_theme="no"
-			fi
-		fi
-
-		## Bibata prompt
-		if ! [[ $bibata_cursor == "yes" ]]; then
-			read -p "Would you like to install Bibata cursor pack?[Y/n]: " answer
+	
+	## Chili prompt
+	if [[ $de_env == "kde" ]]; then
+		if [[ $chili_theme == "yes" ]]; then
+			read -p "Would you like to install Chili theme?[Y/n]: " answer
 			printf "\n"
 			if [[ -z $answer ]]; then
-				bibata_cursor="yes"
+				chili_theme="yes"
 			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				bibata_cursor="yes"
+				chili_theme="yes"
 			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				bibata_cursor="no"
+				chili_theme="no"
 			else
 				printf "$line\n"
-				printf "Invalid answer - Bibata cursor pack will NOT be installed\n"
+				printf "Invalid answer - Chili theme will NOT be installed\n"
 				printf "$line\n\n"
-				bibata_cursor="no"
-			fi
+				chili_theme="no"
 		fi
+	fi
 
-		## La-Capitaine prompt
-		if ! [[ $capitaine_icons == "yes" ]]; then
-			read -p "Would you like to install La-Capitaine icons?[Y/n]: " answer
-			printf "\n"
-			if [[ -z $answer ]]; then
-				capitaine_icons="yes"
-			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				capitaine_icons="yes"
-			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				capitaine_icons="no"
-			else
-				printf "$line\n"
-				printf "Invalid answer - La-Capitaine icons will NOT be installed\n"
-				printf "$line\n\n"
-				capitaine_icons="no"
-			fi
+	## Bibata prompt
+	if ! [[ $bibata_cursor == "yes" ]]; then
+		read -p "Would you like to install Bibata cursor pack?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			bibata_cursor="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			bibata_cursor="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			bibata_cursor="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Bibata cursor pack will NOT be installed\n"
+			printf "$line\n\n"
+			bibata_cursor="no"
 		fi
+	fi
 
-		## Shoadw prompt
-		if ! [[ $shadow_icons == "yes" ]]; then
-			read -p "Would you like to install Shadow icons?[Y/n]: " answer
-			printf "\n"
-			if [[ -z $answer ]]; then
-				shadow_icons="yes"
-			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				shadow_icons="yes"
-			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				shadow_icons="no"
-			else
-				printf "$line\n"
-				printf "Invalid answer - Shadow icons will NOT be installed\n"
-				printf "$line\n\n"
-				shadow_icons="no"
-			fi
+	## La-Capitaine prompt
+	if ! [[ $capitaine_icons == "yes" ]]; then
+		read -p "Would you like to install La-Capitaine icons?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			capitaine_icons="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			capitaine_icons="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			capitaine_icons="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - La-Capitaine icons will NOT be installed\n"
+			printf "$line\n\n"
+			capitaine_icons="no"
 		fi
+	fi
 
-		## Papirus prompt
-		if ! [[ $papirus_icons == "yes" ]]; then
-			read -p "Would you like to install Papirus icons?[Y/n]: " answer
-			printf "\n"
-			if [[ -z $answer ]]; then
-				papirus_icons="yes"
-			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				papirus_icons="yes"
-			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				papirus_icons="no"
-			else
-				printf "$line\n"
-				printf "Invalid answer - Papirus icons will NOT be installed\n"
-				printf "$line\n\n"
-				papirus_icons="yes"
-			fi
+	## Shoadw prompt
+	if ! [[ $shadow_icons == "yes" ]]; then
+		read -p "Would you like to install Shadow icons?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			shadow_icons="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			shadow_icons="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			shadow_icons="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Shadow icons will NOT be installed\n"
+			printf "$line\n\n"
+			shadow_icons="no"
 		fi
+	fi
 
-		## Adapta prompt
-		if ! [[ $adapta_theme == "yes" ]]; then
-			read -p "Would you like to install Adapta theme?[Y/n]: " answer
-			printf "\n"
-			if [[ -z $answer ]]; then
-				adapta_theme="yes"
-			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				adapta_theme="yes"
-			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				adapta_theme="no"
-			else
-				printf "$line\n"
-				printf "Invalid answer - Adapta theme will NOT be installed\n"
-				printf "$line\n\n"
-				adapta_theme="no"
-			fi
+	## Papirus prompt
+	if ! [[ $papirus_icons == "yes" ]]; then
+		read -p "Would you like to install Papirus icons?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			papirus_icons="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			papirus_icons="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			papirus_icons="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Papirus icons will NOT be installed\n"
+			printf "$line\n\n"
+			papirus_icons="yes"
 		fi
+	fi
 
-		## Arc prompt
-		if ! [[ $arc_theme == "yes" ]]; then
-			read -p "Would you like to install Arc theme?[Y/n]: " answer
-			printf "\n"
-			if [[ -z $answer ]]; then
-				arc_theme="yes"
-			elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
-				arc_theme="yes"
-			elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
-				arc_theme="no"
-			else
-				printf "$line\n"
-				printf "Invalid answer - Arc theme will NOT be installed\n"
-				printf "$line\n\n"
-				arc_theme="no"
-			fi
+	## Arc prompt
+	if ! [[ $arc_theme == "yes" ]]; then
+		read -p "Would you like to install Arc theme?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			arc_theme="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			arc_theme="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			arc_theme="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Arc theme will NOT be installed\n"
+			printf "$line\n\n"
+			arc_theme="no"
 		fi
+	fi
 
+	## Adapta prompt
+	if ! [[ $adapta_theme == "yes" ]]; then
+		read -p "Would you like to install Adapta theme?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			adapta_theme="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			adapta_theme="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			adapta_theme="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Adapta theme will NOT be installed\n"
+			printf "$line\n\n"
+			adapta_theme="no"
+		fi
+	fi
 }
 
 ## Download themes and icons
