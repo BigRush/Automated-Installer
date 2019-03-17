@@ -215,7 +215,7 @@ KDE_Installation () {
 
 ## Prompt the user which themes he would like to install
 Theme_Prompt () {
-	
+
 	## Chili prompt
 	if [[ $de_env == "kde" ]]; then
 		if [[ $chili_theme == "yes" ]]; then
@@ -250,6 +250,24 @@ Theme_Prompt () {
 			printf "Invalid answer - Bibata cursor pack will NOT be installed\n"
 			printf "$line\n\n"
 			bibata_cursor="no"
+		fi
+	fi
+
+	## Zafiro prompt
+	if ! [[ $zafiro_icons == "yes" ]]; then
+		read -p "Would you like to install Zafiro icons?[Y/n]: " answer
+		printf "\n"
+		if [[ -z $answer ]]; then
+			zafiro_icons="yes"
+		elif [[ $answer =~ [y|Y] || $answer =~ [y|Y]es ]]; then
+			zafiro_icons="yes"
+		elif [[ $answer =~ [n|N] || $answer =~ [n|N]o ]]; then
+			zafiro_icons="no"
+		else
+			printf "$line\n"
+			printf "Invalid answer - Zafiro icons will NOT be installed\n"
+			printf "$line\n\n"
+			zafiro_icons="no"
 		fi
 	fi
 
@@ -469,7 +487,6 @@ Theme_Config () {
 	fi
 
 	## Bibata cursor pack
-	Bibata_Cursor_Pack.tar.gz
 	if [[ $bibata_cursor == "yes" ]]; then
 		if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz ]]; then
 			if ! [[ -d /usr/share/icons/Bibata_Amber && -d /usr/share/icons/Bibata_Ice && -d /usr/share/icons/Bibata_Oil ]]; then
@@ -492,6 +509,36 @@ Theme_Config () {
 
 				output_text="Getting Bibata cursor pack with megatools"
 				error_text="while getting Bibata cursor pack megatools"
+
+				status=1
+				Exit_Status
+			fi
+		fi
+	fi
+
+	## Zafiro icons
+	if [[ $zafiro_icons == "yes" ]]; then
+		if [[ -e $HOME/Documents/Themes/Zafiro-icons-0.8.6.tar.gz ]]; then
+			if ! [[ -d /usr/share/icons/Zafiro-icons-0.8.6 ]]; then
+				printf "$line\n"
+				printf "Extracting Zafiro icons...\n"
+				printf "$line\n\n"
+
+				output_text="Extraction"
+				error_text="while extracting Zafiro icons"
+
+				sudo tar -xvf $HOME/Documents/Themes/Zafiro-icons-0.8.6.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+				status=$?
+				Exit_Status
+
+			else
+				printf "$line\n"
+				printf "Zafiro icons doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting Zafiro icons with megatools"
+				error_text="while getting Zafiro icons megatools"
 
 				status=1
 				Exit_Status
