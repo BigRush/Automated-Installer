@@ -438,6 +438,8 @@ Main_Menu () {
 	    case $opt in
 	        "Post install")
 				if [[ $Distro_Val == arch ]]; then
+					Theme_Prompt
+					sleep 1
 					Arch_Config
 					sleep 2.5
 					Alias_and_Wallpaper
@@ -469,6 +471,8 @@ Main_Menu () {
 					Boot_Manager_Config
 
 				elif [[ $Distro_Val == "manjaro" ]]; then
+					Theme_Prompt
+					sleep 1
 					Alias_and_Wallpaper
 					sleep 2.5
 					Pacman_Multilib
@@ -481,6 +485,8 @@ Main_Menu () {
 					Boot_Manager_Config
 
 				elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+					Theme_Prompt
+					sleep 1
 					Alias_and_Wallpaper
 					sleep 2.5
 					Theme_Config
