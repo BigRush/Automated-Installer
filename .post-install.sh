@@ -473,7 +473,7 @@ Theme_Config () {
 	Bibata_Cursor_Pack.tar.gz
 	if [[ $bibata_cursor == "yes" ]]; then
 		if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz ]]; then
-			if ! [[ -e /usr/share/icons/Bibata_Amber && -e /usr/share/icons/Bibata_Ice && -e /usr/share/icons/Bibata_Oil ]]; then
+			if ! [[ -d /usr/share/icons/Bibata_Amber && -d /usr/share/icons/Bibata_Ice && -d /usr/share/icons/Bibata_Oil ]]; then
 				printf "$line\n"
 				printf "Extracting Bibata cursor pack...\n"
 				printf "$line\n\n"
@@ -481,7 +481,7 @@ Theme_Config () {
 				output_text="Extraction"
 				error_text="while extracting Bibata cursor pack"
 
-				sudo tar -xvf $HOME/Documents/Themes/ibata_Cursor_Pack.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
+				sudo tar -xvf $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
 
 				status=$?
 				Exit_Status
@@ -503,7 +503,7 @@ Theme_Config () {
 	## La-Capitaine icons
 	if [[ $capitaine_icons == "yes" ]]; then
 		if [[ -e $HOME/Documents/Themes/la-capitaine-icon-theme-0.6.1-20190217.tar.gz ]]; then
-			if ! [[ -e /usr/share/icons/la-capitaine-icon-theme ]]; then
+			if ! [[ -d /usr/share/icons/la-capitaine-icon-theme ]]; then
 				printf "$line\n"
 				printf "Extracting La-Capitaine icons...\n"
 				printf "$line\n\n"
@@ -533,22 +533,23 @@ Theme_Config () {
 	## Shadow icons
 	if [[ $shadow_icons == "yes" ]]; then
 		if [[ $de_env == "kde" ]]; then
-			if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz  ]]; then
-				if ! [[ -e $HOME/.icons ]]; then
-					mkdir $HOME/.icons
+			if [[ -e $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz ]]; then
+				if ! [[ -d /usr/share/icons/Shadow ]]; then
+					mkdir -p /usr/share/icons/Shadow
+
+					printf "$line\n"
+					printf "Extracting Shadow icons...\n"
+					printf "$line\n\n"
+
+					output_text="Extraction"
+					error_text="while extracting Shadow icons"
+
+					sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+					status=$?
+					Exit_Status
+
 				fi
-
-				printf "$line\n"
-				printf "Extracting Shadow icons...\n"
-				printf "$line\n\n"
-
-				output_text="Extraction"
-				error_text="while extracting Shadow icons"
-
-				sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
-
-				status=$?
-				Exit_Status
 
 			else
 				printf "$line\n"
@@ -641,21 +642,22 @@ Theme_Config () {
 
 			else
 				if [[ -e $HOME/Documents/Themes/shadow-4.8.3.tar.xz ]]; then
-					if ! [[ -e $HOME/.icons ]]; then
-						mkdir $HOME/.icons
+					if ! [[ -d /usr/share/icons/Shadow ]]; then
+						mkdir -p /usr/share/icons/Shadow
+
+						printf "$line\n"
+						printf "Extracting Shadow icons...\n"
+						printf "$line\n\n"
+
+						output_text="Extraction"
+						error_text="while extracting Shadow icons"
+
+						sudo tar -xvf $HOME/Documents/Themes/shadow-kde-04-2018.tar.xz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+						status=$?
+						Exit_Status
+
 					fi
-
-					printf "$line\n"
-					printf "Extracting Shadow icons...\n"
-					printf "$line\n\n"
-
-					output_text="Extraction"
-					error_text="while extracting Shadow icons"
-
-					sudo tar -xvf $HOME/Documents/Themes/shadow-4.8.3.tar.xz -C $HOME/.icons 2>> $errorpath >> $outputpath
-
-					status=$?
-					Exit_Status
 
 				else
 					printf "$line\n"
@@ -1034,7 +1036,7 @@ Theme_Config () {
 	fi
 
 	## Install Transparent theme for plank
-	if ! [[ -e /usr/share/plank/themes/Transparent ]]; then
+	if ! [[ -d /usr/share/plank/themes/Transparent ]]; then
 		if [[ -e $HOME/Documents/Themes/Transparent.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting Transparent theme...\n"
@@ -1062,7 +1064,7 @@ Theme_Config () {
 	fi
 
 	## Install Zero theme for plank
-	if ! [[ -e /usr/share/plank/themes/zero ]]; then
+	if ! [[ -d /usr/share/plank/themes/zero ]]; then
 		if [[ -e $HOME/Documents/Themes/zero.tar.gz ]]; then
 			printf "$line\n"
 			printf "Extracting theme...\n"
