@@ -572,13 +572,26 @@ line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay, desktop environment,
 ## display manager, and auto install Vagrant, Docker or VirtualBox
-while getopts :a:e:d:hODH flag; do
+while getopts :a:d:e:thHDO flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
 				aur_helper="aurman"
 			elif [[ "yay" == "$OPTARG" ]]; then
 				aur_helper="yay"
+			else
+				printf "$line\n"
+				printf "Invalid argument, use '-h' for help\n"
+				printf "$line\n\n"
+				exit 1
+			fi
+			;;
+
+		d)
+			if [[ "sddm" == "$OPTARG" ]]; then
+				display_mgr="sddm"
+			elif [[ "lightdm" == "$OPTARG" ]]; then
+				display_mgr="lightdm"
 			else
 				printf "$line\n"
 				printf "Invalid argument, use '-h' for help\n"
@@ -600,17 +613,15 @@ while getopts :a:e:d:hODH flag; do
 			fi
 			;;
 
-		d)
-			if [[ "sddm" == "$OPTARG" ]]; then
-				display_mgr="sddm"
-			elif [[ "lightdm" == "$OPTARG" ]]; then
-				display_mgr="lightdm"
-			else
-				printf "$line\n"
-				printf "Invalid argument, use '-h' for help\n"
-				printf "$line\n\n"
-				exit 1
-			fi
+		t)
+			for i in $OPTARG; do
+				if [[ $i == 'bibata' || $OPTARG == 'zafiro' || $OPTARG == 'capitaine' \
+				|| $OPTARG == 'shadow' || $OPTARG == 'papirus' || $OPTARG == 'arc' \
+				|| $OPTARG == 'adapta' ]]; then
+					echo $i
+					tmp_themes_array+=("$OPTARG")
+				fi
+			done
 			;;
 
 		O)
