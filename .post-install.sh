@@ -232,6 +232,7 @@ Theme_Prompt () {
 				printf "Invalid answer - Chili theme will NOT be installed\n"
 				printf "$line\n\n"
 				chili_theme="no"
+			fi
 		fi
 	fi
 
