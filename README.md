@@ -34,7 +34,15 @@ $ sudo mv /usr/share/sounds/deepin/stereo/disable.logout /usr/share/sounds/deepi
 
 * [Chili](https://store.kde.org/p/1214121/) login theme (for Plasma only)
 
+* [Bibata](https://www.opendesktop.org/p/1197198/) cursor pack
+
+* [Zafiro](https://www.gnome-look.org/p/1209330/) icons
+
+* [La-Capitaine](https://www.gnome-look.org/p/1148695/) icons
+
 * [Papirus](https://github.com/PapirusDevelopmentTeam/papirus-icon-theme) icons
+
+* [Shadow](https://www.gnome-look.org/p/1012532/) icons
 
 * [Arc](https://github.com/horst3180/arc-theme) theme
 
@@ -129,25 +137,31 @@ $ bash Main.sh
 
  ### Flags with arguments:
 
- -a <argument>          Choose which AUR helper you would
+ -a <argument>          &nbsp;&nbsp;&nbsp;&nbsp;Choose which AUR helper you would
                         like to use [ 'aurman' or 'yay' ]
                         ('yay' is the default option if '-a' is not triggered)
 
- -d <argument>          Choose which display manager
+ -d <argument>          &nbsp;&nbsp;&nbsp;&nbsp;Choose which display manager
                         you would tlike to use [ 'SDDM' or 'LightDM' ]
 
- -e <argument>          Choose which desktop environment
+ -e <argument>          &nbsp;&nbsp;&nbsp;&nbsp;Choose which desktop environment
                         you would tlike to use [ 'Plasma' or 'Deepin' ]
+ 
+ -t <arguments>		       &nbsp;&nbsp;&nbsp;&nbsp;Choose which theme you would like to install,
+                     			arguments should be separated by spaces.
+      		               	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Possible themes:
+                     			['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']
+
 
  ### Flags without arguments:
 
- -D                     Install Docker
+ -D                     &nbsp;&nbsp;&nbsp;&nbsp;Install Docker
 
- -h                     Show help
+ -h                     &nbsp;&nbsp;&nbsp;&nbsp;Show help
 
- -H                     Install Vagrant
+ -H                     &nbsp;&nbsp;&nbsp;&nbsp;Install Vagrant
 
- -O                     Install VirtualBox
+ -O                     &nbsp;&nbsp;&nbsp;&nbsp;Install VirtualBox
 
 
 # Logs
