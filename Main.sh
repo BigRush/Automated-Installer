@@ -450,8 +450,6 @@ Main_Menu () {
 						KDE_Installation
 						sleep 0.5
 						KDE_Font_Config
-						sleep 0.5
-						Theme_Config
 					elif [[ "$desktop_env" == "deepin" ]]; then
 						Deepin_Installation
 					else
@@ -468,6 +466,8 @@ Main_Menu () {
 						DM_Menu
 					fi
 					sleep 2.5
+					Theme_Config
+					sleep 2.5
 					Boot_Manager_Config
 
 				elif [[ $Distro_Val == "manjaro" ]]; then
@@ -477,9 +477,8 @@ Main_Menu () {
 					sleep 2.5
 					Pacman_Multilib
 					sleep 2.5
-					if ! [[ -z $(echo $DESKTOP_SESSION | grep plasma) ]]; then
-						Theme_Config
-					fi
+					Theme_Config
+					sleep 2.5
 					DM_Menu
 					sleep 2.5
 					Boot_Manager_Config
