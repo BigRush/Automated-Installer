@@ -131,8 +131,8 @@ Log_And_Variables () {
 	lightconf=/etc/lightdm/lightdm.conf
 	lightwebconf=/etc/lightdm/lightdm-webkit2-greeter.conf
 	post_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.post-install.sh"
-	appinstall_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.aurhelper.sh"
-	archfuncs_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.appinstall.sh"
+	appinstall_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.appinstall.sh"
+	archfuncs_script="https://raw.githubusercontent.com/BigRush/Automated-Installer/master/.archfuncs.sh"
 	deepin_sound_path=/usr/share/sounds/deepin/stereo/
 	kernel_ver=$(uname -r |cut -d "." -f 1,2 |tr -d ".s")
 	refind_path=$(sudo find /boot -path *refind)
@@ -375,7 +375,7 @@ Source_And_Validation () {
 		output_text=".post-install.sh download"
 		error_text="while downloading .post-install.sh"
 
-		wget --show-progress --progress=bar -a $outputpath $post_script
+		wget --show-progress --progress=bar -a $outputpath -O $tmpdir/post-install.sh $post_script
 		wait
 		status=$?
 		Exit_Status
@@ -384,7 +384,7 @@ Source_And_Validation () {
 		output_text=".post-install.sh source"
 		error_text="while sourcing .post-install.sh"
 
-		source ./.post-install.sh 2>> $errorpath >> $outputpath
+		source $tmpdir/post-install.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
@@ -394,7 +394,7 @@ Source_And_Validation () {
 		output_text=".appinstall.sh download"
 		error_text="while downloading .appinstall.sh"
 
-		wget --show-progress --progress=bar -a $appinstall_script
+		wget --show-progress --progress=bar -a $outputpath -O $tmpdir/appinstall.sh $appinstall_script
 		wait
 		status=$?
 		Exit_Status
@@ -403,7 +403,7 @@ Source_And_Validation () {
 		output_text=".appinstall.sh source"
 		error_text="while sourcing .appinstall.sh"
 
-		source ./.appinstall.sh 2>> $errorpath >> $outputpath
+		source $tmpdir/appinstall.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
@@ -413,7 +413,7 @@ Source_And_Validation () {
 		output_text=".archfuncs.sh download"
 		error_text="while downloading .archfuncs.sh"
 
-		wget --show-progress --progress=bar -a $outputpath $archfuncs_script
+		wget --show-progress --progress=bar -a $outputpath -O $tmpdir/archfuncs.sh $archfuncs_script
 		wait
 		status=$?
 		Exit_Status
@@ -422,7 +422,7 @@ Source_And_Validation () {
 		output_text=".archfuncs.sh source"
 		error_text="while sourcing .archfuncs.sh"
 
-		source ./.archfuncs.sh 2>> $errorpath >> $outputpath
+		source $tmpdir/archfuncs.sh 2>> $errorpath >> $outputpath
 		status=$?
 		Exit_Status
     fi
