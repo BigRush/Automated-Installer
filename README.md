@@ -147,9 +147,9 @@ $ bash Main.sh
  -e <argument>          &nbsp;&nbsp;&nbsp;&nbsp;Choose which desktop environment
                         you would tlike to use [ 'Plasma' or 'Deepin' ]
  
- -t <arguments>		       &nbsp;&nbsp;&nbsp;&nbsp;Choose which theme you would like to install,
+ -t <arguments>		       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Choose which theme you would like to install,
                      			arguments should be separated by spaces.
-      		               	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Possible themes:
+      		               	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Possible themes:
                      			['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']
 
 
