@@ -290,7 +290,7 @@ Theme_Prompt () {
 		fi
 	fi
 
-	## Shoadw prompt
+	## Shoadow prompt
 	if ! [[ $shadow_icons == "yes" ]]; then
 		read -p "Would you like to install Shadow icons?[Y/n]: " answer
 		printf "\n"
