@@ -572,7 +572,7 @@ line="\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-"
 ## Use getopts so I'll have the option to
 ## choose between aurman and yay, desktop environment,
 ## display manager, and auto install Vagrant, Docker or VirtualBox
-while getopts :a:d:e:thHDO flag; do
+while getopts :a:d:e:t:hHDO flag; do
 	case $flag in
 		a)
 			if [[ "aurman" == "$OPTARG" ]]; then
@@ -618,8 +618,37 @@ while getopts :a:d:e:thHDO flag; do
 				if [[ $i == 'bibata' || $OPTARG == 'zafiro' || $OPTARG == 'capitaine' \
 				|| $OPTARG == 'shadow' || $OPTARG == 'papirus' || $OPTARG == 'arc' \
 				|| $OPTARG == 'adapta' ]]; then
-					echo $i
-					tmp_themes_array+=("$OPTARG")
+
+					if [[ $i == 'bibita' ]]; then
+						bibata_cursor="yes"
+
+					elif [[ $i == 'zafiro' ]]; then
+						zafiro_icons="yes"
+
+					elif [[ $i == 'capitaine' ]]; then
+						capitaine_icons="yes"
+
+					elif [[ $i == 'shadow' ]]; then
+						shadow_icons="yes"
+
+					elif [[ $i == 'papirus' ]]; then
+						papirus_icons="yes"
+
+					elif [[ $i == 'arc' ]]; then
+						arc_theme="yes"
+
+					elif [[ $i == 'adapta' ]]; then
+						adapta_theme="yes"
+
+					else
+						printf "$line\n"
+						printf "Something went wrong, no themes are pre-set...\n"
+						printf "$line\n\n"
+					fi
+				else
+					printf "$line\n"
+					printf "Invalid theme argument, no themes are pre-set...\n"
+					printf "$line\n\n"
 				fi
 			done
 			;;
@@ -650,6 +679,11 @@ while getopts :a:d:e:thHDO flag; do
 			printf " -e <argument>"
 			printf "\t\tChoose which desktop environment\n"
 			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
+			printf " -t <arguments>"
+			printf "\t\tChoose which theme you would like to install,\n"
+			printf "      \t\t\targuments should be separated by spaces.\n"
+			printf "      \t\t\tPossible themes:\n"
+			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']\n\n"
 			printf " Flags without arguments:\n\n"
 			printf " -D"
 			printf "\t\t\tInstall Docker\n\n"
@@ -677,6 +711,11 @@ while getopts :a:d:e:thHDO flag; do
 			printf " -e <argument>"
 			printf "\t\tChoose which desktop environment\n"
 			printf "      \t\t\tyou would tlike to use [ 'Plasma' or 'Deepin' ]\n\n"
+			printf " -t <arguments>"
+			printf "\t\tChoose which theme you would like to install,\n"
+			printf "      \t\t\targuments should be separated by spaces.\n"
+			printf "      \t\t\tPossible themes:\n"
+			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']\n\n"
 			printf " Flags without arguments:\n\n"
 			printf " -D"
 			printf "\t\t\tInstall Docker\n\n"
