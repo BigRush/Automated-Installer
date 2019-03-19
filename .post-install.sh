@@ -223,7 +223,7 @@ Theme_Prompt () {
 
 	## Chili prompt
 	if [[ $de_env == "kde" ]]; then
-		if [[ $chili_theme == "yes" ]]; then
+		if ! [[ $chili_theme == "yes" ]]; then
 			read -p "Would you like to install Chili theme?[Y/n]: " answer
 			printf "\n"
 			if [[ -z $answer ]]; then

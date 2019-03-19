@@ -616,7 +616,7 @@ while getopts :a:d:e:t:hHDO flag; do
 			for i in $OPTARG; do
 				if [[ $i == 'bibata' || $OPTARG == 'zafiro' || $OPTARG == 'capitaine' \
 				|| $OPTARG == 'shadow' || $OPTARG == 'papirus' || $OPTARG == 'arc' \
-				|| $OPTARG == 'adapta' ]]; then
+				|| $OPTARG == 'adapta' || $OPTARG == 'chili' ]]; then
 
 					if [[ $i == 'bibita' ]]; then
 						bibata_cursor="yes"
@@ -638,6 +638,9 @@ while getopts :a:d:e:t:hHDO flag; do
 
 					elif [[ $i == 'adapta' ]]; then
 						adapta_theme="yes"
+
+					elif [[ $i == 'chili' ]]; then
+						chili_theme="yes"
 
 					else
 						printf "$line\n"
@@ -682,7 +685,7 @@ while getopts :a:d:e:t:hHDO flag; do
 			printf "\t\tChoose which theme you would like to install,\n"
 			printf "      \t\t\targuments should be separated by spaces.\n"
 			printf "      \t\t\tPossible themes:\n"
-			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']\n\n"
+			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta' 'chili']\n\n"
 			printf " Flags without arguments:\n\n"
 			printf " -D"
 			printf "\t\t\tInstall Docker\n\n"
@@ -714,7 +717,7 @@ while getopts :a:d:e:t:hHDO flag; do
 			printf "\t\tChoose which theme you would like to install,\n"
 			printf "      \t\t\targuments should be separated by spaces.\n"
 			printf "      \t\t\tPossible themes:\n"
-			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta']\n\n"
+			printf "      \t\t\t['bibata' 'zafiro' 'capitaine' 'shadow' 'papirus' 'arc' 'adapta' 'chili']\n\n"
 			printf " Flags without arguments:\n\n"
 			printf " -D"
 			printf "\t\t\tInstall Docker\n\n"
