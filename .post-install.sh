@@ -1443,6 +1443,21 @@ Boot_Manager_Config () {
 			sudo runuser -l "root" -c "printf \"GRUB_HIDDEN_TIMEOUT_QUIET=true\n\" >> /etc/default/grub"
 		fi
 
+		if [[ -n $(egrep "^GRUB_DEFAULT=.*" /etc/default/grub) ]]; then
+			sudo sed -ie 's/GRUB_DEFAULT=.*/GRUB_DEFAULT=saved/' /etc/default/grub
+
+		else
+			sudo runuser -l "root" -c "printf \"GRUB_DEFAULT=saved\n\" >> /etc/default/grub"
+		fi
+
+		if [[ -n $(egrep "^GRUB_SAVEDEFAULT=.*" /etc/default/grub) ]]; then
+			sudo sed -ie 's/GGRUB_SAVEDEFAULT=.*/GRUB_SAVEDEFAULT=true/' /etc/default/grub
+
+		else
+			sudo runuser -l "root" -c "printf \"GRUB_SAVEDEFAULT=true\n\" >> /etc/default/grub"
+		fi
+
+
 		if ! [[ -d /boot/grub/themes ]]; then
 			sudo mkdir -p /boot/grub/themes
 		fi
