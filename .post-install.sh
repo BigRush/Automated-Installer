@@ -507,18 +507,18 @@ Theme_Config () {
 
 				status=$?
 				Exit_Status
-
-			else
-				printf "$line\n"
-				printf "Bibata cursor pack doesn't exists...\n"
-				printf "$line\n\n"
-
-				output_text="Getting Bibata cursor pack with megatools"
-				error_text="while getting Bibata cursor pack megatools"
-
-				status=1
-				Exit_Status
 			fi
+
+		else
+			printf "$line\n"
+			printf "Bibata cursor pack doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting Bibata cursor pack with megatools"
+			error_text="while getting Bibata cursor pack megatools"
+
+			status=1
+			Exit_Status
 		fi
 	fi
 
@@ -537,18 +537,18 @@ Theme_Config () {
 
 				status=$?
 				Exit_Status
-
-			else
-				printf "$line\n"
-				printf "Zafiro icons doesn't exists...\n"
-				printf "$line\n\n"
-
-				output_text="Getting Zafiro icons with megatools"
-				error_text="while getting Zafiro icons megatools"
-
-				status=1
-				Exit_Status
 			fi
+
+		else
+			printf "$line\n"
+			printf "Zafiro icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting Zafiro icons with megatools"
+			error_text="while getting Zafiro icons megatools"
+
+			status=1
+			Exit_Status
 		fi
 	fi
 
@@ -567,18 +567,18 @@ Theme_Config () {
 
 				status=$?
 				Exit_Status
-
-			else
-				printf "$line\n"
-				printf "La-Capitaine icons doesn't exists...\n"
-				printf "$line\n\n"
-
-				output_text="Getting La-Capitaine icons with megatools"
-				error_text="while getting La-Capitaine icons megatools"
-
-				status=1
-				Exit_Status
 			fi
+
+		else
+			printf "$line\n"
+			printf "La-Capitaine icons doesn't exists...\n"
+			printf "$line\n\n"
+
+			output_text="Getting La-Capitaine icons with megatools"
+			error_text="while getting La-Capitaine icons megatools"
+
+			status=1
+			Exit_Status
 		fi
 	fi
 
