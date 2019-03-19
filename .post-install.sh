@@ -1428,7 +1428,7 @@ Boot_Manager_Config () {
 			sudo runuser -l "root" -c "printf \"GRUB_TIMEOUT=0\n\" >> /etc/default/grub"
 		fi
 
-		if [[ -n $(egrep "^GRUB_HIDDEN_TIMEOUT=s.*" /etc/default/grub) ]]; then
+		if [[ -n $(egrep "^GRUB_HIDDEN_TIMEOUT=.*" /etc/default/grub) ]]; then
 			sudo sed -ie 's/GRUB_HIDDEN_TIMEOUT=.*/GRUB_HIDDEN_TIMEOUT=1/' /etc/default/grub
 
 		else
