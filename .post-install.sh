@@ -215,6 +215,11 @@ KDE_Installation () {
 
 ## Prompt the user which themes he would like to install
 Theme_Prompt () {
+	if [[ -z $de_env ]]; then
+		if [[ $DESKTOP_SESSION == "plasma" ]]; then
+			de_env=kde
+		fi
+	fi
 
 	## Chili prompt
 	if [[ $de_env == "kde" ]]; then
