@@ -494,31 +494,75 @@ Theme_Config () {
 
 	## Bibata cursor pack
 	if [[ $bibata_cursor == "yes" ]]; then
-		if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz ]]; then
-			if ! [[ -d /usr/share/icons/Bibata_Amber && -d /usr/share/icons/Bibata_Ice && -d /usr/share/icons/Bibata_Oil ]]; then
+		if [[ $de_env == "gtk" ]]; then
+			if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz ]]; then
+				if ! [[ -d /usr/share/icons/Bibata_Amber && -d /usr/share/icons/Bibata_Ice && -d /usr/share/icons/Bibata_Oil ]]; then
+					printf "$line\n"
+					printf "Extracting Bibata cursor pack...\n"
+					printf "$line\n\n"
+
+					output_text="Extraction"
+					error_text="while extracting Bibata cursor pack"
+
+					sudo tar -xvf $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
+
+					status=$?
+					Exit_Status
+				fi
+
+			else
 				printf "$line\n"
-				printf "Extracting Bibata cursor pack...\n"
+				printf "Bibata cursor pack doesn't exists...\n"
 				printf "$line\n\n"
 
-				output_text="Extraction"
-				error_text="while extracting Bibata cursor pack"
+				output_text="Getting Bibata cursor pack with megatools"
+				error_text="while getting Bibata cursor pack megatools"
 
-				sudo tar -xvf $HOME/Documents/Themes/Bibata_Cursor_Pack.tar.gz -C /usr/share/icons 2>> $errorpath >> $outputpath
-
-				status=$?
+				status=1
 				Exit_Status
 			fi
 
-		else
-			printf "$line\n"
-			printf "Bibata cursor pack doesn't exists...\n"
-			printf "$line\n\n"
+		elif [[ $de_env == "kde" ]]; then
+			if [[ -e $HOME/Documents/Themes/Bibata_Cursor_Pack.zip ]]; then
+				if ! [[ -d /usr/share/icons/Bibata_Amber && -d /usr/share/icons/Bibata_Ice && -d /usr/share/icons/Bibata_Oil ]]; then
+					if [[ -z $(command -v unzip) ]]; then
 
-			output_text="Getting Bibata cursor pack with megatools"
-			error_text="while getting Bibata cursor pack megatools"
+						output_text="unzip installation"
+						error_text="while installing unzip"
 
-			status=1
-			Exit_Status
+						sudo echo
+						sudo pacman -S unzip --needed --noconfirm 2>> $errorpath >> $outputpath &
+						BPID=$!
+						Progress_Spinner
+						wait $BPID
+						status=$?
+						Exit_Status
+					fi
+
+					printf "$line\n"
+					printf "Extracting Bibata cursor pack...\n"
+					printf "$line\n\n"
+
+					output_text="Extraction"
+					error_text="while extracting Bibata cursor pack"
+
+					sudo unzip $HOME/Documents/Themes/Bibata_Cursor_Pack.zip -d /usr/share/icons 2>> $errorpath >> $outputpath
+
+					status=$?
+					Exit_Status
+				fi
+
+			else
+				printf "$line\n"
+				printf "Bibata cursor pack doesn't exists...\n"
+				printf "$line\n\n"
+
+				output_text="Getting Bibata cursor pack with megatools"
+				error_text="while getting Bibata cursor pack megatools"
+
+				status=1
+				Exit_Status
+			fi
 		fi
 	fi
 
