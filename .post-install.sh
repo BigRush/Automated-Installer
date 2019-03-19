@@ -1218,11 +1218,6 @@ DM_Menu () {
 		LightDM_Installation
 		sleep 0.5
 		LightDM_Configuration
-
-	else
-		printf "$line\n"
-		printf "Somehow something went wrong somewhere\n"
-		printf "$line\n\n"
 	fi
 }
 
