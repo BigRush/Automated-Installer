@@ -417,7 +417,7 @@ Vbox_Installation () {
 		## Update the package lists
 
 		output_text="Updating the package lists"
-		error_text="while ufpdating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -451,8 +451,8 @@ Vbox_Installation () {
 		Exit_Status
 	fi
 
-	output_text="Adding the user \'$origuser\' to group \'vboxusers\'"
-	error_text="while adding the user \'$origuser\' to group \'vboxusers\'"
+	output_text="Adding the user \'$orig_user\' to group \'vboxusers\'"
+	error_text="while adding the user \'$orig_user\' to group \'vboxusers\'"
 	sudo gpasswd -a $orig_user vboxusers 2>> $errorpath >> $outputpath
 	Exit_Status
 }
@@ -546,7 +546,7 @@ Docker_Installation () {
 		## Update the package lists
 
 		output_text="Updating the package lists"
-		error_text="while ufpdating the package lists"
+		error_text="while updating the package lists"
 
 		sudo apt-get update 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -581,8 +581,8 @@ Docker_Installation () {
 		Exit_Status
 	fi
 
-	output_text="Adding the user \'$origuser\' to group \'docker\'"
-	error_text="while adding the user \'$origuser\' to group \'docker\'"
+	output_text="Adding the user \'$orig_user\' to group \'docker\'"
+	error_text="while adding the user \'$orig_user\' to group \'docker\'"
 	sudo gpasswd -a $orig_user docker 2>> $errorpath >> $outputpath
 	Exit_Status
 
