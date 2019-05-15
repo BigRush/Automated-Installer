@@ -174,7 +174,7 @@ Distro_Check () {
 	## of the array that matches the file, then status will remain 1 (failed)
 	## and prompt the user that the script did not find his distribution
 	for i in ${Distro_Array[@]}; do
-		DistroChk=$(cat /etc/*-release |egrep "^ID" |cut  -d '=' -f '2' |tr -d [:punct:] |egrep "^$i$")
+		DistroChk=$(cat /etc/*-release |egrep "^ID" |cut -d '=' -f '2' |tr -d [:punct:] |egrep "^$i$")
 		if [[ -n $DistroChk ]]; then
 		  	Distro_Val="$i"
 		    status=0
@@ -195,7 +195,7 @@ Distro_Check () {
 		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
 
 	elif [[ $Distro_Val == ubuntu ]]; then
-		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep \(.*\) |awk '{print $2}' |tr -d [:punct:])"
+		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep -o "\(.*\)" |awk '{print $1}' |tr -d [:punct:])"
 	fi
 
 	if [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
