@@ -192,10 +192,10 @@ Distro_Check () {
 
 
 	if [[ $Distro_Val == debian ]]; then
-		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
+		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:] |tr [:upper:] [:lower:])"
 
 	elif [[ $Distro_Val == ubuntu ]]; then
-		ubuntu_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep -o "\(.*\)" |awk '{print $1}' |tr -d [:punct:])"
+		ubuntu_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep -o "\(.*\)" |awk '{print $1}' |tr -d [:punct:] |tr [:upper:] [:lower:])"
 	fi
 
 	if [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
