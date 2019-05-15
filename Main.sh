@@ -174,10 +174,11 @@ Distro_Check () {
 	## of the array that matches the file, then status will remain 1 (failed)
 	## and prompt the user that the script did not find his distribution
 	for i in ${Distro_Array[@]}; do
-		DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |tr -d [:punct:] |egrep "^$i$")
+		DistroChk=$(cat /etc/*-release |egrep "^ID" |cut  -d '=' -f '2' |tr -d [:punct:] |egrep "^$i$")
 		if [[ -n $DistroChk ]]; then
 		  	Distro_Val="$i"
 		    status=0
+			break
 		fi
 	done
 
