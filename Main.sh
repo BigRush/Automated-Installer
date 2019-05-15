@@ -164,7 +164,7 @@ Clean_Up () {
 Distro_Check () {
 
 	## Put all the distros i want to check in an array
-	Distro_Array=(manjaro arch debian \"Ubuntu\" \"centos\" \"fedora\")
+	Distro_Array=(manjaro arch ubuntu debian centos fedora)
 	## set the initial success variable to 1 (0=success 1=failed)
 	status=1
 	## Go other each element of the array and check if that element (in this
@@ -174,8 +174,8 @@ Distro_Check () {
 	## of the array that matches the file, then status will remain 1 (failed)
 	## and prompt the user that the script did not find his distribution
 	for i in ${Distro_Array[@]}; do
-		DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |egrep "^$i$")
-		if ! [[ -z $DistroChk ]]; then
+		DistroChk=$(cat /etc/*-release |grep ID |cut  -d '=' -f '2' |tr -d [:punct:] |egrep "^$i$")
+		if [[ -n $DistroChk ]]; then
 		  	Distro_Val="$i"
 		    status=0
 		fi
@@ -193,11 +193,11 @@ Distro_Check () {
 	if [[ $Distro_Val == debian ]]; then
 		debian_cname="$(cat /etc/*-release |egrep ^VERSION=.* |awk '{print $2}' |tr -d [:punct:])"
 
-	elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+	elif [[ $Distro_Val == ubuntu ]]; then
 		ubuntu_cname=_cname="$(cat /etc/*-release |egrep ^VERSION=.* |egrep \(.*\) |awk '{print $2}' |tr -d [:punct:])"
 	fi
 
-	if [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+	if [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
 		printf "$line\n"
 		printf "This script doesn't support $Distro_Val at the moment\n"
 		printf "$line\n"
@@ -212,7 +212,7 @@ System_Update () {
 	output_text="Updating the package lists"
 	error_text="Updating the package lists"
 
-	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+	if [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 
 		sudo apt-get update 2>> $errorpath >> $outputpath &
 		BPID=$!
@@ -270,7 +270,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == ubuntu ]]; then
 			sudo echo
 			sudo apt-get install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -279,7 +279,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		elif [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
 			sudo echo
 			sudo yum install wget -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -306,7 +306,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 			sudo echo
 			sudo apt-get install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -315,7 +315,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		elif [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
 			sudo echo
 			sudo yum install curl -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -342,7 +342,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == ubuntu ]]; then
 			sudo echo
 			sudo apt-get install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -351,7 +351,7 @@ Dependencies_Installation () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		elif [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
 			sudo echo
 			sudo yum install git -y 2>> $errorpath >> $outputpath &
 			BPID=$!
@@ -483,7 +483,7 @@ Main_Menu () {
 					sleep 2.5
 					Boot_Manager_Config
 
-				elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+				elif [[ $Distro_Val == "debian" || $Distro_Val == ubuntu ]]; then
 					Theme_Prompt
 					sleep 1
 					Alias_and_Wallpaper
@@ -517,7 +517,7 @@ Main_Menu () {
 						Vbox_Installation
 					fi
 
-				elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+				elif [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 					Apt_Applications
 					sleep 1
 					Deb_Packages

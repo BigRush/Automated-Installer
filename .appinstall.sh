@@ -382,7 +382,7 @@ Vbox_Installation () {
 		sudo modprobe vboxdrv 2>> $errorpath >> $outputpath
 		Exit_Status
 
-	elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+	elif [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 
 		## Add the repository key
 		output_text="Adding the repository key"
@@ -480,7 +480,7 @@ Docker_Installation () {
 		fi
 	fi
 
-	if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+	if [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 		## Install packages to allow apt to use a repository over HTTPS
 		docker_dep=(apt-transport-https ca-certificates gnupg2 software-properties-common)
 		for i in ${docker_dep[*]}; do
@@ -519,7 +519,7 @@ Docker_Installation () {
 				Exit_Status
 			fi
 
-		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == ubuntu ]]; then
 			## Add Docker’s official GPG key
 			output_text="Adding Docker’s official GPG key"
 			error_text="while adding Docker’s official GPG key"
@@ -623,7 +623,7 @@ Vagrant_Installation () {
 		status=$?
 		Exit_Status
 
-	elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+	elif [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 
 		## Check if Downloads folder exists and if not, create it
 		if ! [[ -d $HOME/Downloads ]]; then

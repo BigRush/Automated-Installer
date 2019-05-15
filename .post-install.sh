@@ -420,7 +420,7 @@ Theme_Config () {
 				Exit_Status
 			fi
 
-		elif [[ $Distro_Val == "debian" || $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == "debian" || $Distro_Val == ubuntu ]]; then
 
 			## Install megatools to get theme files from mega cloud
 			sudo echo
@@ -431,7 +431,7 @@ Theme_Config () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"centos\" || $Distro_Val == \"fedora\" ]]; then
+		elif [[ $Distro_Val == centos || $Distro_Val == fedora ]]; then
 
 			## Install megatools to get theme files from mega cloud
 			sudo echo
@@ -702,7 +702,7 @@ Theme_Config () {
 					Exit_Status
 				fi
 
-			elif [[ $Distro_Val == '\"Ubuntu\"' ]]; then
+			elif [[ $Distro_Val == 'ubuntu' ]]; then
 				## Add PPA
 				output_text="Adding the repository"
 				error_text="while adding the repository"
@@ -843,7 +843,7 @@ Theme_Config () {
 			status=$?
 			Exit_Status
 
-		elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+		elif [[ $Distro_Val == ubuntu ]]; then
 
 			## Add PPA
 			printf "$line\n"
@@ -906,7 +906,7 @@ Theme_Config () {
 				status=$?
 				Exit_Status
 
-			elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+			elif [[ $Distro_Val == ubuntu ]]; then
 
 				## Install Arc-KDE theme
 				printf "$line\n"
@@ -937,7 +937,7 @@ Theme_Config () {
 				status=$?
 				Exit_Status
 
-			elif [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			elif [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 				output_text="Cloning Arc theme"
 				error_text="while Cloning Arc theme"
 
@@ -1019,7 +1019,7 @@ Theme_Config () {
 				status=$?
 				Exit_Status
 
-			elif [[ $Distro_Val == \"Ubuntu\" ]]; then
+			elif [[ $Distro_Val == ubuntu ]]; then
 				## Install Arc-KDE theme
 
 				output_text="Installing Arc-KDE theme"
@@ -1048,7 +1048,7 @@ Theme_Config () {
 			cd $tmpdir/adapta-gtk-theme
 
 			adapta_pkg=("autoconf" "automake" "inkscape" "libgdk-pixbuf2.0-dev" "libglib2.0-dev" "libxml2-utils" "pkg-config" "sassc")
-			if [[ $Distro_Val == debian || $Distro_Val == \"Ubuntu\" ]]; then
+			if [[ $Distro_Val == debian || $Distro_Val == ubuntu ]]; then
 				for i in ${adapta_pkg[*]}; do
 					output_text="Installing Adapta theme dependency: $i"
 					error_text="while installing Adapta theme dependency: $i"
