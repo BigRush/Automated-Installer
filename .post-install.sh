@@ -385,7 +385,7 @@ Theme_Config () {
 		output_text="Megatools installation"
 		error_text="while installing Megatools"
 
-		if [[ $Distro_Val == arch ]]; then
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 			if [[ $aur_helper == "aurman" ]]; then
 				sudo echo
 
@@ -661,7 +661,7 @@ Theme_Config () {
 			fi
 
 		elif [[ $de_env == "gtk" ]]; then
-			if [[ $Distro_Val == arch ]]; then
+			if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 				if [[ $aur_helper == "aurman" ]]; then
 					sudo echo
 
@@ -774,7 +774,7 @@ Theme_Config () {
 	## Papirus icons
 	sudo echo
 	if [[ $papirus_icons == "yes" ]]; then
-		if [[ $Distro_Val == arch ]]; then
+		if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 			output_text="Installing Papirus icons"
 			error_text="while installing Papirus icons"
 
@@ -884,7 +884,7 @@ Theme_Config () {
 	## Arc theme
 	if [[ $arc_theme == "yes" ]]; then
 		if [[ $de_env == "kde" ]]; then
-			if [[ $Distro_Val == arch ]]; then
+			if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 				output_text="Installing Arc theme"
 				error_text="while installing Arc theme"
 
@@ -925,7 +925,7 @@ Theme_Config () {
 			fi
 
 		elif [[ $de_env == "gtk" ]]; then
-			if [[ $Distro_Val == arch ]]; then
+			if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 				output_text="Installing Arc theme"
 				error_text="while installing Arc theme"
 
@@ -993,7 +993,7 @@ Theme_Config () {
 	## Install Adapta theme
 	if [[ $adapta_theme == "yes" ]]; then
 		if [[ $de_env == "kde" ]]; then
-			if [[ $Distro_Val == arch ]]; then
+			if [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 				sudo echo
 
 				output_text="Installing Adapta theme"
@@ -1060,7 +1060,7 @@ Theme_Config () {
 					Exit_Status
 				done
 
-			elif [[ $Distro_Val == arch ]]; then
+			elif [[ $Distro_Val == arch || $Distro_Val == manjaro ]]; then
 				for i in ${adapta_pkg[*]}; do
 					output_text="Installing Adapta theme dependency: $i"
 					error_text="while installing Adapta theme dependency: $i"
